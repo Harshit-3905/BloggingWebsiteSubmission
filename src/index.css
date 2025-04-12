@@ -1,0 +1,1220 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: var(--scheme-500, 168 85 247);
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: var(--scheme-200, 233 213 255);
+    --accent-foreground: var(--scheme-950, 59 7 100);
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.5rem;
+    --glass-background: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.18);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    --glass-backdrop: blur(8px);
+    --gradient-primary: linear-gradient(135deg, hsl(var(--scheme-400)) 0%, hsl(var(--scheme-600)) 100%);
+    --gradient-subtle: linear-gradient(135deg, hsl(var(--scheme-100)) 0%, hsl(var(--scheme-200)) 100%);
+    --scheme-hsl: 268 94% 66%;
+    --accent-color: #8B5CF6;
+    --accent-color-text: #5B21B6;
+    --accent-color-bg: #F3F0FF;
+    --scheme-50: hsl(var(--scheme-hsl) / 0.05);
+    --scheme-100: hsl(var(--scheme-hsl) / 0.1);
+    --scheme-200: hsl(var(--scheme-hsl) / 0.2);
+    --scheme-300: hsl(var(--scheme-hsl) / 0.3);
+    --scheme-400: hsl(var(--scheme-hsl) / 0.4);
+    --scheme-500: hsl(var(--scheme-hsl) / 0.5);
+    --scheme-600: hsl(var(--scheme-hsl) / 0.6);
+    --scheme-700: hsl(var(--scheme-hsl) / 0.7);
+    --scheme-800: hsl(var(--scheme-hsl) / 0.8);
+    --scheme-900: hsl(var(--scheme-hsl) / 0.9);
+    --scheme-950: hsl(var(--scheme-hsl) / 0.95);
+    --primary: var(--scheme-hsl);
+    --primary-foreground: 0 0% 98%;
+    --gradient-primary: linear-gradient(135deg,
+        hsl(var(--scheme-hsl) / 0.8) 0%,
+        hsl(var(--scheme-hsl) / 1) 100%);
+    --gradient-subtle: linear-gradient(135deg,
+        var(--scheme-50) 0%,
+        var(--scheme-200) 100%);
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: var(--scheme-hsl);
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: var(--scheme-900, 88 28 135);
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --glass-background: rgba(23, 25, 35, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    --gradient-primary: linear-gradient(135deg,
+        hsl(var(--scheme-hsl) / 0.7) 0%,
+        hsl(var(--scheme-hsl) / 0.9) 100%);
+    --gradient-subtle: linear-gradient(135deg,
+        hsl(var(--scheme-hsl) / 0.1) 0%,
+        hsl(var(--scheme-hsl) / 0.2) 100%);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-medium tracking-tight text-foreground;
+  }
+
+  code,
+  pre {
+    font-family: 'Source Code Pro', 'Fira Code', monospace;
+  }
+
+  .font-code {
+    font-family: 'JetBrains Mono', 'Source Code Pro', monospace;
+  }
+
+  p,
+  li,
+  span,
+  div {
+    @apply text-foreground;
+  }
+
+  a,
+  button,
+  [role="button"] {
+    @apply cursor-pointer;
+  }
+
+  a {
+    @apply text-primary hover:text-primary/80 transition-colors;
+  }
+
+  /* Ensure contrast for muted text */
+  .text-muted-foreground {
+    @apply text-foreground/70 dark:text-foreground/70;
+  }
+}
+
+.container-custom {
+  @apply container px-4 mx-auto;
+}
+
+.binary-gradient {
+  @apply bg-gradient-to-br from-primary-500 to-purple-700 dark:from-primary-400 dark:to-purple-600;
+  background: var(--gradient-primary);
+}
+
+.binary-gradient-soft {
+  @apply bg-gradient-to-br from-primary-400/90 to-purple-600/90 dark:from-primary-400/80 dark:to-purple-600/80;
+}
+
+.section-padding {
+  @apply py-16 md:py-24;
+}
+
+/* Animation keyframes */
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+  }
+
+  50% {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.8);
+  }
+}
+
+/* Custom typing animation */
+@keyframes typing {
+  from {
+    width: 0
+  }
+
+  to {
+    width: 100%
+  }
+}
+
+@keyframes blink-caret {
+
+  from,
+  to {
+    border-color: transparent
+  }
+
+  50% {
+    border-color: currentColor
+  }
+}
+
+/* Animation classes */
+.animate-pulse-slow {
+  animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.8s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-glow {
+  animation: glow 3s infinite;
+}
+
+.animate-typing {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid;
+  width: 0;
+  animation:
+    typing 3.5s steps(40, end) forwards,
+    blink-caret 0.75s step-end infinite;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.6);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Custom styling for markdown content */
+.prose {
+  @apply max-w-none;
+}
+
+.prose pre {
+  @apply bg-muted rounded-lg overflow-x-auto p-4 text-sm text-foreground;
+  font-family: 'Source Code Pro', 'Fira Code', monospace;
+}
+
+.prose code {
+  @apply text-primary bg-muted px-1.5 py-0.5 rounded text-sm;
+  font-family: 'Source Code Pro', 'Fira Code', monospace;
+}
+
+.prose a {
+  @apply text-primary hover:underline;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-primary/20 pl-4 italic;
+}
+
+.prose img {
+  @apply rounded-lg my-8;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  @apply font-bold tracking-tight text-foreground;
+}
+
+.prose h1 {
+  @apply text-3xl md:text-4xl;
+}
+
+.prose h2 {
+  @apply text-2xl md:text-3xl mt-12;
+}
+
+.prose h3 {
+  @apply text-xl md:text-2xl mt-8;
+}
+
+.prose h4 {
+  @apply text-lg md:text-xl mt-6;
+}
+
+.prose p,
+.prose li {
+  @apply text-foreground/90 dark:text-foreground/90;
+}
+
+/* Interactive card effect */
+.hover-card-effect {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card-effect:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Tag color map classes */
+.tag-react {
+  @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300;
+}
+
+.tag-javascript {
+  @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300;
+}
+
+.tag-typescript {
+  @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300;
+}
+
+.tag-css {
+  @apply bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300;
+}
+
+.tag-html {
+  @apply bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300;
+}
+
+.tag-nodejs {
+  @apply bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300;
+}
+
+.tag-python {
+  @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300;
+}
+
+.tag-design {
+  @apply bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300;
+}
+
+.tag-database {
+  @apply bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300;
+}
+
+.tag-api {
+  @apply bg-lime-100 text-lime-800 dark:bg-lime-900 dark:text-lime-300;
+}
+
+.tag-mobile {
+  @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300;
+}
+
+.tag-devops {
+  @apply bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-300;
+}
+
+.tag-security {
+  @apply bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300;
+}
+
+.tag-career {
+  @apply bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300;
+}
+
+.tag-tutorial {
+  @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300;
+}
+
+.tag-guide {
+  @apply bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300;
+}
+
+.tag-opinion {
+  @apply bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-300;
+}
+
+.tag-news {
+  @apply bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-300;
+}
+
+/* Tech stack cards animation */
+.tech-card {
+  @apply transition-all duration-300 hover:shadow-lg;
+}
+
+.tech-card:hover .tech-icon {
+  @apply scale-110 text-primary;
+}
+
+/* Stats card animation */
+.stats-card {
+  @apply relative overflow-hidden rounded-xl p-6 shadow-sm border border-border bg-card transition-all duration-300;
+}
+
+.stats-card::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-br from-primary-400/10 to-transparent opacity-0 transition-opacity duration-300;
+}
+
+.stats-card:hover {
+  @apply shadow-md border-primary-400/30;
+}
+
+.stats-card:hover::before {
+  @apply opacity-100;
+}
+
+.stats-card:hover .stats-number {
+  @apply text-primary-500 dark:text-primary-400;
+}
+
+/* Code block styling */
+.code-block {
+  @apply bg-black/90 dark:bg-black/60 text-white rounded-lg p-4 shadow-lg font-code overflow-hidden;
+}
+
+.code-comment {
+  @apply text-gray-400;
+}
+
+.code-string {
+  @apply text-green-400 dark:text-green-300;
+}
+
+.code-keyword {
+  @apply text-purple-400 dark:text-purple-300;
+}
+
+.code-function {
+  @apply text-blue-400 dark:text-blue-300;
+}
+
+.code-variable {
+  @apply text-orange-400 dark:text-orange-300;
+}
+
+/* Improving color contrast for navigation */
+.nav-link {
+  @apply text-foreground/90 hover:text-primary transition-colors;
+}
+
+.nav-link-active {
+  @apply text-primary font-medium;
+}
+
+/* Enhanced button styles */
+.btn-gradient {
+  @apply relative overflow-hidden text-white transition duration-300 shadow-lg;
+  background: var(--gradient-primary);
+}
+
+.btn-gradient::before {
+  content: '';
+  @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 50%);
+}
+
+.btn-gradient:hover::before {
+  @apply opacity-100;
+}
+
+/* Blog card enhancements - recipe card style */
+.blog-card {
+  @apply bg-white dark:bg-card rounded-xl shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden transition-all duration-300;
+}
+
+.blog-card-image {
+  @apply aspect-video object-cover transition-transform duration-300;
+}
+
+.blog-card:hover .blog-card-image {
+  @apply scale-105;
+}
+
+/* Blog card rating stars */
+.star-rating {
+  @apply flex items-center;
+}
+
+.star-rating .star {
+  @apply transition-all duration-300;
+}
+
+.blog-card:hover .star-rating .star {
+  animation: star-pulse 1.5s ease infinite;
+}
+
+@keyframes star-pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Blog card bookmark button */
+.bookmark-btn {
+  @apply transition-all duration-300;
+}
+
+.blog-card:hover .bookmark-btn {
+  @apply transform rotate-[-8deg];
+}
+
+/* Blog card tag styles */
+.blog-tag {
+  @apply inline-block rounded-full px-2.5 py-0.5 text-xs border;
+}
+
+/* Blog card category badge */
+.category-badge {
+  @apply px-3 py-1 rounded-full text-xs font-medium;
+}
+
+/* Blog card difficulty indicator */
+.difficulty-indicator {
+  @apply inline-flex items-center text-gray-500 text-sm;
+}
+
+.difficulty-indicator-dot {
+  @apply inline-block w-2 h-2 rounded-full mr-1.5;
+}
+
+.difficulty-easy .difficulty-indicator-dot {
+  @apply bg-green-500;
+}
+
+.difficulty-medium .difficulty-indicator-dot {
+  @apply bg-blue-500;
+}
+
+.difficulty-advanced .difficulty-indicator-dot {
+  @apply bg-purple-500;
+}
+
+/* Feature section improvements */
+.feature-icon-wrapper {
+  @apply rounded-full w-12 h-12 flex items-center justify-center bg-gradient-to-br from-primary-500 to-purple-700 text-white shadow-md transition-transform duration-300;
+}
+
+.feature-card:hover .feature-icon-wrapper {
+  @apply scale-110;
+}
+
+/* Header floating tweaks */
+.header-fixed {
+  @apply sticky top-0 z-40 w-full backdrop-blur-sm shadow-sm;
+  backdrop-filter: blur(8px);
+}
+
+/* Toast styling improvements */
+.toaster .toast {
+  @apply border-l-4 shadow-lg;
+}
+
+.toast[data-variant="default"] {
+  @apply border-l-primary;
+}
+
+.toast[data-variant="destructive"] {
+  @apply border-l-destructive;
+}
+
+.toast[data-variant="success"] {
+  @apply border-l-green-500;
+}
+
+/* Improved stats card */
+.improved-stats-card {
+  @apply relative overflow-hidden rounded-xl border border-border bg-card shadow-sm hover:shadow-md transition-all duration-300 p-6;
+}
+
+.improved-stats-card::after {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none;
+}
+
+.improved-stats-card .stats-number {
+  @apply text-2xl sm:text-3xl font-bold text-foreground transition-colors duration-300 group-hover:text-primary;
+}
+
+.improved-stats-card .stats-label {
+  @apply text-muted-foreground;
+}
+
+/* Tech stack revamp */
+.tech-stack-card {
+  @apply bg-card border border-border rounded-xl p-6 transition-all duration-300 hover:shadow-md hover:border-primary/30 h-full;
+}
+
+.tech-stack-card:hover .tech-icon {
+  @apply text-primary scale-110;
+}
+
+.tech-stack-heading {
+  @apply text-xl font-bold mb-4 group-hover:text-primary transition-colors duration-300;
+}
+
+.tech-stack-list {
+  @apply space-y-2;
+}
+
+.tech-stack-item {
+  @apply flex items-center space-x-2;
+}
+
+.tech-stack-item::before {
+  content: "•";
+  @apply text-primary/70;
+}
+
+/* Trending topics revamp */
+.trending-topic {
+  @apply flex justify-between items-center py-3 border-b border-border hover:bg-muted/40 px-3 -mx-3 rounded-md transition-colors duration-200;
+}
+
+.trending-topic:last-child {
+  @apply border-b-0;
+}
+
+.trending-name {
+  @apply font-medium hover:text-primary transition-colors;
+}
+
+.trending-posts {
+  @apply text-sm text-muted-foreground;
+}
+
+/* Hero section improvements */
+.hero-section {
+  @apply relative min-h-[80vh] flex items-center overflow-hidden;
+}
+
+/* Different styling for light/dark mode hero section */
+.light .hero-section {
+  background-color: #f7f7f7;
+  background-image: linear-gradient(0deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 240, 250, 0.8) 100%), url('/background/hero-bg-light.jpg');
+  background-size: cover;
+  background-position: center;
+  color: #111827 !important;
+}
+
+.dark .hero-section {
+  background-color: #050505;
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%), url('/background/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Fix text colors in hero section for light mode */
+.light .hero-section h1,
+.light .hero-section p,
+.light .hero-section span:not(.bg-clip-text) {
+  color: #111827 !important;
+}
+
+.light .hero-section .border-white {
+  border-color: #111827 !important;
+}
+
+/* Update buttons in hero section for light mode */
+.light .hero-section button[variant="outline"],
+.light .hero-section .button-outline {
+  border-color: rgba(17, 24, 39, 0.3) !important;
+  color: #111827 !important;
+}
+
+.light .hero-section button[variant="outline"]:hover,
+.light .hero-section .button-outline:hover {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+}
+
+/* Markdown content improved contrast */
+.prose p,
+.prose li,
+.prose blockquote {
+  @apply text-foreground dark:text-foreground;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  @apply text-foreground dark:text-foreground;
+}
+
+.prose code,
+.prose pre code {
+  @apply text-foreground dark:text-foreground bg-muted dark:bg-muted;
+}
+
+/* Dynamic color scheme variables based on the selected scheme */
+[data-color-scheme="purple"] {
+  --scheme-50: 250 245 255;
+  /* purple-50 */
+  --scheme-100: 243 232 255;
+  /* purple-100 */
+  --scheme-200: 233 213 255;
+  /* purple-200 */
+  --scheme-300: 216 180 254;
+  /* purple-300 */
+  --scheme-400: 192 132 252;
+  /* purple-400 */
+  --scheme-500: 168 85 247;
+  /* purple-500 */
+  --scheme-600: 147 51 234;
+  /* purple-600 */
+  --scheme-700: 126 34 206;
+  /* purple-700 */
+  --scheme-800: 107 33 168;
+  /* purple-800 */
+  --scheme-900: 88 28 135;
+  /* purple-900 */
+  --scheme-950: 59 7 100;
+  /* purple-950 */
+}
+
+[data-color-scheme="blue"] {
+  --scheme-50: 239 246 255;
+  /* blue-50 */
+  --scheme-100: 219 234 254;
+  /* blue-100 */
+  --scheme-200: 191 219 254;
+  /* blue-200 */
+  --scheme-300: 147 197 253;
+  /* blue-300 */
+  --scheme-400: 96 165 250;
+  /* blue-400 */
+  --scheme-500: 59 130 246;
+  /* blue-500 */
+  --scheme-600: 37 99 235;
+  /* blue-600 */
+  --scheme-700: 29 78 216;
+  /* blue-700 */
+  --scheme-800: 30 64 175;
+  /* blue-800 */
+  --scheme-900: 30 58 138;
+  /* blue-900 */
+  --scheme-950: 23 37 84;
+  /* blue-950 */
+}
+
+[data-color-scheme="teal"] {
+  --scheme-50: 240 253 250;
+  /* teal-50 */
+  --scheme-100: 204 251 241;
+  /* teal-100 */
+  --scheme-200: 153 246 228;
+  /* teal-200 */
+  --scheme-300: 94 234 212;
+  /* teal-300 */
+  --scheme-400: 45 212 191;
+  /* teal-400 */
+  --scheme-500: 20 184 166;
+  /* teal-500 */
+  --scheme-600: 13 148 136;
+  /* teal-600 */
+  --scheme-700: 15 118 110;
+  /* teal-700 */
+  --scheme-800: 17 94 89;
+  /* teal-800 */
+  --scheme-900: 19 78 74;
+  /* teal-900 */
+  --scheme-950: 4 47 46;
+  /* teal-950 */
+}
+
+[data-color-scheme="amber"] {
+  --scheme-50: 255 251 235;
+  /* amber-50 */
+  --scheme-100: 254 243 199;
+  /* amber-100 */
+  --scheme-200: 253 230 138;
+  /* amber-200 */
+  --scheme-300: 252 211 77;
+  /* amber-300 */
+  --scheme-400: 251 191 36;
+  /* amber-400 */
+  --scheme-500: 245 158 11;
+  /* amber-500 */
+  --scheme-600: 217 119 6;
+  /* amber-600 */
+  --scheme-700: 180 83 9;
+  /* amber-700 */
+  --scheme-800: 146 64 14;
+  /* amber-800 */
+  --scheme-900: 120 53 15;
+  /* amber-900 */
+  --scheme-950: 69 26 3;
+  /* amber-950 */
+}
+
+[data-color-scheme="rose"] {
+  --scheme-50: 255 241 242;
+  /* rose-50 */
+  --scheme-100: 255 228 230;
+  /* rose-100 */
+  --scheme-200: 254 205 211;
+  /* rose-200 */
+  --scheme-300: 253 164 175;
+  /* rose-300 */
+  --scheme-400: 251 113 133;
+  /* rose-400 */
+  --scheme-500: 244 63 94;
+  /* rose-500 */
+  --scheme-600: 225 29 72;
+  /* rose-600 */
+  --scheme-700: 190 18 60;
+  /* rose-700 */
+  --scheme-800: 159 18 57;
+  /* rose-800 */
+  --scheme-900: 136 19 55;
+  /* rose-900 */
+  --scheme-950: 76 5 25;
+  /* rose-950 */
+}
+
+/* Modern Glass effect */
+.glass-morphism {
+  backdrop-filter: var(--glass-backdrop);
+  -webkit-backdrop-filter: var(--glass-backdrop);
+  background: var(--glass-background);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Animated background gradients */
+.gradient-bg-animate {
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+  background-image: linear-gradient(-45deg,
+      hsl(var(--scheme-500)) 0%,
+      hsl(var(--scheme-700)) 25%,
+      hsl(var(--scheme-600)) 50%,
+      hsl(var(--scheme-400)) 75%,
+      hsl(var(--scheme-500)) 100%);
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%
+  }
+
+  50% {
+    background-position: 100% 50%
+  }
+
+  100% {
+    background-position: 0% 50%
+  }
+}
+
+/* 3D Card Tilt Effect */
+.tilt-card {
+  @apply transition-transform duration-300;
+}
+
+.tilt-card:hover {
+  transform: rotateX(2deg) rotateY(2deg) scale(1.02);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Updated binary-gradient to use scheme colors */
+.binary-gradient {
+  background: var(--gradient-primary);
+}
+
+/* Add a floating animation for cards or elements */
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply text-transparent bg-clip-text;
+  background-image: var(--gradient-primary);
+}
+
+/* Create utility classes for accent colors that adapt to light/dark mode */
+.text-accent {
+  color: var(--accent-color-text);
+}
+
+.bg-accent-subtle {
+  background-color: var(--accent-color-bg);
+}
+
+.border-accent {
+  border-color: var(--accent-color);
+}
+
+/* Fix contrast for text over gradient backgrounds */
+.binary-gradient * {
+  color: white !important;
+  /* Ensure text is always white on gradient backgrounds */
+}
+
+/* Ensure consistent gradient for all gradient areas */
+.binary-gradient,
+.gradient-bg-animate,
+section.py-24.gradient-bg-animate,
+section.py-24.binary-gradient {
+  @apply bg-gradient-to-br;
+  background: var(--gradient-primary);
+}
+
+/* Ensure smooth transitions for theme changes */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Fix button hover effects globally */
+button[variant="outline"]:hover,
+.button-outline:hover {
+  background-color: transparent !important;
+  border-color: var(--accent-color) !important;
+}
+
+button[variant="default"]:hover,
+.button-default:hover {
+  opacity: 0.9;
+  background-color: var(--accent-color) !important;
+}
+
+/* Ensure text contrast in gradient sections */
+.binary-gradient *,
+.gradient-bg-animate * {
+  color: white !important;
+}
+
+/* Add these styles to ensure consistency across the site */
+
+/* Set fixed height for card components to ensure uniformity */
+.tilt-card,
+.feature-card {
+  @apply h-full;
+  /* Make all cards take full height of their container */
+}
+
+/* Ensure Developer Tools cards have consistent height */
+.grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3.gap-8>div {
+  @apply h-full;
+}
+
+/* Unified card styles */
+.card-uniform {
+  @apply h-full border-2 border-primary/10 hover:border-primary/30 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 bg-card;
+}
+
+/* Improve text contrast in dark mode */
+.dark .text-muted-foreground {
+  @apply text-gray-300/70;
+}
+
+/* Enhanced hero section styling */
+.hero-section {
+  @apply relative min-h-[80vh] flex items-center overflow-hidden;
+  background-color: #050505;
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 100%), url('/background/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+/* Add consistent styling for tech stack items */
+.tech-card {
+  @apply rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-primary/10 bg-card h-full;
+}
+
+.tech-card:hover {
+  @apply transform -translate-y-2 border-primary/30;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.tech-header {
+  @apply p-6 bg-gradient-to-r;
+}
+
+.tech-content {
+  @apply p-6;
+}
+
+.tech-badge {
+  @apply px-3 py-1.5 rounded-md text-sm font-medium cursor-pointer transition-all duration-300 flex items-center gap-1 border border-primary/10 bg-primary/5 text-primary hover:bg-primary/10;
+}
+
+.tech-badge:hover {
+  @apply transform scale-105;
+}
+
+/* Add these rules to fix the hover color issues in both light and dark mode */
+
+/* Ensure hover states have proper contrast */
+button:hover,
+a:hover,
+.hover-highlight:hover {
+  /* Use higher contrast colors for hover states */
+  color: var(--accent-color-text) !important;
+}
+
+/* Fix button hover states */
+button[variant="outline"]:hover,
+.button-outline:hover,
+button.bg-white:hover {
+  background-color: var(--accent-color-bg) !important;
+  color: var(--accent-color-text) !important;
+  border-color: var(--accent-color) !important;
+}
+
+/* Fix selected theme button hover state */
+button[variant="default"]:hover,
+.button-default:hover,
+button.bg-primary:hover {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+  opacity: 0.9;
+}
+
+/* Fix theme button specific hover issues */
+.theme-toggle-btn:hover {
+  background-color: var(--accent-color-bg) !important;
+}
+
+/* Special hover states for buttons on different backgrounds */
+.bg-background button:hover,
+.bg-card button:hover {
+  background-color: var(--accent-color-bg) !important;
+  color: var(--accent-color-text) !important;
+}
+
+/* Ensure white text on colored backgrounds stays white on hover */
+.binary-gradient button:hover,
+.gradient-bg-animate button:hover,
+[class*="bg-primary"] button:hover,
+.bg-secondary button:hover {
+  color: white !important;
+}
+
+/* Replace the previous hover styles with these updated ones for better contrast */
+
+/* Button hover styles for light/dark mode with better contrast */
+.dark button:hover,
+.dark .button:hover,
+.dark [class*="Button"]:hover {
+  background-color: white !important;
+  color: black !important;
+  border-color: white !important;
+}
+
+.light button:hover,
+.light .button:hover,
+.light [class*="Button"]:hover {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+  border-color: var(--accent-color) !important;
+}
+
+/* Specific overrides for buttons that need exceptions */
+.dark button[variant="outline"]:hover,
+.dark .button-outline:hover {
+  background-color: white !important;
+  color: black !important;
+  border-color: white !important;
+}
+
+.light button[variant="outline"]:hover,
+.light .button-outline:hover {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+  border-color: var(--accent-color) !important;
+}
+
+/* Fix for navigation menu items on hover to use accent color */
+.NavigationMenuLink:hover,
+.NavigationMenuTrigger:hover,
+.navigationMenuTriggerStyle:hover,
+[class*="NavigationMenu"]:hover {
+  color: var(--accent-color) !important;
+  background-color: transparent !important;
+  border-color: var(--accent-color) !important;
+}
+
+/* Override for navigation links active state to use accent color */
+.text-primary,
+[data-active="true"],
+[data-state="open"],
+.active-link {
+  color: var(--accent-color) !important;
+  border-color: var(--accent-color) !important;
+}
+
+/* Fix for tabs on hover with pink accent color */
+[data-color-scheme="pink"] .NavigationMenuLink:hover,
+[data-color-scheme="pink"] .NavigationMenuTrigger:hover,
+[data-color-scheme="pink"] .navigationMenuTriggerStyle:hover {
+  color: var(--accent-color) !important;
+  border-color: var(--accent-color) !important;
+}
+
+/* Fix section headings to use accent color */
+.gradient-text,
+h1 .bg-clip-text,
+h2 .bg-clip-text,
+h3 .bg-clip-text,
+h2.bg-clip-text,
+.from-primary,
+.text-transparent.bg-gradient-to-r {
+  background-image: var(--gradient-primary) !important;
+}
+
+/* Fix tabs color to match accent color */
+[data-active="true"],
+[data-state="active"],
+[data-selected="true"],
+.active-tab {
+  color: var(--accent-color) !important;
+  border-color: var(--accent-color) !important;
+}
+
+/* Update navigation menu trigger style to use CSS variables for colors */
+.navigationMenuTriggerStyle {
+  color: var(--foreground);
+  border-bottom: 2px solid transparent;
+}
+
+.navigationMenuTriggerStyle:hover {
+  color: var(--accent-color) !important;
+}
+
+.navigationMenuTriggerStyle[data-active="true"],
+.navigationMenuTriggerStyle[data-state="open"] {
+  color: var(--accent-color) !important;
+  border-bottom-color: var(--accent-color) !important;
+}
+
+/* Ensure all color-related elements update when accent color changes */
+
+/* Utility classes for dynamic accent color */
+.text-accent-color {
+  color: var(--accent-color) !important;
+}
+
+.border-accent-color {
+  border-color: var(--accent-color) !important;
+}
+
+.bg-accent-color {
+  background-color: var(--accent-color) !important;
+}
+
+/* Ensure section headings update with accent color */
+h1[class*="gradient"],
+h2[class*="gradient"],
+h3[class*="gradient"],
+.accent-heading,
+.section-title,
+[class*="from-primary"] {
+  color: var(--accent-color) !important;
+}
+
+/* Override default primary color with accent color */
+.bg-primary {
+  background-color: var(--accent-color) !important;
+}
+
+.text-primary {
+  color: var(--accent-color) !important;
+}
+
+.border-primary {
+  border-color: var(--accent-color) !important;
+}
+
+/* Fix transparent heading text with gradients */
+h1 .bg-clip-text.text-transparent,
+h2 .bg-clip-text.text-transparent,
+h3 .bg-clip-text.text-transparent,
+.gradient-text {
+  background-image: var(--gradient-primary) !important;
+}
