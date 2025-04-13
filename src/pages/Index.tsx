@@ -724,7 +724,8 @@ const Index = () => {
             ].map((stat, index) => (
               <AnimatedSection key={stat.label} delay={index * 0.1}>
                 <motion.div 
-                  whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.1)" }}
+                  whileHover={{ y: -5 }}
+                  style={{ boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.1)" } as React.CSSProperties}
                   className="flex flex-col items-center p-6 rounded-xl border border-[var(--accent-color)]/10 bg-background/80 backdrop-blur-sm"
                 >
                   <div className="mb-4 p-3 rounded-full bg-[var(--accent-color)]/10 text-[var(--accent-color)]">
