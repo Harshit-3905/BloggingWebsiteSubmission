@@ -148,36 +148,41 @@ export const useBlogStore = create<BlogStore>()(
         // Convert to proper Blog format with proper BlogTag[] type
         const transformedBlogs: Blog[] = demoBlogs.map((blog) => {
           // Convert any "author" format comments to the right format
-          const comments = Array.isArray(blog.comments) 
-            ? blog.comments.map(comment => {
-                if ('author' in comment) {
+          const comments = Array.isArray(blog.comments)
+            ? blog.comments.map((comment) => {
+                if ("author" in comment) {
                   return {
                     id: comment.id,
                     userId: comment.author.id,
                     userName: comment.author.name,
                     userAvatar: comment.author.avatar,
                     content: comment.content,
-                    createdAt: typeof comment.createdAt === 'string' 
-                      ? new Date(comment.createdAt).getTime() 
-                      : comment.createdAt || now
+                    createdAt:
+                      typeof comment.createdAt === "string"
+                        ? new Date(comment.createdAt).getTime()
+                        : comment.createdAt || now,
                   };
                 }
                 return comment;
               })
             : [];
-            
+
           // Safely handle the type narrowing
-          const blogItem = blog as any; // Use 'any' temporarily to access properties
+          const blogItem = blog as Blog;
 
           return {
             ...blogItem,
             id: blogItem.id || uuidv4(),
-            createdAt: typeof blogItem.createdAt === 'string' 
-              ? new Date(blogItem.createdAt).getTime() 
-              : (blogItem.createdAt || now - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000),
-            updatedAt: typeof blogItem.updatedAt === 'string' 
-              ? new Date(blogItem.updatedAt).getTime() 
-              : (blogItem.updatedAt || now - Math.floor(Math.random() * 10) * 24 * 60 * 60 * 1000),
+            createdAt:
+              typeof blogItem.createdAt === "string"
+                ? new Date(blogItem.createdAt).getTime()
+                : blogItem.createdAt ||
+                  now - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000,
+            updatedAt:
+              typeof blogItem.updatedAt === "string"
+                ? new Date(blogItem.updatedAt).getTime()
+                : blogItem.updatedAt ||
+                  now - Math.floor(Math.random() * 10) * 24 * 60 * 60 * 1000,
             views: blogItem.views || Math.floor(Math.random() * 1000) + 100,
             likes: blogItem.likes || Math.floor(Math.random() * 200) + 10,
             bookmarked: blogItem.bookmarked || false,

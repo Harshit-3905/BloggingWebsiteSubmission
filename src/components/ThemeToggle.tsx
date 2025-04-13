@@ -1,4 +1,3 @@
-
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useThemeStore } from "@/store/useThemeStore";
@@ -86,32 +85,26 @@ export function ThemeToggle() {
     toast({
       title: `Theme changed to ${newTheme}`,
       description: "Your theme preference has been saved.",
-      className: "border-primary"
+      className: "border-[var(--accent-color)]"
     });
-  };
-
-  const buttonVariants = {
-    rotate: { rotate: 360 },
-    initial: { rotate: 0 }
   };
 
   return (
     <motion.div 
-      initial="initial"
-      variants={buttonVariants}
-      transition={{ duration: 0.5 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
     >
       <Button 
-        variant="ghost" 
+        variant="outline" 
         size="icon" 
         onClick={handleToggleTheme} 
-        className="rounded-full cursor-pointer"
+        className="rounded-full border-[var(--accent-color)]/20 hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]/40"
         aria-label="Toggle theme"
       >
         {theme === "light" ? (
-          <Moon className="h-5 w-5 transition-all" />
+          <Moon className="h-4 w-4 transition-all" />
         ) : (
-          <Sun className="h-5 w-5 transition-all" />
+          <Sun className="h-4 w-4 transition-all" />
         )}
       </Button>
     </motion.div>

@@ -1,44 +1,56 @@
-
-import React from "react";
+import React, { useState } from "react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Search, Users, Code, Terminal, TrendingUp, Zap, Hash } from "lucide-react";
+import { Search, Users, Code, Terminal, TrendingUp, Zap, Hash, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
+import { containerClass, gradientTextClass } from "@/utils/tailwindClasses";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export function TrendingTopicsSection() {
+  const { isLoggedIn } = useAuthStore();
+  const [followedTopics, setFollowedTopics] = useState<string[]>([]);
+
+  const toggleFollow = (topicName: string) => {
+    setFollowedTopics(prev => 
+      prev.includes(topicName) 
+        ? prev.filter(topic => topic !== topicName)
+        : [...prev, topicName]
+    );
+  };
+
   // Tech trends with color coding
   const trends = [
     { 
       name: "WebAssembly", 
       posts: "2,543 posts", 
       growth: "+24%",
-      color: "bg-gradient-to-r from-purple-500 to-purple-700"
+      color: "bg-gradient-to-r from-[var(--accent-color)] to-[var(--accent-color-bright)]"
     },
     { 
       name: "Blockchain", 
       posts: "5,129 posts", 
       growth: "+18%",
-      color: "bg-gradient-to-r from-blue-500 to-blue-700"
+      color: "bg-gradient-to-r from-[var(--accent-color-bright)] to-[var(--accent-color)]"
     },
     { 
       name: "MachineLearning", 
       posts: "8,021 posts", 
       growth: "+32%",
-      color: "bg-gradient-to-r from-green-500 to-green-700"
+      color: "bg-gradient-to-r from-[var(--accent-color)] to-[var(--accent-color-bright)]"
     },
     { 
       name: "Serverless", 
       posts: "3,942 posts", 
       growth: "+15%",
-      color: "bg-gradient-to-r from-amber-500 to-amber-700"
+      color: "bg-gradient-to-r from-[var(--accent-color-bright)] to-[var(--accent-color)]"
     },
     { 
       name: "MicroFrontends", 
       posts: "1,837 posts", 
       growth: "+11%",
-      color: "bg-gradient-to-r from-red-500 to-red-700"
+      color: "bg-gradient-to-r from-[var(--accent-color)] to-[var(--accent-color-bright)]"
     },
   ];
 
@@ -48,22 +60,22 @@ export function TrendingTopicsSection() {
       icon: <Users className="h-5 w-5" />,
       title: "Community Forum",
       description: "Ask questions and get answers from experts",
-      color: "bg-indigo-100 text-indigo-900 dark:bg-indigo-900/30 dark:text-indigo-300",
-      gradient: "from-indigo-500 to-purple-600"
+      color: "bg-[var(--accent-color)]/10 text-[var(--accent-color-text)] dark:bg-[var(--accent-color)]/20 dark:text-[var(--accent-color-bright)]",
+      gradient: "from-[var(--accent-color)] to-[var(--accent-color-bright)]"
     },
     {
       icon: <Code className="h-5 w-5" />,
       title: "Code Reviews",
       description: "Get feedback on your code from senior developers",
-      color: "bg-cyan-100 text-cyan-900 dark:bg-cyan-900/30 dark:text-cyan-300",
-      gradient: "from-cyan-500 to-blue-600"
+      color: "bg-[var(--accent-color)]/10 text-[var(--accent-color-text)] dark:bg-[var(--accent-color)]/20 dark:text-[var(--accent-color-bright)]",
+      gradient: "from-[var(--accent-color-bright)] to-[var(--accent-color)]"
     },
     {
       icon: <Terminal className="h-5 w-5" />,
       title: "Tech Discussions",
       description: "Debate about best practices and latest technologies",
-      color: "bg-emerald-100 text-emerald-900 dark:bg-emerald-900/30 dark:text-emerald-300",
-      gradient: "from-emerald-500 to-green-600"
+      color: "bg-[var(--accent-color)]/10 text-[var(--accent-color-text)] dark:bg-[var(--accent-color)]/20 dark:text-[var(--accent-color-bright)]",
+      gradient: "from-[var(--accent-color)] to-[var(--accent-color-bright)]"
     }
   ];
 
@@ -93,14 +105,14 @@ export function TrendingTopicsSection() {
 
   return (
     <section className="py-24 bg-gradient-to-b from-background/80 to-muted/30">
-      <div className="container-custom">
+      <div className={containerClass}>
         <AnimatedSection>
           <div className="text-center mb-16">
-            <Badge variant="outline" className="px-4 py-1 mb-4 text-sm font-medium rounded-full border-primary text-primary">
+            <Badge variant="outline" className="px-4 py-1 mb-4 text-sm font-medium rounded-full border-[var(--accent-color)] text-[var(--accent-color-text)]">
               What's Hot
             </Badge>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">Trending Topics</span>
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[var(--accent-color)] to-[var(--accent-color-bright)]">Trending Topics</span>
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
               Stay updated with what's buzzing in the developer community right now
@@ -116,7 +128,7 @@ export function TrendingTopicsSection() {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <div className="p-6 bg-gradient-to-r from-primary/90 to-primary/70 text-white">
+            <div className="p-6 bg-gradient-to-r from-[var(--accent-color)]/90 to-[var(--accent-color-bright)]/70 text-white">
               <div className="flex items-center gap-3 mb-1">
                 <TrendingUp className="h-6 w-6" />
                 <h2 className="text-2xl font-bold">Hot Conversations</h2>
@@ -134,7 +146,7 @@ export function TrendingTopicsSection() {
               {trends.map((trend, index) => (
                 <motion.div 
                   key={trend.name}
-                  className="py-4 flex items-center justify-between group cursor-pointer"
+                  className="py-4 flex items-center justify-between group"
                   variants={cardVariants}
                   whileHover={{ x: 5 }}
                 >
@@ -143,7 +155,7 @@ export function TrendingTopicsSection() {
                       <Hash className="h-6 w-6" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                      <h3 className="font-semibold text-lg group-hover:text-[var(--accent-color-text)] transition-colors">
                         #{trend.name}
                       </h3>
                       <div className="flex items-center gap-3">
@@ -155,9 +167,31 @@ export function TrendingTopicsSection() {
                     </div>
                   </div>
                   
-                  <Button size="sm" variant="ghost" className="rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span className="mr-1">Follow</span>
-                    <Zap className="h-3.5 w-3.5" />
+                  <Button 
+                    size="sm" 
+                    variant={followedTopics.includes(trend.name) ? "default" : "ghost"} 
+                    className={`rounded-full transition-all duration-300 ${
+                      followedTopics.includes(trend.name) 
+                        ? "bg-[var(--accent-color)] text-white opacity-100" 
+                        : "hover:bg-[var(--accent-color)] opacity-0 group-hover:opacity-100"
+                    }`}
+                    onClick={() => toggleFollow(trend.name)}
+                  >
+                    {followedTopics.includes(trend.name) ? (
+                      <motion.div
+                        initial={{ scale: 0.8 }}
+                        animate={{ scale: 1 }}
+                        className="flex items-center"
+                      >
+                        <CheckCircle className="h-3.5 w-3.5 mr-1" />
+                        <span>Following</span>
+                      </motion.div>
+                    ) : (
+                      <span className="flex items-center">
+                        <span className="mr-1">Follow</span>
+                        <Zap className="h-3.5 w-3.5" />
+                      </span>
+                    )}
                   </Button>
                 </motion.div>
               ))}
@@ -171,7 +205,7 @@ export function TrendingTopicsSection() {
             transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <div className="p-6 bg-gradient-to-r from-secondary/90 to-secondary/70 text-white">
+            <div className="p-6 bg-gradient-to-r from-[var(--accent-color-bright)]/90 to-[var(--accent-color)]/70 text-white">
               <h2 className="text-2xl font-bold mb-1">Join the Conversation</h2>
               <p className="text-white/80">Connect with fellow developers</p>
             </div>
@@ -187,7 +221,7 @@ export function TrendingTopicsSection() {
                 {communityFeatures.map((feature, index) => (
                   <motion.div 
                     key={feature.title}
-                    className={`p-4 rounded-lg ${feature.color} flex items-start gap-4 cursor-pointer`}
+                    className={`p-4 rounded-lg ${feature.color} flex items-start gap-4`}
                     variants={cardVariants}
                     whileHover={{ x: 5, scale: 1.02 }}
                   >
@@ -209,10 +243,19 @@ export function TrendingTopicsSection() {
                 transition={{ delay: 0.6 }}
                 viewport={{ once: true }}
               >
-                <Button asChild className="w-full bg-gradient-to-r from-primary to-primary/90 text-white shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all">
-                  <Link to="/signup">
-                    Join Binary Blogs
-                  </Link>
+                <Button 
+                  asChild 
+                  className="w-full shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
+                >
+                  {isLoggedIn ? (
+                    <Link to="/blogs">
+                      Explore Conversations
+                    </Link>
+                  ) : (
+                    <Link to="/signup">
+                      Join Binary Blogs
+                    </Link>
+                  )}
                 </Button>
               </motion.div>
             </div>

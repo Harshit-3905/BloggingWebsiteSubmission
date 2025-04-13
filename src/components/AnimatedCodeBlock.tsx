@@ -1,4 +1,3 @@
-
 import { useEffect, useState, useRef } from "react";
 import { motion, useAnimate } from "framer-motion";
 
@@ -11,7 +10,7 @@ export function AnimatedCodeBlock() {
   const hasAnimatedOnce = useRef(false);
   
   // Lines of code to animate
-  const codeSample = [
+  const codeLines = [
     "function shareCodingKnowledge() {",
     "  const blog = {",
     "    title: \"My Coding Journey\",",
@@ -21,7 +20,9 @@ export function AnimatedCodeBlock() {
     "",
     "  BinaryBlogs.publish(blog);",
     "}"
-  ].join("\n");
+  ];
+  
+  const codeSample = codeLines.join("\n");
   
   // Animate typing effect - only once
   useEffect(() => {
@@ -134,58 +135,80 @@ export function AnimatedCodeBlock() {
   return (
     <motion.div 
       ref={scope}
-      className="code-block relative font-code border border-white/10 rounded-lg p-6 shadow-xl"
+      className="code-block relative font-code border border-white/20 rounded-lg shadow-xl bg-black dark:bg-black text-white"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, delay: 0.5 }}
     >
-      {isTyping ? (
-        <pre className="text-sm md:text-base text-left overflow-x-auto">
-          <code>
-            {typedText}
-            <span className={`${cursorVisible ? 'opacity-100' : 'opacity-0'} transition-opacity`}>|</span>
-          </code>
-        </pre>
-      ) : (
-        <pre className="text-sm md:text-base text-left overflow-x-auto">
-          <code>
-            <span className="code-keyword">function</span>{" "}
-            <span className="function-name text-green-400">shareCodingKnowledge</span>() {"{"}
-            <br />
-            {"  "}
-            <span className="code-keyword">const</span> blog = {"{"}
-            <br />
-            {"    "}title: <span className="code-string">"My Coding Journey"</span>,
-            <br />
-            {"    "}author: <motion.span 
-                      className="code-string"
-                      animate={{ opacity: [1, 0.5, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    >"You"</motion.span>,
-            <br />
-            {"    "}audience: <span className="code-string">"The World"</span>
-            <br />
-            {"  "}{"}"};
-            <br />
-            <br />
-            {"  "}
-            <motion.span 
-              className="object-name text-purple-400"
-              animate={{ 
-                textShadow: ["0px 0px 0px rgba(139, 92, 246, 0)", "0px 0px 10px rgba(139, 92, 246, 0.5)", "0px 0px 0px rgba(139, 92, 246, 0)"] 
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >BinaryBlogs</motion.span>.
-            <motion.span 
-              className="function-name text-green-400"
-              animate={{ color: ["#4ade80", "#22c55e", "#4ade80"] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >publish</motion.span>(blog);
-            <br />
-            {"}"}
-          </code>
-        </pre>
-      )}
+      <div className="flex">
+        {/* Line numbers column */}
+        <div className="line-numbers py-6 pl-4 pr-2 text-white select-none bg-black/90 border-r border-white/10 font-mono text-xs md:text-sm text-right">
+          {Array.from({ length: isTyping ? typedText.split('\n').length : codeLines.length }).map((_, i) => (
+            <div key={i} className="leading-relaxed text-white">
+              {i + 1}
+            </div>
+          ))}
+        </div>
+        
+        {/* Code content */}
+        <div className="p-6 flex-1 overflow-x-auto">
+          {isTyping ? (
+            <pre className="text-sm md:text-base text-left overflow-x-auto text-white">
+              <code>
+                {typedText}
+                <span className={`${cursorVisible ? 'opacity-100' : 'opacity-0'} transition-opacity`}>|</span>
+              </code>
+            </pre>
+          ) : (
+            <pre className="text-sm md:text-base text-left overflow-x-auto text-white">
+              <code>
+                <span className="code-keyword text-blue-400">function</span>{" "}
+                <span className="function-name text-green-400">shareCodingKnowledge</span>() {"{"}
+                <br />
+                {"  "}
+                <span className="code-keyword text-blue-400">const</span> blog = {"{"}
+                <br />
+                {"    "}title: <span className="code-string text-amber-300">"My Coding Journey"</span>,
+                <br />
+                {"    "}author: <motion.span 
+                          className="code-string text-amber-300"
+                          animate={{ opacity: [1, 0.5, 1] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        >"You"</motion.span>,
+                <br />
+                {"    "}audience: <span className="code-string text-amber-300">"The World"</span>
+                <br />
+                {"  "}{"}"};
+                <br />
+                <br />
+                {"  "}
+                <motion.span 
+                  className="object-name text-purple-400"
+                  animate={{ 
+                    textShadow: ["0px 0px 0px rgba(139, 92, 246, 0)", "0px 0px 10px rgba(139, 92, 246, 0.5)", "0px 0px 0px rgba(139, 92, 246, 0)"] 
+                  }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >BinaryBlogs</motion.span>.
+                <motion.span 
+                  className="function-name text-green-400"
+                  animate={{ color: ["#4ade80", "#22c55e", "#4ade80"] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >publish</motion.span>(blog);
+                <br />
+                {"}"}
+              </code>
+            </pre>
+          )}
+        </div>
+      </div>
+      
+      {/* Editor top bar with buttons */}
+      <div className="absolute top-0 left-0 right-0 h-6 bg-gray-900 rounded-t-lg flex items-center px-3 gap-1">
+        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+        <div className="w-3 h-3 rounded-full bg-green-500"></div>
+        <div className="text-gray-400 text-xs ml-2 font-sans">script.js</div>
+      </div>
       
       {/* Flying particles animation */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">

@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BlogEditor } from "@/components/BlogEditor";
+import  BlogEditor  from "@/components/BlogEditor";
 import { useBlogStore } from "@/store/useBlogStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useToast } from "@/hooks/use-toast";

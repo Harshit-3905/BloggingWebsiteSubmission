@@ -255,7 +255,7 @@ export default function AuthPage() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full"
+                    className="w-full bg-primary/10 hover:bg-primary/20 text-primary"
                     onClick={handleGuestLogin}
                     disabled={isSubmitting}
                   >

@@ -1,4 +1,3 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -9,6 +8,7 @@ import { type Blog } from "@/types/blogTypes";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import { cardHoverClass } from "@/utils/tailwindClasses";
 
 interface BlogCardProps {
   blog: Blog;
@@ -49,7 +49,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
       description: newStatus 
         ? "The blog has been added to your bookmarks for later reading."
         : "The blog has been removed from your bookmarks.",
-      className: "bg-card border-primary shadow-lg"
+      className: "bg-card border-[var(--accent-color)] shadow-lg"
     });
   };
 
@@ -67,7 +67,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
     toast({
       title: newStatus ? "Blog liked!" : "Like removed",
       description: newStatus ? "Thank you for your appreciation." : "You've removed your like from this blog.",
-      className: "bg-card border-primary shadow-lg"
+      className: "bg-card border-[var(--accent-color)] shadow-lg"
     });
   };
 
@@ -101,42 +101,9 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
     tap: { scale: 0.9 }
   };
 
-  // Get color for category badge
-  const getCategoryColor = (category: string) => {
-    const categoryMap: Record<string, string> = {
-      "React": "bg-blue-100 text-blue-800",
-      "JavaScript": "bg-yellow-100 text-yellow-800",
-      "TypeScript": "bg-blue-100 text-blue-800",
-      "CSS": "bg-pink-100 text-pink-800",
-      "HTML": "bg-orange-100 text-orange-800",
-      "Python": "bg-green-100 text-green-800",
-      "Design": "bg-purple-100 text-purple-800",
-      "Tutorial": "bg-green-100 text-green-800",
-      "Career": "bg-indigo-100 text-indigo-800",
-      "Opinion": "bg-red-100 text-red-800",
-      "News": "bg-cyan-100 text-cyan-800"
-    };
-    
-    return categoryMap[category] || "bg-gray-100 text-gray-800";
-  };
-  
   // Generate tag color based on tag name
   const getTagColor = (tag: string) => {
-    const tagMap: Record<string, string> = {
-      "React": "bg-blue-50 text-blue-700 border-blue-200",
-      "JavaScript": "bg-yellow-50 text-yellow-700 border-yellow-200",
-      "TypeScript": "bg-blue-50 text-blue-700 border-blue-200",
-      "CSS": "bg-pink-50 text-pink-700 border-pink-200",
-      "HTML": "bg-orange-50 text-orange-700 border-orange-200",
-      "Tutorial": "bg-green-50 text-green-700 border-green-200",
-      "Guide": "bg-purple-50 text-purple-700 border-purple-200",
-      "Opinion": "bg-red-50 text-red-700 border-red-200",
-      "News": "bg-sky-50 text-sky-700 border-sky-200",
-      "API": "bg-indigo-50 text-indigo-700 border-indigo-200",
-      "Performance": "bg-amber-50 text-amber-700 border-amber-200"
-    };
-    
-    return tagMap[tag] || "bg-gray-50 text-gray-700 border-gray-200";
+    return "bg-[var(--accent-color)]/10 text-[var(--accent-color-text)] border-[var(--accent-color)]/20";
   };
 
   return (
@@ -146,7 +113,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
       animate="visible"
       whileHover="hover"
       variants={cardVariants}
-      className="blog-card overflow-hidden rounded-xl bg-white shadow-md dark:bg-card border border-gray-100 dark:border-gray-800"
+      className="blog-card overflow-hidden rounded-xl bg-white shadow-md dark:bg-card border border-[var(--accent-color)]/10 hover:border-[var(--accent-color)]/30 transition-all duration-300"
     >
       <div className="relative">
         <Link to={`/blog/${blog.slug}`} className="block">
@@ -160,7 +127,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
             
             {/* Category Badge */}
             <div className="absolute left-3 top-3 z-10">
-              <span className={`px-3 py-1 rounded-full text-xs font-medium ${getCategoryColor(mainCategory)}`}>
+              <span className={`px-3 py-1 rounded-full text-xs font-medium bg-gray-600`}>
                 {mainCategory}
               </span>
             </div>
@@ -175,7 +142,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
                 className="rounded-full bg-white p-2 shadow-md transition hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700"
               >
                 <Heart 
-                  className={`h-4 w-4 ${isLiked ? "fill-red-500 text-red-500" : "text-gray-400"}`} 
+                  className={`h-4 w-4 ${isLiked ? "fill-[var(--accent-color)] text-[var(--accent-color)]" : "text-gray-400"}`} 
                 />
               </button>
             </motion.div>
@@ -203,7 +170,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
         
         {/* Title */}
         <Link to={`/blog/${blog.slug}`}>
-          <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+          <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white hover:text-[var(--accent-color-text)] transition-colors">
             {blog.title}
           </h3>
         </Link>
@@ -215,7 +182,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
       </div>
       
       {/* Footer */}
-      <div className="border-t border-gray-100 dark:border-gray-800 px-4 py-3 flex items-center justify-between">
+      <div className="border-t border-[var(--accent-color)]/10 dark:border-[var(--accent-color)]/20 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           {/* Reading time */}
           <div className="flex items-center text-gray-500 text-sm">
@@ -225,7 +192,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
           
           {/* Difficulty */}
           <div className="flex items-center text-gray-500 text-sm">
-            <span className="inline-block w-2 h-2 rounded-full mr-1.5 bg-blue-500"></span>
+            <span className="inline-block w-2 h-2 rounded-full mr-1.5 bg-[var(--accent-color)]"></span>
             <span>{difficulty}</span>
           </div>
         </div>
@@ -234,9 +201,9 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
         <motion.div variants={buttonVariants}>
           <button
             onClick={handleBookmark}
-            className="text-gray-400 hover:text-primary"
+            className="text-gray-400 hover:text-[var(--accent-color-text)]"
           >
-            <Bookmark className={`h-5 w-5 ${isBookmarked ? "fill-orange-500 text-orange-500" : ""}`} />
+            <Bookmark className={`h-5 w-5 ${isBookmarked ? "fill-[var(--accent-color)] text-[var(--accent-color)]" : ""}`} />
           </button>
         </motion.div>
       </div>

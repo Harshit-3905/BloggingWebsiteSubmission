@@ -1,10 +1,10 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { BlogEditor } from "@/components/BlogEditor";
+import BlogEditor from "@/components/BlogEditor";
 import { useBlogStore } from "@/store/useBlogStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useToast } from "@/hooks/use-toast";
+import { BlogTag } from "@/types/blogTypes";
 
 export default function EditBlogPage() {
   const { id } = useParams<{ id: string }>();
@@ -53,7 +53,7 @@ export default function EditBlogPage() {
     content: string;
     excerpt: string;
     coverImage: string;
-    tags: any[];
+    tags: BlogTag[];
   }) => {
     setIsSubmitting(true);
     

@@ -25,9 +25,9 @@ import NotFoundPage from "./pages/NotFoundPage";
 const queryClient = new QueryClient();
 
 const App = () => {
-  const { theme, selectedColorName, accentColor, setColorScheme } = useThemeStore();
+  const { theme, selectedColorName, accentColor, fontFamily, setColorScheme, setFontFamily } = useThemeStore();
 
-  // Apply theme and accent color from store
+  // Apply theme, accent color, and font family from store
   useEffect(() => {
     // Apply theme based on system preference if set to system
     if (theme === "system") {
@@ -43,6 +43,9 @@ const App = () => {
     // Apply color scheme (this will set all necessary CSS variables)
     setColorScheme(selectedColorName);
     
+    // Apply font family
+    setFontFamily(fontFamily);
+    
     // Listen for system theme changes when using system preference
     if (theme === "system") {
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -57,7 +60,7 @@ const App = () => {
       mediaQuery.addEventListener("change", handleChange);
       return () => mediaQuery.removeEventListener("change", handleChange);
     }
-  }, [theme, selectedColorName, setColorScheme]);
+  }, [theme, selectedColorName, accentColor, fontFamily, setColorScheme, setFontFamily]);
 
   return (
     <QueryClientProvider client={queryClient}>

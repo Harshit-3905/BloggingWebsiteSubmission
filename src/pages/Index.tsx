@@ -7,11 +7,9 @@ import { ArrowRight, Code, Terminal, GitBranch, Globe, BookOpen, Users, Database
 import { useAuthStore } from "@/store/useAuthStore";
 import { useBlogStore } from "@/store/useBlogStore";
 import { BlogCard } from "@/components/BlogCard";
-import { Card } from "@/components/ui/card";
 import { AnimatedCodeBlock } from "@/components/AnimatedCodeBlock";
-import { TechStackSection } from "@/components/home/TechStackSection";
-import { StatsSection } from "@/components/home/StatsSection";
 import { TrendingTopicsSection } from "@/components/home/TrendingTopicsSection";
+import { glassMorphismClass } from "@/utils/tailwindClasses";
 
 const Index = () => {
   const { isLoggedIn } = useAuthStore();
@@ -55,7 +53,7 @@ const Index = () => {
     {
       icon: <Globe className="h-6 w-6 text-white" />,
       title: "Web Technologies",
-      description: "Stay updated with the latest frontend and backend frameworks and libraries."
+      description: "Stay updated with the latest frameworks and libraries."
     },
     {
       icon: <BookOpen className="h-6 w-6 text-white" />,
@@ -71,91 +69,117 @@ const Index = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Hero Section with Tailwind for light/dark mode adaptation */}
+      {/* Hero Section - completely revamped with better positioned elements */}
       <motion.section 
         ref={heroRef}
-        className="relative min-h-[80vh] flex items-center overflow-hidden
-                   dark:bg-black dark:text-white light:bg-gray-50 light:text-gray-900"
+        className="relative min-h-[90vh] flex items-center overflow-hidden
+                  bg-background text-foreground"
         style={{ opacity, scale }}
       >
-        {/* Background overlay with different styles for light/dark mode */}
-        <div className="absolute inset-0 dark:bg-gradient-to-br dark:from-black/70 dark:to-black/50 
-                        light:bg-gradient-to-br light:from-white/70 light:to-white/50"></div>
+        {/* Background overlay with gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background/90 z-10"></div>
         
-        {/* Animated background elements */}
+        {/* Animated background elements - Fixed positioning */}
         <div className="absolute inset-0 overflow-hidden">
+          {/* Subtle pattern background */}
           <div className="absolute inset-0 bg-[url('/patterns/circuit-board.svg')] bg-repeat opacity-10"></div>
           
-          {/* Animated orbs */}
+          {/* Animated orbs with properly distributed positions */}
           <motion.div 
-            className="absolute h-32 w-32 rounded-full bg-[var(--accent-color)]/30 filter blur-xl"
+            className="absolute h-56 w-56 rounded-full bg-[var(--accent-color)]/20 filter blur-3xl"
             style={{ top: '15%', left: '10%' }}
             animate={{ 
               y: [0, 40, 0],
               x: [0, 20, 0],
-              opacity: [0.5, 0.8, 0.5]
+              opacity: [0.5, 0.7, 0.5]
             }}
             transition={{ 
-              duration: 8,
+              duration: 15,
               repeat: Infinity,
               repeatType: "reverse"
             }}
           />
           <motion.div 
-            className="absolute h-40 w-40 rounded-full bg-secondary/20 filter blur-xl"
-            style={{ top: '25%', right: '15%' }}
+            className="absolute h-64 w-64 rounded-full bg-[var(--accent-color-bright)]/20 filter blur-3xl"
+            style={{ top: '35%', right: '15%' }}
             animate={{ 
               y: [0, -50, 0],
               x: [0, -30, 0],
-              opacity: [0.3, 0.6, 0.3]
+              opacity: [0.3, 0.5, 0.3]
             }}
             transition={{ 
-              duration: 10,
+              duration: 18,
               repeat: Infinity,
               repeatType: "reverse"
             }}
           />
           <motion.div 
-            className="absolute h-36 w-36 rounded-full bg-primary/20 filter blur-xl"
-            style={{ bottom: '20%', left: '25%' }}
+            className="absolute h-72 w-72 rounded-full bg-[var(--accent-color-text)]/10 filter blur-3xl"
+            style={{ bottom: '20%', left: '30%' }}
             animate={{ 
               y: [0, 30, 0],
               x: [0, -20, 0],
-              opacity: [0.2, 0.5, 0.2]
+              opacity: [0.2, 0.4, 0.2]
             }}
             transition={{ 
-              duration: 9,
+              duration: 20,
               repeat: Infinity,
               repeatType: "reverse"
             }}
           />
           
-          {/* Code particles with dynamic color based on theme */}
-          {Array.from({ length: 15 }).map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute font-code text-xs dark:text-white/10 light:text-black/10"
-              initial={{ 
-                x: Math.random() * 100 - 50 + '%', 
-                y: Math.random() * 100 + '%',
-                opacity: 0 
-              }}
-              animate={{ 
-                y: [null, '-100%'],
-                opacity: [0, 0.7, 0]
-              }}
-              transition={{ 
-                duration: 10 + Math.random() * 20,
-                repeat: Infinity,
-                delay: Math.random() * 5
-              }}
-            >
-              {['<>', '/>', '{}', '()', '[]', '&&', '||', '=>', '+=', '*='][i % 10]}
-            </motion.div>
-          ))}
+          {/* Code particles distributed across the screen */}
+          {Array.from({ length: 15 }).map((_, i) => {
+            // Create a more distributed pattern
+            const quadrant = i % 4; // Split into 4 quadrants
+            let xPos, yPos;
+            
+            switch(quadrant) {
+              case 0: // Top left
+                xPos = Math.random() * 30;
+                yPos = Math.random() * 40;
+                break;
+              case 1: // Top right
+                xPos = 70 + Math.random() * 30;
+                yPos = Math.random() * 40;
+                break;
+              case 2: // Bottom left
+                xPos = Math.random() * 30;
+                yPos = 60 + Math.random() * 40;
+                break;
+              case 3: // Bottom right
+                xPos = 70 + Math.random() * 30;
+                yPos = 60 + Math.random() * 40;
+                break;
+            }
+            
+            return (
+              <motion.div
+                key={i}
+                className="absolute font-code text-sm text-[var(--accent-color)]/20 dark:text-white/10 text-black/10"
+                initial={{ 
+                  x: `${xPos}%`, 
+                  y: `${yPos}%`,
+                  opacity: 0,
+                  scale: Math.random() * 0.5 + 0.5
+                }}
+                animate={{ 
+                  y: [null, `${yPos - 20}%`],
+                  opacity: [0, 0.7, 0]
+                }}
+                transition={{ 
+                  duration: 10 + Math.random() * 20,
+                  repeat: Infinity,
+                  delay: Math.random() * 5
+                }}
+              >
+                {['<>', '/>', '{}', '()', '[]', '&&', '||', '=>', '+=', '*='][i % 10]}
+              </motion.div>
+            )
+          })}
         </div>
         
-        <div className="container-custom relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center min-h-[70vh]">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 relative z-20 grid grid-cols-1 md:grid-cols-2 gap-8 items-center min-h-[70vh]">
           <motion.div 
             className="space-y-6"
             initial={{ opacity: 0, x: -50 }}
@@ -167,20 +191,19 @@ const Index = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.7 }}
             >
-              <span className="px-4 py-1 dark:bg-white/10 dark:text-white/90 light:bg-black/10 light:text-black/90 
-                               rounded-full text-sm font-medium backdrop-blur-sm mb-4 inline-block">
+              <span className="px-4 py-1.5 bg-[var(--accent-color)]/10 text-[var(--accent-color-text)] 
+                                rounded-full text-sm font-medium backdrop-blur-sm mb-4 inline-block">
                 For Developers, By Developers
               </span>
             </motion.div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight 
-                           dark:text-white light:text-gray-900">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
               Where <span className="font-code bg-clip-text text-transparent bg-gradient-to-r 
-                                    from-[var(--accent-color)] to-[var(--accent-color)]/80">Code</span> 
+                                from-[var(--accent-color)] to-[var(--accent-color-bright)]">Code</span> 
               Meets <span className="font-code bg-clip-text text-transparent bg-gradient-to-r 
-                                    from-[var(--accent-color)]/80 to-[var(--accent-color)]">Community</span>
+                              from-[var(--accent-color-bright)] to-[var(--accent-color)]">Community</span>
             </h1>
-            <p className="text-lg md:text-xl dark:text-white/90 light:text-gray-800 leading-relaxed max-w-xl">
+            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-xl">
               A space for developers to share insights, discover solutions, and connect with a community that speaks your language.
             </p>
             
@@ -192,8 +215,10 @@ const Index = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <Button asChild size="lg" 
-                      className="gap-2 bg-[var(--accent-color)] hover:bg-[var(--accent-color)]/90 
-                                 font-medium min-w-[160px] text-white">
+                      className="gap-2 bg-[var(--accent-color)] hover:bg-background 
+                                text-white hover:text-[var(--accent-color)] font-medium min-w-[160px] 
+                                shadow-lg hover:shadow-xl transition-all border-2 border-transparent 
+                                hover:border-[var(--accent-color)]">
                       <Link to="/signup">
                         Get Started 
                         <ArrowRight className="h-4 w-4 ml-2" />
@@ -205,11 +230,9 @@ const Index = () => {
                     whileTap={{ scale: 0.95 }}
                   >
                     <Button asChild size="lg" variant="outline" 
-                      className="gap-2 dark:text-white dark:border-white/30 
-                                 light:text-gray-900 light:border-gray-900/30 
-                                 dark:hover:bg-white dark:hover:text-black
-                                 light:hover:bg-[var(--accent-color)] light:hover:text-white
-                                 min-w-[160px]">
+                      className="gap-2 bg-[var(--accent-color)] border-transparent text-white
+                                hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]
+                                min-w-[160px] transition-all">
                       <Link to="/blogs">
                         Browse Blogs
                       </Link>
@@ -222,7 +245,9 @@ const Index = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Button asChild size="lg" className="gap-2 bg-primary hover:bg-primary/90 font-medium min-w-[160px] text-white hover:text-white">
+                    <Button asChild size="lg" 
+                      className="gap-2 font-medium min-w-[160px] 
+                                shadow-lg hover:shadow-xl transition-all bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
                       <Link to="/blogs">
                         Explore Blogs
                         <ArrowRight className="h-4 w-4 ml-2" />
@@ -233,7 +258,10 @@ const Index = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Button asChild size="lg" variant="outline" className="gap-2 dark:text-white dark:border-white/30 light:text-black light:border-black/30 dark:hover:bg-white/10 light:hover:bg-black/10 min-w-[160px]">
+                    <Button asChild size="lg" variant="outline" 
+                      className="gap-2 bg-[var(--accent-color)] border-transparent text-white
+                                hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]
+                                min-w-[160px] transition-all">
                       <Link to="/new-blog">
                         Write a Post
                       </Link>
@@ -244,24 +272,78 @@ const Index = () => {
             </div>
           </motion.div>
           
-          {/* Right side content */}
+          {/* Right side content with improved animation */}
           <motion.div 
             className="relative hidden md:flex justify-center items-center"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent-color)]/20 
-                           to-[var(--accent-color)]/30 rounded-full filter blur-3xl opacity-30"></div>
-            <div className="relative z-10">
+            {/* Enhanced glow effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent-color)]/10 
+                          to-[var(--accent-color-bright)]/20 rounded-full filter blur-3xl opacity-40"></div>
+            
+            {/* Floating elements around the code block */}
+            <motion.div 
+              className="absolute -top-10 -left-10 p-2 px-4 rounded-lg border border-[var(--accent-color)]/20 
+                        bg-background/80 backdrop-blur-sm text-xs font-code shadow-lg"
+              animate={{ 
+                y: [0, -10, 0],
+                rotate: [0, -5, 0],
+                opacity: [0.7, 1, 0.7]
+              }}
+              transition={{ 
+                duration: 5,
+                repeat: Infinity,
+                repeatType: "reverse"
+              }}
+            >
+              &lt;Responsive /&gt;
+            </motion.div>
+            
+            <motion.div 
+              className="absolute -bottom-8 -right-5 p-2 px-4 rounded-lg border border-[var(--accent-color)]/20 
+                        bg-background/80 backdrop-blur-sm text-xs font-code shadow-lg"
+              animate={{ 
+                y: [0, 10, 0],
+                rotate: [0, 5, 0],
+                opacity: [0.7, 1, 0.7]
+              }}
+              transition={{ 
+                duration: 6,
+                repeat: Infinity,
+                repeatType: "reverse"
+              }}
+            >
+              npm install
+            </motion.div>
+            
+            <motion.div 
+              className="absolute -top-5 right-10 p-2 px-4 rounded-lg border border-[var(--accent-color)]/20 
+                        bg-background/80 backdrop-blur-sm text-xs font-code shadow-lg"
+              animate={{ 
+                y: [0, 8, 0],
+                rotate: [0, 3, 0],
+                opacity: [0.7, 1, 0.7]
+              }}
+              transition={{ 
+                duration: 7,
+                repeat: Infinity,
+                repeatType: "reverse"
+              }}
+            >
+              function() { }
+            </motion.div>
+            
+            <div className="relative z-10 transform hover:scale-105 transition-transform duration-700">
               <AnimatedCodeBlock />
             </div>
           </motion.div>
         </div>
         
-        {/* Scroll indicator */}
+        {/* Improved scroll indicator */}
         <motion.div 
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
           animate={{ y: [0, 10, 0] }}
           transition={{ 
             duration: 1.5, 
@@ -269,13 +351,13 @@ const Index = () => {
             repeatType: "loop" 
           }}
         >
-          <div className="w-10 h-14 rounded-full dark:border-2 dark:border-white/30 
-                         light:border-2 light:border-gray-900/30 flex justify-center items-start pt-3 
-                         backdrop-blur-sm dark:bg-white/5 light:bg-black/5">
+          <div className="w-10 h-14 rounded-full border-2 border-[var(--accent-color)]/40 flex justify-center items-start pt-3 
+                        backdrop-blur-sm bg-background/30 shadow-lg">
             <motion.div 
-              className="w-2 h-2 rounded-full dark:bg-white light:bg-gray-900"
+              className="w-2 h-2 rounded-full bg-[var(--accent-color)]"
               animate={{ 
                 y: [0, 12, 0],
+                scale: [1, 1.2, 1],
                 opacity: [0.5, 1, 0.5]
               }}
               transition={{ 
@@ -288,60 +370,83 @@ const Index = () => {
         </motion.div>
       </motion.section>
 
-      {/* Stats Section */}
-      <StatsSection />
-
       {/* Features Section */}
       <section className="py-24 bg-background relative overflow-hidden">
-        <div className="container-custom relative z-10">
+        {/* Background patterns */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[var(--accent-color)]/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-[var(--accent-color)]/5 rounded-full blur-3xl"></div>
+          <div className="absolute inset-0 opacity-20 bg-[url('/patterns/grid.svg')] bg-repeat"></div>
+        </div>
+        
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <AnimatedSection>
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Developers Choose Binary Blogs</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
+              <motion.span 
+                initial={{ opacity: 0, y: -10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="px-4 py-1.5 rounded-full text-sm bg-[var(--accent-color)]/10 text-[var(--accent-color-text)] font-medium inline-block mb-4"
+              >
+                Powerful Features
+              </motion.span>
+              <motion.h2 
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                viewport={{ once: true }}
+                className="text-3xl md:text-4xl font-bold mb-4"
+              >
+                Why Developers Choose <span className="gradient-text">Binary Blogs</span>
+              </motion.h2>
+              <motion.p 
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="text-muted-foreground max-w-2xl mx-auto"
+              >
                 Our platform is built by developers, for developers, with features designed to make learning and sharing technical knowledge seamless.
-              </p>
+              </motion.p>
             </div>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {features.slice(0, 4).map((feature, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
               <AnimatedSection key={feature.title} delay={index * 0.1}>
                 <motion.div
                   whileHover={{ y: -8 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  className={`${glassMorphismClass} overflow-hidden h-full`}
                 >
-                  <Card className="h-full border-2 border-primary/10 hover:border-primary/30 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-background to-background/70">
-                    <div className="p-6 h-full flex flex-col relative z-10">
-                      <div className="flex items-start gap-4 mb-4">
-                        <motion.div 
-                          className="rounded-xl w-14 h-14 flex items-center justify-center bg-primary text-primary-foreground mb-4"
-                          whileHover={{ scale: 1.1, rotate: 5 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                        >
-                          {feature.icon}
-                        </motion.div>
-                        <div className="flex-1">
-                          <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                          <p className="text-muted-foreground">
-                            {feature.description}
-                          </p>
-                        </div>
-                      </div>
+                  <div className="p-8 h-full flex flex-col relative">
+                    {/* Decorative elements */}
+                    <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-[var(--accent-color)]/5 blur-2xl"></div>
+                    <div className="absolute -bottom-20 -left-20 w-40 h-40 rounded-full bg-[var(--accent-color)]/5 blur-2xl"></div>
+                    
+                    <div className="relative z-10 flex flex-col h-full">
+                      <motion.div 
+                        className="rounded-xl w-14 h-14 flex items-center justify-center bg-[var(--accent-color)] text-white mb-6"
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                      >
+                        {React.cloneElement(feature.icon, { className: "h-6 w-6 text-white" })}
+                      </motion.div>
                       
-                      {/* Decorative elements */}
-                      <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-primary/5 rounded-full opacity-70" />
-                      <div className="absolute top-5 right-5 w-20 h-20 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 blur-2xl" />
+                      <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
+                      <p className="text-muted-foreground flex-grow">
+                        {feature.description}
+                      </p>
+                    
                     </div>
-                  </Card>
+                  </div>
                 </motion.div>
               </AnimatedSection>
             ))}
           </div>
         </div>
       </section>
-
-      {/* Tech Stack Section */}
-      <TechStackSection />
 
       {/* Featured Blogs Section */}
       <section className="py-24 bg-background">
@@ -379,12 +484,21 @@ const Index = () => {
       {/* New Testimonials Section with glass morphism */}
       <section className="py-24 bg-background relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-72 h-72 rounded-full bg-primary/30 filter blur-3xl"></div>
-          <div className="absolute bottom-10 right-10 w-72 h-72 rounded-full bg-secondary/30 filter blur-3xl"></div>
+          <div className="absolute top-10 left-10 w-72 h-72 rounded-full bg-[var(--accent-color)]/30 filter blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-72 h-72 rounded-full bg-[var(--accent-color)]/30 filter blur-3xl"></div>
         </div>
         <div className="container-custom relative z-10">
           <AnimatedSection>
             <div className="text-center mb-16">
+              <motion.span 
+                initial={{ opacity: 0, y: -10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="px-4 py-1.5 rounded-full text-sm bg-[var(--accent-color)]/10 text-[var(--accent-color-text)] font-medium inline-block mb-4"
+              >
+                Testimonials
+              </motion.span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <span className="gradient-text">What Developers Say</span>
               </h2>
@@ -419,17 +533,19 @@ const Index = () => {
                 <motion.div
                   whileHover={{ y: -8 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="glass-morphism rounded-xl overflow-hidden h-full"
+                  className={`${glassMorphismClass} overflow-hidden h-full`}
                 >
-                  <div className="p-6">
+                  <div className="p-8 h-full">
                     <div className="flex flex-col h-full">
                       <div className="mb-4">
-                        <svg className="h-8 w-8 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z"></path>
-                        </svg>
+                        <div className="rounded-xl w-14 h-14 flex items-center justify-center bg-[var(--accent-color)] text-white">
+                          <svg className="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z"></path>
+                          </svg>
+                        </div>
                       </div>
-                      <p className="flex-grow text-lg mb-6 italic">"{testimonial.quote}"</p>
-                      <div className="flex items-center">
+                      <p className="flex-grow text-lg mb-6">"{testimonial.quote}"</p>
+                      <div className="mt-auto pt-4 border-t border-[var(--accent-color)]/10 flex items-center">
                         <div className="flex-shrink-0 mr-3">
                           <img className="h-10 w-10 rounded-full" src={testimonial.avatar} alt={testimonial.author} />
                         </div>
@@ -483,7 +599,7 @@ const Index = () => {
               },
               {
                 title: "Syntax Visualizer",
-                description: "Visualize code execution and data flow to better understand complex algorithms",
+                description: "Visualize code execution and flow to better understand algorithms",
                 icon: <Globe className="h-6 w-6" />,
                 comingSoon: false
               },
@@ -495,7 +611,7 @@ const Index = () => {
               },
               {
                 title: "Security Scanner",
-                description: "Scan your code for potential security vulnerabilities and get fix recommendations",
+                description: "Scan your code for potential security vulnerabilities",
                 icon: <Shield className="h-6 w-6" />,
                 comingSoon: true
               },
@@ -510,7 +626,7 @@ const Index = () => {
                 <motion.div
                   whileHover={{ y: -8, transition: { duration: 0.2 } }}
                   whileTap={{ scale: 0.98 }}
-                  className="h-full border-2 border-primary/10 hover:border-primary/30 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 bg-card"
+                  className={`${glassMorphismClass} overflow-hidden h-full`}
                 >
                   <div className="p-6 h-full flex flex-col">
                     <motion.div 
@@ -531,7 +647,9 @@ const Index = () => {
                     </p>
                     <div className="mt-auto">
                       <Button variant={feature.comingSoon ? "outline" : "default"} size="sm" 
-                        className={feature.comingSoon ? "border-primary/20 text-muted-foreground" : ""}>
+                        className={feature.comingSoon 
+                          ? "border-primary/20 text-muted-foreground hover:border-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-background" 
+                          : "bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"}>
                         {feature.comingSoon ? "Get Notified" : "Learn More"}
                       </Button>
                     </div>
@@ -539,6 +657,119 @@ const Index = () => {
                 </motion.div>
               </AnimatedSection>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Community Highlights Section - New Addition */}
+      <section className="py-24 bg-background relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 opacity-30">
+          <svg className="absolute top-0 left-0 w-full h-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none">
+            <defs>
+              <pattern id="dots-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                <circle cx="20" cy="20" r="1" fill="currentColor" className="text-[var(--accent-color)]/30" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#dots-pattern)" />
+          </svg>
+        </div>
+        
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+          <AnimatedSection>
+            <div className="text-center mb-12">
+              <motion.span 
+                initial={{ opacity: 0, y: -10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                viewport={{ once: true }}
+                className="px-4 py-1.5 rounded-full text-sm bg-[var(--accent-color)]/10 text-[var(--accent-color-text)] font-medium inline-block mb-4"
+              >
+                Our Community
+              </motion.span>
+              <motion.h2 
+                initial={{ opacity: 0, y: -20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                viewport={{ once: true }}
+                className="text-3xl md:text-4xl font-bold"
+              >
+                Join a Thriving Developer Community
+              </motion.h2>
+            </div>
+          </AnimatedSection>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+            {[
+              { 
+                label: "Active Members", 
+                value: "15,000+",
+                icon: <Users className="h-12 w-12" />,
+              },
+              { 
+                label: "Technical Articles", 
+                value: "3,200+",
+                icon: <BookOpen className="h-12 w-12" />,
+              },
+              { 
+                label: "Code Snippets", 
+                value: "8,500+",
+                icon: <Code className="h-12 w-12" />,
+              },
+              { 
+                label: "Daily Conversations", 
+                value: "1,200+",
+                icon: <Terminal className="h-12 w-12" />,
+              }
+            ].map((stat, index) => (
+              <AnimatedSection key={stat.label} delay={index * 0.1}>
+                <motion.div 
+                  whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.1)" }}
+                  className="flex flex-col items-center p-6 rounded-xl border border-[var(--accent-color)]/10 bg-background/80 backdrop-blur-sm"
+                >
+                  <div className="mb-4 p-3 rounded-full bg-[var(--accent-color)]/10 text-[var(--accent-color)]">
+                    {stat.icon}
+                  </div>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="text-3xl md:text-4xl font-bold text-foreground mb-2"
+                  >
+                    {stat.value}
+                  </motion.div>
+                  <h3 className="text-lg font-semibold text-foreground mb-1">{stat.label}</h3>
+                </motion.div>
+              </AnimatedSection>
+            ))}
+          </div>
+          
+          {/* Community testimonial slider */}
+          <div className="max-w-4xl mx-auto bg-gradient-to-br from-[var(--accent-color)]/5 to-[var(--accent-color)]/10 backdrop-blur-sm p-8 rounded-2xl border border-[var(--accent-color)]/20">
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="text-center"
+            >
+              <div className="mb-6 mx-auto w-16 h-16 flex items-center justify-center rounded-full bg-[var(--accent-color)]/10">
+                <svg className="w-8 h-8 text-[var(--accent-color)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+              </div>
+              <blockquote className="text-lg md:text-xl italic mb-6 text-foreground">
+                "Binary Blogs has transformed how I approach coding challenges. The community here is incredibly supportive, and the quality of content has helped me grow as a developer."
+              </blockquote>
+              <div className="flex items-center justify-center">
+                <img src="https://i.pravatar.cc/150?img=32" alt="Sarah Chen" className="w-12 h-12 rounded-full mr-4 border-2 border-[var(--accent-color)]/30" />
+                <div className="text-left">
+                  <div className="font-medium">Sarah Chen</div>
+                  <div className="text-sm text-muted-foreground">Senior Frontend Developer at TechCorp</div>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>

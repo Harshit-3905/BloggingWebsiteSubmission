@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -39,25 +38,25 @@ export default function DashboardPage() {
       title: "Total Blogs",
       value: totalBlogs,
       icon: <File className="h-5 w-5" />,
-      color: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
+      color: "bg-[var(--accent-color)]/10 text-[var(--accent-color)]"
     },
     {
       title: "Total Views",
       value: totalViews,
       icon: <Eye className="h-5 w-5" />,
-      color: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300"
+      color: "bg-[var(--accent-color-bright)]/10 text-[var(--accent-color-bright)]"
     },
     {
       title: "Total Likes",
       value: totalLikes,
       icon: <Heart className="h-5 w-5" />,
-      color: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300"
+      color: "bg-primary/10 text-primary"
     },
     {
       title: "Bookmarks",
       value: totalBookmarks,
       icon: <BookmarkCheck className="h-5 w-5" />,
-      color: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300"
+      color: "bg-secondary/10 text-secondary"
     }
   ];
   
@@ -83,7 +82,7 @@ export default function DashboardPage() {
           whileTap={{ scale: 0.95 }}
         >
           <Button asChild>
-            <Link to="/new-blog" className="flex items-center gap-2">
+            <Link to="/new-blog" className="flex items-center gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
               <PenSquare className="h-4 w-4" />
               Create New Blog
             </Link>
@@ -91,62 +90,22 @@ export default function DashboardPage() {
         </motion.div>
       </div>
       
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        {stats.map((stat, i) => (
-          <motion.div
-            key={stat.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: i * 0.1 }}
-          >
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-1">
-                      {stat.title}
-                    </p>
-                    <p className="text-3xl font-bold">{stat.value}</p>
-                  </div>
-                  <div className={`rounded-full p-2 ${stat.color}`}>
-                    {stat.icon}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        ))}
-      </div>
-      
       {/* Analytics Charts */}
-      {userBlogs.length > 0 ? (
-        <div className="mb-8">
-          <DashboardCharts blogs={userBlogs} />
+      <div className="mb-8">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold">Blog Analytics</h2>
         </div>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-muted/40 border rounded-lg p-8 text-center mb-8"
-        >
-          <h3 className="text-xl font-semibold mb-2">No Blog Analytics Yet</h3>
-          <p className="text-muted-foreground mb-6">
-            Create your first blog to see analytics and performance metrics.
-          </p>
-          <Button asChild>
-            <Link to="/new-blog">Create Your First Blog</Link>
-          </Button>
-        </motion.div>
-      )}
+        
+        {/* Always show DashboardCharts - it now handles empty blogs with demo data */}
+        <DashboardCharts blogs={userBlogs} />
+      </div>
       
       {/* Recent Blogs */}
       <div className="mb-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Your Recent Blogs</h2>
           {userBlogs.length > 3 && (
-            <Button asChild variant="ghost" size="sm" className="gap-1">
+            <Button asChild variant="ghost" size="sm" className="gap-1 hover:text-[var(--accent-color)] hover:bg-[var(--accent-color)]/5">
               <Link to="/profile">
                 View All <ArrowRight className="h-4 w-4" />
               </Link>
@@ -165,7 +124,7 @@ export default function DashboardPage() {
             <CardContent className="p-6 text-center">
               <p className="text-muted-foreground mb-4">You haven't created any blogs yet.</p>
               <Button asChild>
-                <Link to="/new-blog">Create Your First Blog</Link>
+                <Link to="/new-blog" className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">Create Your First Blog</Link>
               </Button>
             </CardContent>
           </Card>
@@ -177,7 +136,7 @@ export default function DashboardPage() {
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold">Bookmarked Blogs</h2>
           {bookmarkedBlogs.length > 3 && (
-            <Button asChild variant="ghost" size="sm" className="gap-1">
+            <Button asChild variant="ghost" size="sm" className="gap-1 hover:text-[var(--accent-color)] hover:bg-[var(--accent-color)]/5">
               <Link to="/bookmarks">
                 View All <ArrowRight className="h-4 w-4" />
               </Link>

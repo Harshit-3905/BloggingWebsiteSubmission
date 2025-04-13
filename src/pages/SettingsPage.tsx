@@ -188,7 +188,7 @@ export default function SettingsPage() {
                       />
                     </div>
                   </div>
-                  <Button className="mt-4">Update Profile</Button>
+                  <Button className="mt-4 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">Update Profile</Button>
                 </div>
 
                 <div className="space-y-4 pt-4 border-t">
@@ -213,7 +213,7 @@ export default function SettingsPage() {
                       />
                     </div>
                   </div>
-                  <Button className="mt-4">Change Password</Button>
+                  <Button className="mt-4 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">Change Password</Button>
                 </div>
               </CardContent>
             </Card>
@@ -334,7 +334,14 @@ export default function SettingsPage() {
                         Make your profile visible to other users
                       </p>
                     </div>
-                    <Switch id="profile-visibility" checked={true} />
+                    <Switch id="profile-visibility" checked={profileVisibilityEnabled}
+                      onCheckedChange={() => 
+                        handleToggleSetting(
+                          setProfileVisibilityEnabled, 
+                          "Profile visibility", 
+                          profileVisibilityEnabled
+                        )
+                      } />
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -364,15 +371,7 @@ export default function SettingsPage() {
                         Enhance your account security with 2FA
                       </p>
                     </div>
-                    <Button variant="outline" size="sm">Setup</Button>
-                  </div>
-                </div>
-
-                <div className="pt-4 border-t">
-                  <h3 className="text-lg font-medium mb-4">Data Management</h3>
-                  <div className="space-y-4">
-                    <Button variant="outline">Download My Data</Button>
-                    <Button variant="destructive">Delete Account</Button>
+                    <Button variant="outline" size="sm" className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">Setup</Button>
                   </div>
                 </div>
               </CardContent>
@@ -461,9 +460,6 @@ export default function SettingsPage() {
                     <p className="text-sm text-muted-foreground">
                       Using 25MB of 100MB (25%)
                     </p>
-                    <Button variant="outline" size="sm" className="mt-2">
-                      Manage Storage
-                    </Button>
                   </div>
                 </div>
               </CardContent>

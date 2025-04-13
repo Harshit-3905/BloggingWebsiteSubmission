@@ -24,13 +24,24 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuthStore } from "@/store/useAuthStore";
 import { Search, PenSquare, LogOut, User, LayoutDashboard, BookmarkCheck, Settings, Code, Menu } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Badge } from "@/components/ui/badge";
 
 export function Header() {
   const { isLoggedIn, user, logout, guestLogin } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
+  const [scrolled, setScrolled] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -48,12 +59,18 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className={cn(
+      "sticky top-0 z-40 w-full border-b backdrop-blur transition-all duration-200",
+      scrolled 
+        ? "bg-background/95 border-[var(--accent-color)]/10 shadow-sm" 
+        : "bg-background/80 border-transparent"
+    )}>
       <div className="container py-3 flex h-14 items-center justify-between">
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2">
             <motion.div 
               className="rounded-full w-8 h-8 binary-gradient grid place-items-center text-white font-bold"
+              whileHover={{ rotate: 10, scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               B
@@ -74,9 +91,10 @@ export function Header() {
                 <Link to="/blogs">
                   <NavigationMenuLink className={cn(
                     navigationMenuTriggerStyle(),
+                    "transition-colors duration-200 border border-transparent",
                     isActive("/blogs") 
-                      ? "text-[var(--accent-color)] border-[var(--accent-color)]" 
-                      : "hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]"
+                      ? "text-[var(--accent-color)] border-[var(--accent-color)]/40 bg-[var(--accent-color)]/5" 
+                      : "hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]/20 hover:bg-[var(--accent-color)]/5"
                   )}>
                     Blogs
                   </NavigationMenuLink>
@@ -86,13 +104,43 @@ export function Header() {
                 <Link to="/bookmarks">
                   <NavigationMenuLink className={cn(
                     navigationMenuTriggerStyle(),
+                    "transition-colors duration-200 border border-transparent",
                     isActive("/bookmarks") 
-                      ? "text-[var(--accent-color)] border-[var(--accent-color)]" 
-                      : "hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]"
+                      ? "text-[var(--accent-color)] border-[var(--accent-color)]/40 bg-[var(--accent-color)]/5" 
+                      : "hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]/20 hover:bg-[var(--accent-color)]/5"
                   )}>
                     Bookmarks
                   </NavigationMenuLink>
                 </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className={cn(
+                  "transition-colors duration-200 border border-transparent",
+                  "hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]/20 hover:bg-[var(--accent-color)]/5"
+                )}>
+                  Categories
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                    {[
+                      {name: "JavaScript", desc: "Modern JS concepts and tutorials", path: "/blogs?tag=JavaScript"},
+                      {name: "React", desc: "Component patterns and state management", path: "/blogs?tag=React"},
+                      {name: "Node.js", desc: "Server-side JavaScript development", path: "/blogs?tag=Node.js"},
+                      {name: "TypeScript", desc: "Static typing for JavaScript", path: "/blogs?tag=TypeScript"},
+                      {name: "CSS", desc: "Styling and animations", path: "/blogs?tag=CSS"},
+                      {name: "Backend", desc: "Server-side development", path: "/blogs?category=Backend"}
+                    ].map((item) => (
+                      <ListItem 
+                        key={item.name} 
+                        title={item.name} 
+                        href={item.path}
+                        className="hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+                      >
+                        {item.desc}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
               </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
@@ -106,7 +154,7 @@ export function Header() {
             <Button
               variant="outline"
               size="icon"
-              className="rounded-full"
+              className="rounded-full border-[var(--accent-color)]/20 hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]/40"
               onClick={() => navigate("/blogs")}
             >
               <Search className="h-4 w-4" />
@@ -118,12 +166,15 @@ export function Header() {
 
           {isLoggedIn ? (
             <div className="flex items-center gap-2">
-              <motion.div whileTap={{ scale: 0.95 }} className="hidden md:block">
+              <motion.div 
+                whileHover={{ scale: 1.05 }} 
+                whileTap={{ scale: 0.95 }} 
+                className="hidden md:block"
+              >
                 <Button
-                  variant="outline"
                   size="sm"
                   onClick={() => navigate("/new-blog")}
-                  className="rounded-full hidden md:flex"
+                  className="rounded-full hidden md:flex bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
                 >
                   <PenSquare className="h-4 w-4 mr-2" />
                   New Blog
@@ -132,38 +183,64 @@ export function Header() {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="rounded-full p-0 h-8 w-8">
+                  <motion.button 
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="rounded-full p-0.5 overflow-hidden border-2 border-transparent hover:border-[var(--accent-color)]/40 transition-colors duration-300"
+                  >
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={user?.avatar} alt={user?.name || "User"} />
-                      <AvatarFallback>
+                      <AvatarFallback className="bg-[var(--accent-color)]/20 text-[var(--accent-color)]">
                         {user?.name?.charAt(0) || "U"}
                       </AvatarFallback>
                     </Avatar>
-                  </Button>
+                  </motion.button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuContent align="end" className="w-56 border-[var(--accent-color)]/20">
+                  <DropdownMenuLabel className="flex items-center gap-2">
+                    <span>My Account</span>
+                    {user?.role === "admin" && (
+                      <Badge variant="outline" className="bg-[var(--accent-color)]/10 text-[var(--accent-color)] border-[var(--accent-color)]/20 text-xs">
+                        Admin
+                      </Badge>
+                    )}
+                  </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={() => navigate("/profile")} className="cursor-pointer">
+                    <DropdownMenuItem 
+                      onClick={() => navigate("/profile")} 
+                      className="cursor-pointer hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+                    >
                       <User className="mr-2 h-4 w-4" />
                       <span>Profile</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate("/dashboard")} className="cursor-pointer">
+                    <DropdownMenuItem 
+                      onClick={() => navigate("/dashboard")} 
+                      className="cursor-pointer hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+                    >
                       <LayoutDashboard className="mr-2 h-4 w-4" />
                       <span>Dashboard</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate("/bookmarks")} className="cursor-pointer">
+                    <DropdownMenuItem 
+                      onClick={() => navigate("/bookmarks")} 
+                      className="cursor-pointer hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+                    >
                       <BookmarkCheck className="mr-2 h-4 w-4" />
                       <span>Bookmarks</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate("/settings")} className="cursor-pointer">
+                    <DropdownMenuItem 
+                      onClick={() => navigate("/settings")} 
+                      className="cursor-pointer hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+                    >
                       <Settings className="mr-2 h-4 w-4" />
                       <span>Settings</span>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                  <DropdownMenuItem 
+                    onClick={handleLogout} 
+                    className="cursor-pointer hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/20 dark:hover:text-red-400"
+                  >
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log out</span>
                   </DropdownMenuItem>
@@ -172,68 +249,170 @@ export function Header() {
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <Button
-                size="sm"
-                onClick={() => navigate("/signup")}
-                className="hidden sm:inline-flex"
-              >
-                Sign Up
-              </Button>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key="login-buttons"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="flex gap-2"
+                >
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate("/login")}
+                    className="hidden sm:inline-flex border-[var(--accent-color)]/20 text-[var(--accent-color-text)] hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]/40"
+                  >
+                    Log In
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => navigate("/signup")}
+                    className="hidden sm:inline-flex bg-[var(--accent-color)] hover:bg-[var(--accent-color-bright)]"
+                  >
+                    Sign Up
+                  </Button>
+                </motion.div>
+              </AnimatePresence>
             </div>
           )}
 
           {/* Mobile Menu */}
           <Sheet>
             <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon" className="rounded-full">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="rounded-full hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+              >
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[80vw] sm:w-[350px]">
+            <SheetContent side="right" className="w-[80vw] sm:w-[350px] border-l-[var(--accent-color)]/20">
               <div className="flex flex-col h-full py-4 gap-6">
                 <div className="space-y-1">
-                  <h2 className="text-lg font-medium mb-4">Navigation</h2>
+                  <h2 className="text-lg font-medium mb-4 text-[var(--accent-color)]">Navigation</h2>
                   <div className="flex flex-col space-y-2">
-                    <Link to="/" className="py-2 px-3 rounded-md hover:bg-accent">Home</Link>
-                    <Link to="/blogs" className="py-2 px-3 rounded-md hover:bg-accent">Blogs</Link>
-                    <Link to="/bookmarks" className="py-2 px-3 rounded-md hover:bg-accent">Bookmarks</Link>
+                    <Link 
+                      to="/" 
+                      className={cn(
+                        "py-2 px-3 rounded-md transition-colors",
+                        isActive("/") 
+                          ? "bg-[var(--accent-color)]/10 text-[var(--accent-color)]" 
+                          : "hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+                      )}
+                    >
+                      Home
+                    </Link>
+                    <Link 
+                      to="/blogs" 
+                      className={cn(
+                        "py-2 px-3 rounded-md transition-colors",
+                        isActive("/blogs") 
+                          ? "bg-[var(--accent-color)]/10 text-[var(--accent-color)]" 
+                          : "hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+                      )}
+                    >
+                      Blogs
+                    </Link>
+                    <Link 
+                      to="/bookmarks" 
+                      className={cn(
+                        "py-2 px-3 rounded-md transition-colors",
+                        isActive("/bookmarks") 
+                          ? "bg-[var(--accent-color)]/10 text-[var(--accent-color)]" 
+                          : "hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+                      )}
+                    >
+                      Bookmarks
+                    </Link>
+                    {isLoggedIn && (
+                      <Link 
+                        to="/new-blog" 
+                        className={cn(
+                          "py-2 px-3 rounded-md transition-colors",
+                          isActive("/new-blog") 
+                            ? "bg-[var(--accent-color)]/10 text-[var(--accent-color)]" 
+                            : "hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+                        )}
+                      >
+                        <PenSquare className="h-4 w-4 inline-block mr-2" /> New Blog
+                      </Link>
+                    )}
                   </div>
                 </div>
                 
                 <div className="space-y-1">
-                  <h2 className="text-lg font-medium mb-2">Popular Categories</h2>
+                  <h2 className="text-lg font-medium mb-2 text-[var(--accent-color)]">Popular Categories</h2>
                   <div className="flex flex-col space-y-2">
-                    <Link to="/blogs?tag=React" className="py-2 px-3 rounded-md hover:bg-accent flex items-center gap-2">
+                    <Link 
+                      to="/blogs?tag=React" 
+                      className="py-2 px-3 rounded-md hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] flex items-center gap-2"
+                    >
                       <Code className="h-4 w-4" /> React
                     </Link>
-                    <Link to="/blogs?tag=JavaScript" className="py-2 px-3 rounded-md hover:bg-accent flex items-center gap-2">
+                    <Link 
+                      to="/blogs?tag=JavaScript" 
+                      className="py-2 px-3 rounded-md hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] flex items-center gap-2"
+                    >
                       <Code className="h-4 w-4" /> JavaScript
                     </Link>
-                    <Link to="/blogs?tag=TypeScript" className="py-2 px-3 rounded-md hover:bg-accent flex items-center gap-2">
+                    <Link 
+                      to="/blogs?tag=TypeScript" 
+                      className="py-2 px-3 rounded-md hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] flex items-center gap-2"
+                    >
                       <Code className="h-4 w-4" /> TypeScript
                     </Link>
                   </div>
                 </div>
                 
-                {isLoggedIn && (
+                {isLoggedIn ? (
                   <div className="space-y-1 mt-auto">
-                    <h2 className="text-lg font-medium mb-2">Account</h2>
+                    <h2 className="text-lg font-medium mb-2 text-[var(--accent-color)]">Account</h2>
                     <div className="flex flex-col space-y-2">
-                      <Link to="/profile" className="py-2 px-3 rounded-md hover:bg-accent flex items-center gap-2">
+                      <Link 
+                        to="/profile" 
+                        className="py-2 px-3 rounded-md hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] flex items-center gap-2"
+                      >
                         <User className="h-4 w-4" /> Profile
                       </Link>
-                      <Link to="/dashboard" className="py-2 px-3 rounded-md hover:bg-accent flex items-center gap-2">
+                      <Link 
+                        to="/dashboard" 
+                        className="py-2 px-3 rounded-md hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] flex items-center gap-2"
+                      >
                         <LayoutDashboard className="h-4 w-4" /> Dashboard
                       </Link>
-                      <Link to="/settings" className="py-2 px-3 rounded-md hover:bg-accent flex items-center gap-2">
+                      <Link 
+                        to="/settings" 
+                        className="py-2 px-3 rounded-md hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] flex items-center gap-2"
+                      >
                         <Settings className="h-4 w-4" /> Settings
                       </Link>
                       <Button 
                         variant="outline" 
-                        className="w-full justify-start" 
+                        className="w-full justify-start border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 dark:border-red-800/30 dark:text-red-400 dark:hover:bg-red-950/20" 
                         onClick={handleLogout}
                       >
                         <LogOut className="h-4 w-4 mr-2" /> Log out
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-4 mt-auto">
+                    <h2 className="text-lg font-medium mb-2 text-[var(--accent-color)]">Join us</h2>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button 
+                        variant="outline" 
+                        className="w-full border-[var(--accent-color)]/20 hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]/40"
+                        onClick={() => navigate("/login")}
+                      >
+                        Log In
+                      </Button>
+                      <Button 
+                        className="w-full bg-[var(--accent-color)] hover:bg-[var(--accent-color-bright)]"
+                        onClick={() => navigate("/signup")}
+                      >
+                        Sign Up
                       </Button>
                     </div>
                   </div>
@@ -248,24 +427,23 @@ export function Header() {
 }
 
 const ListItem = React.forwardRef<
-  React.ElementRef<typeof NavigationMenuLink>,
-  React.ComponentPropsWithoutRef<typeof NavigationMenuLink>
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {
   return (
     <li>
-      <NavigationMenuLink
-        ref={ref}
+      <Link
+        to={props.href || "#"}
         className={cn(
-          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+          "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors",
           className
         )}
-        {...props}
       >
         <div className="text-sm font-medium leading-none">{title}</div>
         <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
           {children}
         </p>
-      </NavigationMenuLink>
+      </Link>
     </li>
   );
 });

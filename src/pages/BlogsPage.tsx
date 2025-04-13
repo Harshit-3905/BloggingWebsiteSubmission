@@ -203,6 +203,7 @@ export default function BlogsPage() {
                 size="icon" 
                 onClick={handleRefresh}
                 disabled={isLoading}
+                className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
               >
                 <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
               </Button>

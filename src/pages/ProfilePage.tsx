@@ -65,17 +65,17 @@ export default function ProfilePage() {
             <div className="flex flex-wrap gap-3 justify-center md:justify-start">
               {isCurrentUser ? (
                 <>
-                  <Button onClick={() => navigate("/settings")} variant="outline" className="gap-2">
+                  <Button onClick={() => navigate("/settings")} variant="outline" className="gap-2 hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
                     <PenLine className="h-4 w-4" />
                     Edit Profile
                   </Button>
-                  <Button onClick={() => navigate("/new-blog")} className="gap-2">
+                  <Button onClick={() => navigate("/new-blog")} className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
                     <PenLine className="h-4 w-4" />
                     Write Blog
                   </Button>
                 </>
               ) : (
-                <Button variant="outline" className="gap-2">
+                <Button variant="outline" className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
                   <User className="h-4 w-4" />
                   Follow
                 </Button>
@@ -114,7 +114,7 @@ export default function ProfilePage() {
                     : "This user hasn't written any blogs yet."}
                 </p>
                 {isCurrentUser && (
-                  <Button onClick={() => navigate("/new-blog")}>
+                  <Button onClick={() => navigate("/new-blog")} className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
                     Write Your First Blog
                   </Button>
                 )}
@@ -132,7 +132,7 @@ export default function ProfilePage() {
                   : "This user hasn't liked any blogs yet."}
               </p>
               {isCurrentUser && (
-                <Button onClick={() => navigate("/blogs")} variant="outline">
+                <Button onClick={() => navigate("/blogs")} variant="outline" className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
                   Explore Blogs
                 </Button>
               )}

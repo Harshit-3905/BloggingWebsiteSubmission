@@ -6,13 +6,25 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
-import { Heart, Bookmark, MessageSquare, Share2, Edit, Calendar, Eye, ArrowLeft } from "lucide-react";
+import { 
+  Heart, 
+  Bookmark, 
+  MessageSquare, 
+  Share2, 
+  Edit, 
+  Calendar, 
+  Eye, 
+  ArrowLeft,
+  Clock,
+  ThumbsUp 
+} from "lucide-react";
 import { BlogCard } from "@/components/BlogCard";
 import { useBlogStore } from "@/store/useBlogStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useToast } from "@/hooks/use-toast";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { Separator } from "@/components/ui/separator";
 
 export default function BlogDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -25,6 +37,16 @@ export default function BlogDetailPage() {
   
   // Track if we have loaded the blog completely
   const [blogLoaded, setBlogLoaded] = useState(false);
+  
+  // Reference to content div for scrolling
+  const contentRef = useRef<HTMLDivElement>(null);
+  
+  // Animation state
+  const [showCommentForm, setShowCommentForm] = useState(false);
+
+  // Add near the top of the component
+  const [contentFix, setContentFix] = useState(false);
+  const viewIncremented = useRef(false);
 
   // Find the blog by slug
   const blog = blogs.find((b) => b.slug === slug);
@@ -48,7 +70,7 @@ export default function BlogDetailPage() {
         incrementView(blog.id);
       }, 0);
     }
-  }, [blog, blogLoaded]);
+  }, [blog, blogLoaded, incrementView]);
 
   useEffect(() => {
     if (!blog) return;
@@ -63,6 +85,38 @@ export default function BlogDetailPage() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [blog]);
+
+  // Add after blog is found
+  useEffect(() => {
+    if (blog && !viewIncremented.current) {
+      viewIncremented.current = true;
+      
+      // Use timeout to break render cycle
+      setTimeout(() => {
+        // Increment view count to trigger an update
+        incrementView(blog.id);
+        // Force a re-render of our content
+        setContentFix(true);
+      }, 0);
+    }
+  }, [blog, incrementView]);
+
+  // Calculate reading time
+  const calculateReadingTime = (content: string): number => {
+    const wordsPerMinute = 200;
+    const wordCount = content.split(/\s+/).length;
+    return Math.ceil(wordCount / wordsPerMinute);
+  };
+  
+  // Scroll to comments section
+  const scrollToComments = () => {
+    if (contentRef.current) {
+      setShowCommentForm(true);
+      setTimeout(() => {
+        contentRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  };
 
   if (!blog) {
     return (
@@ -149,11 +203,17 @@ export default function BlogDetailPage() {
     }
   };
 
+  // Get reading time
+  const readingTime = blog.content ? calculateReadingTime(blog.content) : 0;
+
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative pb-12">
       {/* Scroll Progress Bar */}
       <div className="fixed top-14 left-0 right-0 z-50">
-        <Progress value={scrollProgress} className="h-1 rounded-none" />
+        <Progress value={scrollProgress} className="h-1 rounded-none bg-muted" 
+          style={{ 
+            '--progress-background': 'var(--accent-color)',
+          } as React.CSSProperties} />
       </div>
       
       {/* Back Button */}
@@ -162,7 +222,7 @@ export default function BlogDetailPage() {
           variant="ghost" 
           size="sm" 
           onClick={() => navigate('/blogs')}
-          className="flex items-center gap-1 hover:gap-2 transition-all"
+          className="flex items-center gap-1 hover:gap-2 transition-all hover:text-[var(--accent-color)] hover:bg-[var(--accent-color)]/5"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Back to blogs</span>
@@ -171,48 +231,88 @@ export default function BlogDetailPage() {
       
       {/* Blog Header */}
       <div className="relative">
-        <div className="aspect-[3/1] relative overflow-hidden">
+        <div className="aspect-video sm:aspect-[3/1] relative overflow-hidden rounded-none sm:rounded-lg mx-0 sm:mx-4">
           <img
             src={blog.coverImage}
             alt={blog.title}
             className="object-cover w-full h-full"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent opacity-70"></div>
+          
+          {/* Floating action buttons for mobile */}
+          <div className="absolute bottom-4 right-4 flex gap-2 sm:hidden">
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleLike}
+                className="rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90"
+              >
+                <Heart className={`h-4 w-4 ${blog.likes > 0 ? "fill-[var(--accent-color)] text-[var(--accent-color)]" : ""}`} />
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleBookmark}
+                className="rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90"
+              >
+                <Bookmark className={`h-4 w-4 ${blog.bookmarked ? "fill-[var(--accent-color)] text-[var(--accent-color)]" : ""}`} />
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleShare}
+                className="rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90"
+              >
+                <Share2 className="h-4 w-4" />
+              </Button>
+            </motion.div>
+          </div>
         </div>
         
-        <div className="container-custom relative -mt-24 mb-8">
+        <div className="container-custom relative -mt-16 sm:-mt-24 mb-8">
           <motion.div 
-            className="bg-background border rounded-lg shadow-lg p-6 md:p-8"
+            className="bg-background border rounded-lg shadow-lg p-4 md:p-8"
             initial="hidden"
             animate="visible"
             variants={fadeInUp}
           >
             <div className="flex flex-wrap gap-2 mb-4">
-              {blog.tags.map((tag) => (
+              {blog.tags.map((tag, index) => (
                 <Badge 
                   key={tag} 
                   variant="secondary"
-                  className={blog.tags.indexOf(tag) % 2 === 0 ? "bg-primary/10 hover:bg-primary/20 text-primary" : ""}
+                  className={index % 2 === 0 
+                    ? "bg-[var(--accent-color)]/10 hover:bg-[var(--accent-color)]/20 text-[var(--accent-color)]" 
+                    : ""}
                 >
                   {tag}
                 </Badge>
               ))}
             </div>
             
-            <h1 className="text-3xl md:text-4xl font-bold mb-4">{blog.title}</h1>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">{blog.title}</h1>
             
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
               <div className="flex items-center gap-3">
-                <Avatar className="h-10 w-10 border-2 border-primary/20">
+                <Avatar className="h-10 w-10 border-2 border-[var(--accent-color)]/20">
                   <AvatarImage src={blog.author.avatar} alt={blog.author.name} />
                   <AvatarFallback>{blog.author.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="font-medium">{blog.author.name}</p>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
                     <div className="flex items-center gap-1">
                       <Calendar className="h-3 w-3" />
                       <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      <span>{readingTime} min read</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <Eye className="h-3 w-3" />
@@ -222,54 +322,62 @@ export default function BlogDetailPage() {
                 </div>
               </div>
               
-              <div className="flex items-center gap-2">
+              {/* Desktop action buttons */}
+              <div className="hidden sm:flex items-center gap-2">
                 <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                   <Button
                     variant="outline"
-                    size="icon"
+                    size="sm"
                     onClick={handleLike}
-                    className="rounded-full"
+                    className="rounded-full flex items-center gap-1 hover:border-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-[var(--accent-color)]/10"
                   >
-                    <Heart
-                      className={`h-4 w-4 ${blog.likes > 0 ? "fill-primary text-primary" : ""}`}
-                    />
-                    <span className="sr-only">Like</span>
+                    <ThumbsUp className={`h-4 w-4 ${blog.likes > 0 ? "fill-[var(--accent-color)] text-[var(--accent-color)]" : ""}`} />
+                    <span>{blog.likes}</span>
                   </Button>
                 </motion.div>
                 <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                   <Button
                     variant="outline"
-                    size="icon"
+                    size="sm"
                     onClick={handleBookmark}
-                    className="rounded-full"
+                    className="rounded-full flex items-center gap-1 hover:border-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-[var(--accent-color)]/10"
                   >
-                    <Bookmark
-                      className={`h-4 w-4 ${blog.bookmarked ? "fill-primary text-primary" : ""}`}
-                    />
-                    <span className="sr-only">Bookmark</span>
+                    <Bookmark className={`h-4 w-4 ${blog.bookmarked ? "fill-[var(--accent-color)] text-[var(--accent-color)]" : ""}`} />
+                    <span>Save</span>
                   </Button>
                 </motion.div>
                 <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                   <Button
                     variant="outline"
-                    size="icon"
+                    size="sm"
                     onClick={handleShare}
-                    className="rounded-full"
+                    className="rounded-full flex items-center gap-1 hover:border-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-[var(--accent-color)]/10"
                   >
                     <Share2 className="h-4 w-4" />
-                    <span className="sr-only">Share</span>
+                    <span>Share</span>
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={scrollToComments}
+                    className="rounded-full flex items-center gap-1 hover:border-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-[var(--accent-color)]/10"
+                  >
+                    <MessageSquare className="h-4 w-4" />
+                    <span>{blog.comments.length}</span>
                   </Button>
                 </motion.div>
                 {isLoggedIn && user?.id === blog.author.id && (
                   <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
                     <Button
                       variant="outline"
-                      size="icon"
+                      size="sm"
                       onClick={() => navigate(`/edit-blog/${blog.id}`)}
-                      className="rounded-full"
+                      className="rounded-full flex items-center gap-1 hover:border-[var(--accent-color)]/40 hover:text-[var(--accent-color)]"
                     >
                       <Edit className="h-4 w-4" />
-                      <span className="sr-only">Edit</span>
+                      <span>Edit</span>
                     </Button>
                   </motion.div>
                 )}
@@ -281,53 +389,171 @@ export default function BlogDetailPage() {
       
       {/* Blog Content */}
       <div className="container-custom mb-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <AnimatedSection className="lg:col-span-2" delay={0.1}>
-            <div className="bg-background rounded-lg border p-6 md:p-8 shadow-sm">
-              <div className="prose prose-lg max-w-none">
-                {blog?.content && <MarkdownRenderer content={blog.content} />}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
+          <AnimatedSection className="lg:col-span-3" delay={0.1}>
+            <div className="bg-background rounded-lg border p-4 md:p-6 lg:p-8 shadow-sm">
+              {/* FIX: Enhanced styling for markdown content to ensure visibility */}
+              <div className="markdown-content w-full max-w-none text-foreground inline-block
+                prose dark:prose-invert 
+                prose-headings:text-foreground prose-headings:font-bold prose-headings:mb-4 
+                prose-p:text-foreground prose-p:my-4 prose-p:leading-relaxed prose-p:block
+                prose-strong:text-foreground prose-strong:font-bold
+                prose-a:text-[var(--accent-color)] hover:prose-a:text-[var(--accent-color-bright)] prose-a:underline
+                prose-img:rounded-md prose-img:mx-auto prose-img:my-6 prose-img:block
+                prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-foreground
+                prose-pre:bg-muted prose-pre:text-foreground prose-pre:p-4 prose-pre:rounded-md prose-pre:overflow-auto
+                prose-blockquote:border-l-[var(--accent-color)] prose-blockquote:bg-muted/50 prose-blockquote:py-1 prose-blockquote:px-4 prose-blockquote:not-italic
+                prose-ul:text-foreground prose-ul:my-4 prose-li:text-foreground prose-li:my-1
+                prose-table:border prose-table:border-border prose-th:bg-muted prose-th:text-foreground prose-th:p-2 prose-td:border prose-td:border-border prose-td:p-2">
+                {blog?.content && (
+                  <div key={contentFix ? "content-fixed" : "content-initial"}>
+                    <MarkdownRenderer content={blog.content} />
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Floating action bar for smaller screens */}
+            <div className="sticky bottom-4 lg:hidden flex justify-center mt-4">
+              <div className="bg-background/90 backdrop-blur border rounded-full shadow-lg p-1 flex items-center space-x-1">
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleLike}
+                    className="rounded-full flex items-center gap-1 h-9 hover:bg-[var(--accent-color)]/20 hover:text-[var(--accent-color)]"
+                  >
+                    <ThumbsUp className={`h-4 w-4 ${blog.likes > 0 ? "fill-[var(--accent-color)] text-[var(--accent-color)]" : ""}`} />
+                    <span className="text-sm">{blog.likes}</span>
+                  </Button>
+                </motion.div>
+                
+                <Separator orientation="vertical" className="h-6" />
+                
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={scrollToComments}
+                    className="rounded-full flex items-center gap-1 h-9 hover:bg-[var(--accent-color)]/20 hover:text-[var(--accent-color)]"
+                  >
+                    <MessageSquare className="h-4 w-4" />
+                    <span className="text-sm">{blog.comments.length}</span>
+                  </Button>
+                </motion.div>
+                
+                <Separator orientation="vertical" className="h-6" />
+                
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleBookmark}
+                    className="rounded-full h-9 hover:bg-[var(--accent-color)]/20 hover:text-[var(--accent-color)]"
+                  >
+                    <Bookmark className={`h-4 w-4 ${blog.bookmarked ? "fill-[var(--accent-color)] text-[var(--accent-color)]" : ""}`} />
+                  </Button>
+                </motion.div>
+                
+                {isLoggedIn && user?.id === blog.author.id && (
+                  <>
+                    <Separator orientation="vertical" className="h-6" />
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => navigate(`/edit-blog/${blog.id}`)}
+                        className="rounded-full h-9 hover:bg-[var(--accent-color)]/20 hover:text-[var(--accent-color)]"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </motion.div>
+                  </>
+                )}
+                
+                <Separator orientation="vertical" className="h-6" />
+                
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleShare}
+                    className="rounded-full h-9 hover:bg-[var(--accent-color)]/20 hover:text-[var(--accent-color)]"
+                  >
+                    <Share2 className="h-4 w-4" />
+                  </Button>
+                </motion.div>
               </div>
             </div>
             
             {/* Author Bio */}
             <div className="mt-8 bg-muted/30 border rounded-lg p-6">
-              <div className="flex items-center gap-4 mb-4">
-                <Avatar className="h-16 w-16 border-2 border-primary/20">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
+                <Avatar className="h-16 w-16 border-2 border-[var(--accent-color)]/20">
                   <AvatarImage src={blog.author.avatar} alt={blog.author.name} />
                   <AvatarFallback>{blog.author.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
                   <h3 className="text-xl font-bold">About {blog.author.name}</h3>
-                  <p className="text-muted-foreground">{blog.author.bio}</p>
+                  <p className="text-muted-foreground">{blog.author.bio || "Tech enthusiast and avid writer sharing insights on the latest technologies and development practices."}</p>
                 </div>
               </div>
             </div>
             
             {/* Comments Section */}
-            <div className="mt-8">
+            <div className="mt-8" ref={contentRef}>
               <h3 className="text-xl font-bold flex items-center gap-2 mb-4">
                 <MessageSquare className="h-5 w-5" />
                 Comments ({blog.comments.length})
               </h3>
               
-              <form onSubmit={handleSubmitComment} className="mb-6">
-                <Textarea
-                  placeholder="Write a comment..."
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  className="mb-2"
-                />
-                <Button type="submit" disabled={!isLoggedIn}>
-                  {isLoggedIn ? "Post Comment" : "Login to Comment"}
-                </Button>
-              </form>
+              <AnimatePresence>
+                {(showCommentForm || blog.comments.length > 0) && (
+                  <motion.form 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    onSubmit={handleSubmitComment} 
+                    className="mb-6"
+                  >
+                    <Textarea
+                      placeholder={isLoggedIn ? "Write a comment..." : "Login to comment"}
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      className="mb-2 focus-visible:ring-[var(--accent-color)]"
+                      disabled={!isLoggedIn}
+                    />
+                    <Button 
+                      type="submit" 
+                      disabled={!isLoggedIn}
+                      className="bg-[var(--accent-color)] hover:bg-[var(--accent-color-bright)] text-white"
+                    >
+                      {isLoggedIn ? "Post Comment" : "Login to Comment"}
+                    </Button>
+                  </motion.form>
+                )}
+              </AnimatePresence>
               
-              {blog.comments.length > 0 ? (
+              {!showCommentForm && blog.comments.length === 0 && (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="border border-dashed rounded-lg p-6 text-center mb-6"
+                >
+                  <MessageSquare className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                  <p className="text-muted-foreground mb-4">No comments yet. Start the conversation!</p>
+                  <Button onClick={() => setShowCommentForm(true)}>
+                    Write a Comment
+                  </Button>
+                </motion.div>
+              )}
+              
+              {blog.comments.length > 0 && (
                 <div className="space-y-4">
                   {blog.comments.map((comment, index) => (
                     <motion.div 
                       key={comment.id} 
-                      className="border rounded-lg p-4 hover:border-primary/20 transition-colors"
+                      className="border rounded-lg p-4 hover:border-[var(--accent-color)]/20 transition-colors"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1, duration: 0.4 }}
@@ -349,39 +575,53 @@ export default function BlogDetailPage() {
                           </p>
                         </div>
                       </div>
-                      <p>{comment.content}</p>
+                      <p className="pl-11">{comment.content}</p>
                     </motion.div>
                   ))}
                 </div>
-              ) : (
-                <p className="text-muted-foreground">No comments yet. Be the first to comment!</p>
               )}
             </div>
           </AnimatedSection>
           
           {/* Sidebar */}
-          <AnimatedSection direction="left" delay={0.3}>
-            <div className="space-y-8">
+          <AnimatedSection direction="left" delay={0.3} className="lg:col-span-1">
+            <div className="lg:sticky lg:top-20 space-y-8">
               {/* Blog Stats */}
-              <div className="bg-muted/30 border rounded-lg p-6 hover:border-primary/20 transition-colors">
+              <div className="bg-muted/30 border rounded-lg p-6 hover:border-[var(--accent-color)]/20 transition-colors">
                 <h3 className="text-lg font-medium mb-4">Blog Stats</h3>
                 <div className="space-y-4">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Views</span>
+                    <span className="text-muted-foreground flex items-center gap-2">
+                      <Eye className="h-4 w-4" /> Views
+                    </span>
                     <span className="font-medium">{blog.views}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Likes</span>
+                    <span className="text-muted-foreground flex items-center gap-2">
+                      <ThumbsUp className="h-4 w-4" /> Likes
+                    </span>
                     <span className="font-medium">{blog.likes}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Comments</span>
+                    <span className="text-muted-foreground flex items-center gap-2">
+                      <MessageSquare className="h-4 w-4" /> Comments
+                    </span>
                     <span className="font-medium">{blog.comments.length}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Published</span>
+                    <span className="text-muted-foreground flex items-center gap-2">
+                      <Calendar className="h-4 w-4" /> Published
+                    </span>
                     <span className="font-medium">
                       {new Date(blog.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground flex items-center gap-2">
+                      <Clock className="h-4 w-4" /> Reading Time
+                    </span>
+                    <span className="font-medium">
+                      {readingTime} min
                     </span>
                   </div>
                 </div>
@@ -398,6 +638,22 @@ export default function BlogDetailPage() {
                   </div>
                 </div>
               )}
+              
+              {/* Article Tagcloud on desktop */}
+              <div className="hidden sm:block">
+                <h3 className="text-lg font-medium mb-4">Tags</h3>
+                <div className="flex flex-wrap gap-2">
+                  {blog.tags.map((tag) => (
+                    <Badge 
+                      key={tag} 
+                      variant="outline" 
+                      className="cursor-pointer hover:bg-[var(--accent-color)]/10 hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]/20"
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             </div>
           </AnimatedSection>
         </div>

@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import { BlogTag } from "@/types/blogTypes";
 
 export default function BookmarksPage() {
   const { blogs, bookmarkedBlogs, toggleBookmark } = useBlogStore();
@@ -56,7 +57,7 @@ export default function BookmarksPage() {
       blog.author.name.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesTags = selectedTags.length === 0 || 
-      selectedTags.every(tag => blog.tags.includes(tag as any));
+      selectedTags.every(tag => blog.tags.includes(tag as BlogTag));
     
     return matchesSearch && matchesTags;
   });
@@ -105,7 +106,7 @@ export default function BookmarksPage() {
               className="pl-10"
             />
           </div>
-          <Button variant="outline" className="md:w-auto w-full gap-2">
+          <Button variant="outline" className="md:w-auto w-full gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
             <Filter className="h-4 w-4" />
             Filter
           </Button>
@@ -161,7 +162,7 @@ export default function BookmarksPage() {
             </p>
             <Button
               onClick={() => navigate("/blogs")}
-              className="inline-flex items-center justify-center gap-2"
+              className="inline-flex items-center justify-center gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
             >
               <BookmarkPlus className="h-4 w-4" />
               Explore Blogs

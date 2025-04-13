@@ -1,5 +1,6 @@
-
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -20,7 +21,14 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Inter", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+        sans: [
+          "Inter",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "sans-serif",
+        ],
         mono: ["Source Code Pro", "Fira Code", "monospace"],
         code: ["JetBrains Mono", "Source Code Pro", "monospace"],
         serif: ["Georgia", "Cambria", "Times New Roman", "Times", "serif"],
@@ -68,7 +76,7 @@ export default {
         },
         blue: {
           100: "#DBEAFE",
-          200: "#BFDBFE", 
+          200: "#BFDBFE",
           300: "#93C5FD",
           400: "#60A5FA",
           500: "#3B82F6",
@@ -160,47 +168,47 @@ export default {
         },
         fadeIn: {
           "0%": { opacity: "0" },
-          "100%": { opacity: "1" }
+          "100%": { opacity: "1" },
         },
         slideUp: {
           "0%": { transform: "translateY(20px)", opacity: "0" },
-          "100%": { transform: "translateY(0)", opacity: "1" }
+          "100%": { transform: "translateY(0)", opacity: "1" },
         },
         slideDown: {
           "0%": { transform: "translateY(-20px)", opacity: "0" },
-          "100%": { transform: "translateY(0)", opacity: "1" }
+          "100%": { transform: "translateY(0)", opacity: "1" },
         },
         slideLeft: {
           "0%": { transform: "translateX(20px)", opacity: "0" },
-          "100%": { transform: "translateX(0)", opacity: "1" }
+          "100%": { transform: "translateX(0)", opacity: "1" },
         },
         slideRight: {
           "0%": { transform: "translateX(-20px)", opacity: "0" },
-          "100%": { transform: "translateX(0)", opacity: "1" }
+          "100%": { transform: "translateX(0)", opacity: "1" },
         },
         float: {
           "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" }
+          "50%": { transform: "translateY(-10px)" },
         },
         pulse: {
           "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0.5" }
+          "50%": { opacity: "0.5" },
         },
         typing: {
-          "from": { width: "0" },
-          "to": { width: "100%" }
+          from: { width: "0" },
+          to: { width: "100%" },
         },
         blink: {
           "0%, 100%": { opacity: "1" },
-          "50%": { opacity: "0" }
+          "50%": { opacity: "0" },
         },
         shimmer: {
-          "100%": { transform: "translateX(100%)" }
+          "100%": { transform: "translateX(100%)" },
         },
         spin: {
-          "from": { transform: "rotate(0deg)" },
-          "to": { transform: "rotate(360deg)" }
-        }
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -210,102 +218,107 @@ export default {
         "slide-down": "slideDown 0.5s ease-out forwards",
         "slide-left": "slideLeft 0.5s ease-out forwards",
         "slide-right": "slideRight 0.5s ease-out forwards",
-        "float": "float 3s ease-in-out infinite",
-        "pulse": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "typing": "typing 3.5s steps(40, end), blink 1s step-end infinite",
-        "shimmer": "shimmer 1.5s infinite",
-        "spin-slow": "spin 3s linear infinite"
+        float: "float 3s ease-in-out infinite",
+        pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        typing: "typing 3.5s steps(40, end), blink 1s step-end infinite",
+        shimmer: "shimmer 1.5s infinite",
+        "spin-slow": "spin 3s linear infinite",
       },
       spacing: {
-        '18': '4.5rem',
-        '72': '18rem',
-        '84': '21rem',
-        '96': '24rem',
+        "18": "4.5rem",
+        "72": "18rem",
+        "84": "21rem",
+        "96": "24rem",
       },
       maxHeight: {
-        '0': '0',
-        '1/4': '25%',
-        '1/2': '50%',
-        '3/4': '75%',
+        "0": "0",
+        "1/4": "25%",
+        "1/2": "50%",
+        "3/4": "75%",
       },
       typography: {
         DEFAULT: {
           css: {
-            maxWidth: '65ch',
-            color: 'var(--tw-prose-body)',
+            maxWidth: "65ch",
+            color: "var(--tw-prose-body)",
             p: {
-              marginTop: '1.25em',
-              marginBottom: '1.25em',
+              marginTop: "1.25em",
+              marginBottom: "1.25em",
             },
             a: {
-              color: 'var(--tw-prose-links)',
-              textDecoration: 'none',
-              fontWeight: '500',
-              '&:hover': {
-                textDecoration: 'underline',
+              color: "var(--tw-prose-links)",
+              textDecoration: "none",
+              fontWeight: "500",
+              "&:hover": {
+                textDecoration: "underline",
               },
             },
             h1: {
-              marginTop: '0',
-              marginBottom: '0.75em',
-              fontSize: '2.25em',
-              fontWeight: '700',
-              lineHeight: '1.2',
+              marginTop: "0",
+              marginBottom: "0.75em",
+              fontSize: "2.25em",
+              fontWeight: "700",
+              lineHeight: "1.2",
             },
             h2: {
-              marginTop: '1.5em',
-              marginBottom: '0.75em',
-              fontSize: '1.75em',
-              fontWeight: '600',
-              lineHeight: '1.25',
+              marginTop: "1.5em",
+              marginBottom: "0.75em",
+              fontSize: "1.75em",
+              fontWeight: "600",
+              lineHeight: "1.25",
             },
             h3: {
-              marginTop: '1.5em',
-              marginBottom: '0.75em',
-              fontSize: '1.5em',
-              fontWeight: '600',
-              lineHeight: '1.25',
+              marginTop: "1.5em",
+              marginBottom: "0.75em",
+              fontSize: "1.5em",
+              fontWeight: "600",
+              lineHeight: "1.25",
             },
             code: {
-              fontWeight: '400',
-              borderRadius: '0.25rem',
+              fontWeight: "400",
+              borderRadius: "0.25rem",
             },
             pre: {
-              color: 'var(--tw-prose-pre-code)',
-              borderRadius: '0.375rem',
-              marginTop: '1.25em',
-              marginBottom: '1.25em',
-              padding: '1rem',
-              overflowX: 'auto',
+              color: "var(--tw-prose-pre-code)",
+              borderRadius: "0.375rem",
+              marginTop: "1.25em",
+              marginBottom: "1.25em",
+              padding: "1rem",
+              overflowX: "auto",
             },
             img: {
-              marginTop: '1.5em',
-              marginBottom: '1.5em',
-              borderRadius: '0.375rem',
+              marginTop: "1.5em",
+              marginBottom: "1.5em",
+              borderRadius: "0.375rem",
             },
             blockquote: {
-              fontStyle: 'italic',
-              borderLeftWidth: '4px',
-              paddingLeft: '1rem',
-              marginTop: '1.5em',
-              marginBottom: '1.5em',
+              fontStyle: "italic",
+              borderLeftWidth: "4px",
+              paddingLeft: "1rem",
+              marginTop: "1.5em",
+              marginBottom: "1.5em",
             },
             ul: {
-              marginTop: '1.25em',
-              marginBottom: '1.25em',
-              paddingLeft: '1.5em',
-              listStyleType: 'disc',
+              marginTop: "1.25em",
+              marginBottom: "1.25em",
+              paddingLeft: "1.5em",
+              listStyleType: "disc",
             },
             ol: {
-              marginTop: '1.25em',
-              marginBottom: '1.25em',
-              paddingLeft: '1.5em',
-              listStyleType: 'decimal',
+              marginTop: "1.25em",
+              marginBottom: "1.25em",
+              paddingLeft: "1.5em",
+              listStyleType: "decimal",
             },
           },
         },
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    tailwindcssAnimate,
+    plugin(function ({ addVariant }) {
+      addVariant("light", ["&:not(.dark)", "html:not(.dark) &"]);
+    }),
+  ],
 } satisfies Config;
