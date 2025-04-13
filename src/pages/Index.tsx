@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -15,6 +15,9 @@ const Index = () => {
   const { isLoggedIn } = useAuthStore();
   const { blogs, initializeStore } = useBlogStore();
   const heroRef = useRef<HTMLDivElement>(null);
+  const subscribeRef = useRef<HTMLDivElement>(null);
+  const statsRef = useRef<HTMLDivElement>(null);
+  const [animateStats, setAnimateStats] = useState(false);
   
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -30,6 +33,27 @@ const Index = () => {
       initializeStore();
     }
   }, [blogs.length, initializeStore]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (statsRef.current) {
+        const rect = statsRef.current.getBoundingClientRect();
+        const isVisible = rect.top < window.innerHeight && rect.bottom >= 0;
+        
+        if (isVisible && !animateStats) {
+          setAnimateStats(true);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    // Initial check in case section is already visible
+    handleScroll();
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [animateStats]);
 
   const featuredBlogs = blogs.slice(0, 3);
   
@@ -66,6 +90,65 @@ const Index = () => {
       description: "Learn from experienced developers sharing real-world knowledge."
     },
   ];
+
+  const scrollToSubscribe = () => {
+      if (subscribeRef.current) {
+        const componentTop = subscribeRef.current.offsetTop;
+        const componentHeight = subscribeRef.current.offsetHeight;
+        const windowHeight = window.innerHeight;
+        
+        // Calculate position to center the component in viewport
+        const scrollToPosition = componentTop + componentHeight/2;
+
+        window.scrollTo({
+          top: scrollToPosition,
+          behavior: 'smooth'
+        });
+      }
+  };
+
+  // Component for animated number
+  const AnimatedNumber = ({ value, duration = 2000 }) => {
+    const [count, setCount] = useState(0);
+    const countRef = useRef(null);
+    
+    useEffect(() => {
+      if (!animateStats) return;
+      
+      // Extract the numeric part from strings like "15,000+"
+      const targetNumber = parseInt(value.replace(/,/g, '').replace(/\+/g, ''));
+      
+      let startTime;
+      let animationFrameId;
+      
+      const updateCount = (timestamp) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        
+        const currentCount = Math.floor(progress * targetNumber);
+        setCount(currentCount);
+        
+        if (progress < 1) {
+          animationFrameId = requestAnimationFrame(updateCount);
+        } else {
+          setCount(targetNumber);
+        }
+      };
+      
+      animationFrameId = requestAnimationFrame(updateCount);
+      
+      return () => {
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+        }
+      };
+    }, [animateStats, value, duration]);
+    
+    const formatted = count.toLocaleString();
+    return (
+      <span>{formatted}{value.includes('+') ? '+' : ''}</span>
+    );
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -539,7 +622,7 @@ const Index = () => {
                     <div className="flex flex-col h-full">
                       <div className="mb-4">
                         <div className="rounded-xl w-14 h-14 flex items-center justify-center bg-[var(--accent-color)] text-white">
-                          <svg className="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <svg className="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5c-1.073 0-2.099-.49-2.748-1.179z"></path>
                           </svg>
                         </div>
@@ -625,7 +708,6 @@ const Index = () => {
               <AnimatedSection key={feature.title} delay={index * 0.1}>
                 <motion.div
                   whileHover={{ y: -8, transition: { duration: 0.2 } }}
-                  whileTap={{ scale: 0.98 }}
                   className={`${glassMorphismClass} overflow-hidden h-full`}
                 >
                   <div className="p-6 h-full flex flex-col">
@@ -646,12 +728,24 @@ const Index = () => {
                       {feature.description}
                     </p>
                     <div className="mt-auto">
-                      <Button variant={feature.comingSoon ? "outline" : "default"} size="sm" 
-                        className={feature.comingSoon 
-                          ? "border-primary/20 text-muted-foreground hover:border-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-background" 
-                          : "bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"}>
-                        {feature.comingSoon ? "Get Notified" : "Learn More"}
-                      </Button>
+                      {feature.comingSoon ? (
+                        <Button 
+                          variant="outline"
+                          size="sm" 
+                          onClick={scrollToSubscribe}
+                          className="border-primary/20 text-muted-foreground hover:border-[var(--accent-color)] hover:text-[var(--accent-color)] hover:bg-background cursor-pointer"
+                        >
+                          Get Notified
+                        </Button>
+                      ) : (
+                        <Button 
+                          variant="default"
+                          size="sm"
+                          className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
+                        >
+                          Learn More
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </motion.div>
@@ -662,7 +756,7 @@ const Index = () => {
       </section>
 
       {/* Community Highlights Section - New Addition */}
-      <section className="py-24 bg-background relative overflow-hidden">
+      <section className="py-24 bg-background relative overflow-hidden" ref={statsRef}>
         {/* Background decoration */}
         <div className="absolute inset-0 opacity-30">
           <svg className="absolute top-0 left-0 w-full h-full" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none">
@@ -724,8 +818,7 @@ const Index = () => {
             ].map((stat, index) => (
               <AnimatedSection key={stat.label} delay={index * 0.1}>
                 <motion.div 
-                  whileHover={{ y: -5 }}
-                  style={{ boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.1)" } as React.CSSProperties}
+                  whileHover={{ y: -5, boxShadow: "0 10px 30px -15px rgba(0, 0, 0, 0.1)" }}
                   className="flex flex-col items-center p-6 rounded-xl border border-[var(--accent-color)]/10 bg-background/80 backdrop-blur-sm"
                 >
                   <div className="mb-4 p-3 rounded-full bg-[var(--accent-color)]/10 text-[var(--accent-color)]">
@@ -738,7 +831,7 @@ const Index = () => {
                     viewport={{ once: true }}
                     className="text-3xl md:text-4xl font-bold text-foreground mb-2"
                   >
-                    {stat.value}
+                    {animateStats ? <AnimatedNumber value={stat.value} /> : "0"}
                   </motion.div>
                   <h3 className="text-lg font-semibold text-foreground mb-1">{stat.label}</h3>
                 </motion.div>
@@ -776,7 +869,7 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 binary-gradient text-white">
+      <section id="subscribe-section" className="py-24 binary-gradient text-white" ref={subscribeRef}>
         <div className="container-custom text-center">
           <AnimatedSection>
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Join the Conversation</h2>
