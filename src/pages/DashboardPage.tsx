@@ -154,7 +154,7 @@ export default function DashboardPage() {
           <Card>
             <CardContent className="p-6 text-center">
               <p className="text-muted-foreground mb-4">You don't have any bookmarked blogs yet.</p>
-              <Button asChild>
+              <Button asChild className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
                 <Link to="/blogs">Browse Blogs</Link>
               </Button>
             </CardContent>

@@ -37,7 +37,7 @@ export default function NotFoundPage() {
           <Button asChild>
             <Link to="/">Return Home</Link>
           </Button>
-          <Button variant="outline" asChild>
+          <Button variant="outline" asChild className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
             <Link to="/blogs">Browse Blogs</Link>
           </Button>
         </div>
