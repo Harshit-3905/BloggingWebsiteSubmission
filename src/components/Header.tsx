@@ -180,40 +180,45 @@ export function Header() {
                   <DropdownMenuGroup>
                     <DropdownMenuItem 
                       onClick={() => navigate("/profile")} 
-                      className="cursor-pointer hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+                      className="cursor-pointer group relative"
                     >
-                      <User className="mr-2 h-4 w-4" />
-                      <span>Profile</span>
+                      <div className="absolute inset-0 rounded-md group-hover:bg-[var(--accent-color)]/20 transition-colors duration-200"></div>
+                      <User className="mr-2 h-4 w-4 relative z-10 group-hover:text-[var(--accent-color)]" />
+                      <span className="relative z-10 group-hover:text-[var(--accent-color)]">Profile</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem 
                       onClick={() => navigate("/dashboard")} 
-                      className="cursor-pointer hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+                      className="cursor-pointer group relative"
                     >
-                      <LayoutDashboard className="mr-2 h-4 w-4" />
-                      <span>Dashboard</span>
+                      <div className="absolute inset-0 rounded-md group-hover:bg-[var(--accent-color)]/20 transition-colors duration-200"></div>
+                      <LayoutDashboard className="mr-2 h-4 w-4 relative z-10 group-hover:text-[var(--accent-color)]" />
+                      <span className="relative z-10 group-hover:text-[var(--accent-color)]">Dashboard</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem 
                       onClick={() => navigate("/bookmarks")} 
-                      className="cursor-pointer hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+                      className="cursor-pointer group relative"
                     >
-                      <BookmarkCheck className="mr-2 h-4 w-4" />
-                      <span>Bookmarks</span>
+                      <div className="absolute inset-0 rounded-md group-hover:bg-[var(--accent-color)]/20 transition-colors duration-200"></div>
+                      <BookmarkCheck className="mr-2 h-4 w-4 relative z-10 group-hover:text-[var(--accent-color)]" />
+                      <span className="relative z-10 group-hover:text-[var(--accent-color)]">Bookmarks</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem 
                       onClick={() => navigate("/settings")} 
-                      className="cursor-pointer hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
+                      className="cursor-pointer group relative"
                     >
-                      <Settings className="mr-2 h-4 w-4" />
-                      <span>Settings</span>
+                      <div className="absolute inset-0 rounded-md group-hover:bg-[var(--accent-color)]/20 transition-colors duration-200"></div>
+                      <Settings className="mr-2 h-4 w-4 relative z-10 group-hover:text-[var(--accent-color)]" />
+                      <span className="relative z-10 group-hover:text-[var(--accent-color)]">Settings</span>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem 
                     onClick={handleLogout} 
-                    className="cursor-pointer hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/20 dark:hover:text-red-400"
+                    className="cursor-pointer group relative"
                   >
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
+                    <div className="absolute inset-0 rounded-md group-hover:bg-red-100 dark:group-hover:bg-red-900/20 transition-colors duration-200"></div>
+                    <LogOut className="mr-2 h-4 w-4 relative z-10 group-hover:text-red-500" />
+                    <span className="relative z-10 group-hover:text-red-500">Log out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
