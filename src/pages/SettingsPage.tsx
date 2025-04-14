@@ -21,13 +21,14 @@ export default function SettingsPage() {
   const { toast } = useToast();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(true);
-  const [analyticsEnabled, setAnalyticsEnabled] = useState(true);
+  const [analyticsEnabled, setAnalyticsEnabled] = useState(false);
   const [codeHighlightingEnabled, setCodeHighlightingEnabled] = useState(true);
   const [wysiwygEnabled, setWysiwygEnabled] = useState(true);
   const [profileVisibilityEnabled, setProfileVisibilityEnabled] = useState(true);
   const [newsletterEnabled, setNewsletterEnabled] = useState(false);
   const [commentNotificationsEnabled, setCommentNotificationsEnabled] = useState(true);
   const [mentionNotificationsEnabled, setMentionNotificationsEnabled] = useState(true);
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -364,15 +365,25 @@ export default function SettingsPage() {
                     />
                   </div>
 
-                  <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between">
                     <div className="space-y-0.5">
                       <Label htmlFor="two-factor">Two-Factor Authentication</Label>
                       <p className="text-sm text-muted-foreground">
-                        Enhance your account security with 2FA
+                      Enhance your account security with 2FA
                       </p>
                     </div>
-                    <Button variant="outline" size="sm" className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">Setup</Button>
-                  </div>
+                    <Switch
+                      id="two-factor"
+                      checked={twoFactorEnabled}
+                      onCheckedChange={() => 
+                      handleToggleSetting(
+                        setTwoFactorEnabled,
+                        "Two-factor authentication",
+                        twoFactorEnabled
+                      )
+                      }
+                    />
+                    </div>
                 </div>
               </CardContent>
             </Card>

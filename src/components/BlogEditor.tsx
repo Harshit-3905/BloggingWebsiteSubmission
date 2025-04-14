@@ -25,8 +25,9 @@ import { useNavigate } from "react-router-dom";
 import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
 import { useBlogStore } from "@/store/useBlogStore";
-import { nanoid } from "nanoid";
 import { useToast } from "@/hooks/use-toast";
+import { DragDropImageUpload } from "@/components/DragDropImageUpload";
+import { Textarea } from "@/components/ui/textarea";
 
 interface BlogEditorProps {
   initialTitle?: string;
@@ -181,6 +182,15 @@ export default function BlogEditor({
       return;
     }
     
+    if (!coverImage || coverImage === "/images/placeholder.jpg") {
+      toast({
+        title: "Cover Image Required",
+        description: "Please add a cover image for your blog post.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     // Use onSave prop if provided
     if (onSave) {
     onSave({
@@ -194,8 +204,9 @@ export default function BlogEditor({
     }
     
     // Otherwise, create new blog post
-    const newBlog = {
-      id: nanoid(),
+    const slug = title.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
+    
+    const blogToAdd = {
       title,
       content,
       excerpt: excerpt || content.replace(/<[^>]*>/g, '').slice(0, 150) + "...",
@@ -207,16 +218,11 @@ export default function BlogEditor({
         bio: "Bio placeholder" // Add appropriate bio if available
       },
       tags: tags,
-      date: new Date().toISOString(),
-      readTime: Math.ceil(content.split(" ").length / 200),
-      slug: title.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-'),
-      views: 0,
-      likes: 0,
-      bookmarked: false
+      slug
     };
     
     // Add to store
-    addBlog(newBlog);
+    addBlog(blogToAdd);
     
     // Show success and redirect
     toast({
@@ -224,7 +230,7 @@ export default function BlogEditor({
       description: "Your blog post has been published successfully.",
       className: "border-primary"
     });
-    navigate(`/blog/${newBlog.slug}`);
+    navigate(`/blog/${slug}`);
   };
   
   // Auto-resize excerpt textarea
@@ -248,40 +254,29 @@ export default function BlogEditor({
         <form onSubmit={handleSubmit}>
           {/* Title */}
           <div className="mb-6">
-        <Input
+            <div className="flex items-center gap-2 mb-2">
+              <Heading1 className="h-4 w-4 text-[var(--accent-color)]" />
+              <Label>Blog Title</Label>
+            </div>
+            <Input
               placeholder="Enter blog title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-              className="text-xl py-6 font-semibold text-center border border-[var(--accent-color)]/20 focus-visible:ring-[var(--accent-color)]"
-        />
-      </div>
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="text-xl py-6 font-semibold border border-[var(--accent-color)]/20 focus-visible:ring-[var(--accent-color)]"
+            />
+          </div>
 
           {/* Cover Image */}
           <div className="mb-6">
             <div className="flex items-center gap-2 mb-2">
               <ImageIcon className="h-4 w-4 text-[var(--accent-color)]" />
-              <Label>Cover Image URL</Label>
+              <Label>Cover Image</Label>
             </div>
-            <Input
-              placeholder="Enter cover image URL"
-              value={coverImage}
-              onChange={(e) => setCoverImage(e.target.value)}
-              className="border border-[var(--accent-color)]/20 focus-visible:ring-[var(--accent-color)]"
+            <DragDropImageUpload 
+              onImageSelected={(imageUrl) => setCoverImage(imageUrl)}
+              currentImage={coverImage}
             />
-            {coverImage && (
-              <div className="mt-2 aspect-video rounded-md overflow-hidden border border-[var(--accent-color)]/20">
-                <img 
-                  src={coverImage} 
-                  alt="Cover Preview" 
-                  className="w-full h-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = "/images/placeholder.jpg";
-                    setCoverImage("/images/placeholder.jpg");
-                  }}
-                />
-              </div>
-            )}
-      </div>
+          </div>
 
           {/* Tags */}
           <div className="mb-6">
@@ -332,12 +327,12 @@ export default function BlogEditor({
               <Quote className="h-4 w-4 text-[var(--accent-color)]" />
               <Label>Excerpt (optional)</Label>
             </div>
-            <textarea
+            <Textarea
               placeholder="Brief summary of your blog post (if left empty, first few lines will be used)"
               value={excerpt}
               onChange={(e) => setExcerpt(e.target.value)}
               ref={excerptRef}
-              className="w-full min-h-[80px] px-3 py-2 rounded-md border border-[var(--accent-color)]/20 bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-color)] focus-visible:ring-offset-2 resize-none"
+              className="resize-none"
             />
           </div>
           

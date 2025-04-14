@@ -83,24 +83,7 @@ export function AccentColorSelector() {
           </motion.div>
         ))}
       </div>
-      
-      <div key={accentColor} className="p-4 rounded-md bg-background border border-border">
-        <h3 className="text-sm font-medium mb-2">Color Preview</h3>
-        <div className="flex flex-wrap gap-3">
-          <div className="px-3 py-1.5 rounded-md text-sm" 
-            style={{ backgroundColor: accentColor, color: 'white' }}>
-            Primary Button
-          </div>
-          <div className="px-3 py-1.5 rounded-md text-sm border" 
-            style={{ color: previewColors.text }}>
-            Text Link
-          </div>
-          <div className="px-3 py-1.5 rounded-md text-sm"
-            style={{ backgroundColor: previewColors.bg, color: previewColors.text }}>
-            Background
-          </div>
-        </div>
-      </div>
+
     </div>
   );
 }

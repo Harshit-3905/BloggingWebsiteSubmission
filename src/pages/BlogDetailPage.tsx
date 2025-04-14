@@ -23,7 +23,6 @@ import { useBlogStore } from "@/store/useBlogStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import { AnimatedSection } from "@/components/AnimatedSection";
 import { Separator } from "@/components/ui/separator";
 
 export default function BlogDetailPage() {
@@ -116,6 +115,15 @@ export default function BlogDetailPage() {
   }
 
   const handleLike = () => {
+    if (!isLoggedIn) {
+      toast({
+        title: "Authentication required",
+        description: "Please login to like this blog.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     likeBlog(blog.id);
     toast({
       title: "Blog liked!",
@@ -286,11 +294,7 @@ export default function BlogDetailPage() {
                 <Badge
                   key={tag}
                   variant="secondary"
-                  className={
-                    index % 2 === 0
-                      ? "bg-[var(--accent-color)]/10 hover:bg-[var(--accent-color)]/20 text-[var(--accent-color)]"
-                      : ""
-                  }
+                  className="bg-[var(--accent-color)]/10 hover:bg-[var(--accent-color)]/20 text-[var(--accent-color)]"
                 >
                   {tag}
                 </Badge>
@@ -370,7 +374,7 @@ export default function BlogDetailPage() {
                           : ""
                       }`}
                     />
-                    <span>Save</span>
+                    <span>{blog.bookmarked ? "Saved" : "Save"}</span>
                   </Button>
                 </motion.div>
                 <motion.div
@@ -426,18 +430,123 @@ export default function BlogDetailPage() {
       {/* Blog Content */}
       <div className="container-custom mb-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
-          <div className="bg-background rounded-lg border p-4 md:p-6 lg:p-8 shadow-sm col-span-1 lg:col-span-3">
-            {/* FIX: Enhanced styling for markdown content to ensure visibility */}
-            <div
-              className="markdown-content w-full max-w-none text-foreground inline-block
-                prose dark:prose-invert"
-            >
-              {blog?.content && <MarkdownRenderer content={blog.content} />}
+          <div className="col-span-1 lg:col-span-3">
+            <div className="bg-background rounded-lg border p-4 md:p-6 lg:p-8 shadow-sm">
+              {/* FIX: Enhanced styling for markdown content to ensure visibility */}
+              <div
+                className="markdown-content w-full max-w-none text-foreground inline-block
+                  prose dark:prose-invert min-h-[200px]"
+              >
+                {blog?.content && <MarkdownRenderer content={blog.content} />}
+              </div>
+            </div>
+
+            {/* Author Bio - moved inside the main content column */}
+            <div className="mt-8 bg-muted/30 border rounded-lg p-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
+                <Avatar className="h-16 w-16 border-2 border-[var(--accent-color)]/20">
+                  <AvatarImage src={blog.author.avatar} alt={blog.author.name} />
+                  <AvatarFallback>{blog.author.name.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="text-xl font-bold">About {blog.author.name}</h3>
+                  <p className="text-muted-foreground">
+                    {blog.author.bio ||
+                      "Tech enthusiast and avid writer sharing insights on the latest technologies and development practices."}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Comments Section - moved inside the main content column */}
+            <div className="mt-8" ref={contentRef}>
+              <h3 className="text-xl font-bold flex items-center gap-2 mb-4">
+                <MessageSquare className="h-5 w-5" />
+                Comments ({blog.comments.length})
+              </h3>
+
+              <AnimatePresence>
+                {(showCommentForm || blog.comments.length > 0) && (
+                  <motion.form
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    onSubmit={handleSubmitComment}
+                    className="mb-6"
+                  >
+                    <Textarea
+                      placeholder={
+                        isLoggedIn ? "Write a comment..." : "Login to comment"
+                      }
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      className="mb-2 focus-visible:ring-[var(--accent-color)] border-[var(--accent-color)]/20"
+                      disabled={!isLoggedIn}
+                    />
+                    <Button
+                      type="submit"
+                      disabled={!isLoggedIn}
+                      className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent h-10 px-4 rounded-md flex items-center shrink-0 font-medium"
+                    >
+                      {isLoggedIn ? "Post Comment" : "Login to Comment"}
+                    </Button>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+
+              {!showCommentForm && blog.comments.length === 0 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="border border-dashed rounded-lg p-6 text-center mb-6"
+                >
+                  <MessageSquare className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                  <p className="text-muted-foreground mb-4">
+                    No comments yet. Start the conversation!
+                  </p>
+                  <Button onClick={() => setShowCommentForm(true)}>
+                    Write a Comment
+                  </Button>
+                </motion.div>
+              )}
+
+              {blog.comments.length > 0 && (
+                <div className="space-y-4">
+                  {blog.comments.map((comment, index) => (
+                    <motion.div
+                      key={comment.id}
+                      className="border rounded-lg p-4 hover:border-[var(--accent-color)]/20 transition-colors"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1, duration: 0.4 }}
+                    >
+                      <div className="flex items-center gap-3 mb-2">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage
+                            src={comment.userAvatar}
+                            alt={comment.userName}
+                          />
+                          <AvatarFallback>
+                            {comment.userName.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium">{comment.userName}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(comment.createdAt).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="pl-11">{comment.content}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
            {/* Sidebar - Hidden on mobile */}
-          <div className="hidden lg:block lg:sticky lg:top-20 space-y-8 col-span-1">
+          <div className="hidden lg:block lg:sticky lg:top-20 space-y-8 col-span-1 h-fit">
             {/* Blog Stats */}
             <div className="bg-muted/30 border rounded-lg p-6 hover:border-[var(--accent-color)]/20 transition-colors">
               <h3 className="text-lg font-medium mb-4">Blog Stats</h3>
@@ -534,111 +643,8 @@ export default function BlogDetailPage() {
             </div>
           </div>
 
-          {/* Author Bio */}
-          <div className="mt-8 bg-muted/30 border rounded-lg p-6 col-span-1 lg:col-span-4">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
-              <Avatar className="h-16 w-16 border-2 border-[var(--accent-color)]/20">
-                <AvatarImage src={blog.author.avatar} alt={blog.author.name} />
-                <AvatarFallback>{blog.author.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-              <div>
-                <h3 className="text-xl font-bold">About {blog.author.name}</h3>
-                <p className="text-muted-foreground">
-                  {blog.author.bio ||
-                    "Tech enthusiast and avid writer sharing insights on the latest technologies and development practices."}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Comments Section */}
-          <div className="mt-8 col-span-1 lg:col-span-4" ref={contentRef}>
-            <h3 className="text-xl font-bold flex items-center gap-2 mb-4">
-              <MessageSquare className="h-5 w-5" />
-              Comments ({blog.comments.length})
-            </h3>
-
-            <AnimatePresence>
-              {(showCommentForm || blog.comments.length > 0) && (
-                <motion.form
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  onSubmit={handleSubmitComment}
-                  className="mb-6"
-                >
-                  <Textarea
-                    placeholder={
-                      isLoggedIn ? "Write a comment..." : "Login to comment"
-                    }
-                    value={commentText}
-                    onChange={(e) => setCommentText(e.target.value)}
-                    className="mb-2 focus-visible:ring-[var(--accent-color)] border-[var(--accent-color)]/20"
-                    disabled={!isLoggedIn}
-                  />
-                  <Button
-                    type="submit"
-                    disabled={!isLoggedIn}
-                    className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent h-10 px-4 rounded-md flex items-center shrink-0 font-medium"
-                  >
-                    {isLoggedIn ? "Post Comment" : "Login to Comment"}
-                  </Button>
-                </motion.form>
-              )}
-            </AnimatePresence>
-
-            {!showCommentForm && blog.comments.length === 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="border border-dashed rounded-lg p-6 text-center mb-6"
-              >
-                <MessageSquare className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                <p className="text-muted-foreground mb-4">
-                  No comments yet. Start the conversation!
-                </p>
-                <Button onClick={() => setShowCommentForm(true)}>
-                  Write a Comment
-                </Button>
-              </motion.div>
-            )}
-
-            {blog.comments.length > 0 && (
-              <div className="space-y-4">
-                {blog.comments.map((comment, index) => (
-                  <motion.div
-                    key={comment.id}
-                    className="border rounded-lg p-4 hover:border-[var(--accent-color)]/20 transition-colors"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1, duration: 0.4 }}
-                  >
-                    <div className="flex items-center gap-3 mb-2">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage
-                          src={comment.userAvatar}
-                          alt={comment.userName}
-                        />
-                        <AvatarFallback>
-                          {comment.userName.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="font-medium">{comment.userName}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {new Date(comment.createdAt).toLocaleDateString()}
-                        </p>
-                      </div>
-                    </div>
-                    <p className="pl-11">{comment.content}</p>
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </div>
-
           {/* Floating action bar for smaller screens */}
-          <div className="sticky bottom-4 lg:hidden flex justify-center mt-4">
+          <div className="sticky bottom-4 lg:hidden flex justify-center mt-4 col-span-1">
             <div className="bg-background/90 backdrop-blur border rounded-full shadow-lg p-1 flex items-center space-x-1">
               <motion.div
                 whileHover={{ scale: 1.05 }}
@@ -697,6 +703,7 @@ export default function BlogDetailPage() {
                         : ""
                     }`}
                   />
+                  <span className="text-sm ml-1">{blog.bookmarked ? "Saved" : "Save"}</span>
                 </Button>
               </motion.div>
 

@@ -146,7 +146,7 @@ export const useThemeStore = create<ThemeState>()(
       theme: "dark", // Default to system preference
       selectedColorName: "Purple", // Default color scheme name
       accentColor: COLOR_SCHEMES[0].value, // Default accent color value
-      fontFamily: "sans", // Default font
+      fontFamily: "code", // Default font
 
       toggleTheme: () =>
         set((state) => ({

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import  BlogEditor  from "@/components/BlogEditor";
@@ -16,8 +15,10 @@ export default function NewBlogPage() {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = (e?: React.FormEvent) => {
+    if (e && e.preventDefault) {
+      e.preventDefault();
+    }
     
     if (!title || !content || !coverImage || tags.length === 0) {
       toast({
@@ -55,9 +56,7 @@ export default function NewBlogPage() {
   };
 
   return (
-    <div className="container-custom py-8">
-      <h1 className="text-3xl font-bold mb-6">Create New Blog</h1>
-      
+    <div className="container-custom py-8">      
       <BlogEditor 
         initialTitle={title}
         initialContent={content}
@@ -68,7 +67,7 @@ export default function NewBlogPage() {
           setContent(newContent);
           setCoverImage(newCoverImage);
           setTags(newTags);
-          handleSubmit({} as React.FormEvent);
+          handleSubmit();
         }}
         isSubmitting={false}
       />

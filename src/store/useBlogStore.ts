@@ -101,11 +101,20 @@ export const useBlogStore = create<BlogStore>()(
         });
       },
       likeBlog: (id) => {
-        set((state) => ({
-          blogs: state.blogs.map((blog) =>
-            blog.id === id ? { ...blog, likes: blog.likes + 1 } : blog
-          ),
-        }));
+        set((state) => {
+          // Find the blog
+          const blog = state.blogs.find((b) => b.id === id);
+          if (!blog) return { blogs: state.blogs };
+
+          // Toggle likes - decrease if already liked, otherwise increase
+          const newLikes = blog.likes > 0 ? blog.likes - 1 : blog.likes + 1;
+
+          return {
+            blogs: state.blogs.map((blog) =>
+              blog.id === id ? { ...blog, likes: newLikes } : blog
+            ),
+          };
+        });
       },
       addComment: (blogId, comment) => {
         set((state) => ({

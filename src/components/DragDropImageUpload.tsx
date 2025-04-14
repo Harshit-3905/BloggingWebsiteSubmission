@@ -1,4 +1,3 @@
-
 import { useState, useRef } from "react";
 import { Upload, Image as ImageIcon, FileWarning } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -95,7 +94,6 @@ export function DragDropImageUpload({ onImageSelected, currentImage }: DragDropI
       <AnimatePresence>
         {!previewImage && (
           <motion.div
-            variants={containerVariants}
             initial="initial"
             animate="animate"
             exit="exit"
@@ -137,7 +135,8 @@ export function DragDropImageUpload({ onImageSelected, currentImage }: DragDropI
                 <Button 
                   onClick={handleBrowseClick}
                   variant="default"
-                  className="gap-2"
+                  type="button"
+                  className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
                 >
                   <ImageIcon className="h-4 w-4" />
                   Browse Files
@@ -146,6 +145,7 @@ export function DragDropImageUpload({ onImageSelected, currentImage }: DragDropI
                 <Button
                   type="button"
                   variant="outline"
+                  className="border-[var(--accent-color)]/20 hover:bg-[var(--accent-color)]/10 hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]"
                   onClick={() => {
                     onImageSelected("https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3882&q=80");
                     setPreviewImage("https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3882&q=80");
@@ -160,7 +160,6 @@ export function DragDropImageUpload({ onImageSelected, currentImage }: DragDropI
 
         {previewImage && (
           <motion.div
-            variants={containerVariants}
             initial="initial"
             animate="animate"
             exit="exit"
@@ -177,6 +176,7 @@ export function DragDropImageUpload({ onImageSelected, currentImage }: DragDropI
                   size="sm"
                   variant="destructive"
                   onClick={() => setPreviewImage("")}
+                  className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
                 >
                   Change Image
                 </Button>
