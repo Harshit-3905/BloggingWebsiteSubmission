@@ -338,7 +338,7 @@ export default function BlogEditor({
               value={excerpt}
               onChange={(e) => setExcerpt(e.target.value)}
               ref={excerptRef}
-              className="w-full min-h-[80px] px-3 py-2 rounded-md border border-[var(--accent-color)]/20 focus-visible:ring-[var(--accent-color)] resize-none"
+              className="w-full min-h-[80px] px-3 py-2 rounded-md border border-[var(--accent-color)]/20 bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-color)] focus-visible:ring-offset-2 resize-none"
             />
           </div>
           

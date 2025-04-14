@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 // Define theme and color options
-type ThemeMode = "light" | "dark" | "system";
+type ThemeMode = "light" | "dark";
 
 // Font family options
 type FontOption = "sans" | "serif" | "mono" | "code";
@@ -150,12 +150,7 @@ export const useThemeStore = create<ThemeState>()(
 
       toggleTheme: () =>
         set((state) => ({
-          theme:
-            state.theme === "light"
-              ? "dark"
-              : state.theme === "dark"
-              ? "system"
-              : "light",
+          theme: state.theme === "light" ? "dark" : "light",
         })),
 
       setTheme: (theme) => {
@@ -242,7 +237,7 @@ export const useThemeStore = create<ThemeState>()(
 
       setDefaultTheme: () => {
         set({
-          theme: "system",
+          theme: "dark",
           selectedColorName: "Purple",
           accentColor: COLOR_SCHEMES[0].value,
           fontFamily: "sans",

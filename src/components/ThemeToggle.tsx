@@ -79,9 +79,15 @@ export function ThemeToggle() {
   }, [theme, accentColor, fontFamily]);
 
   const handleToggleTheme = () => {
+    // Get the current theme before toggle
+    const currentTheme = theme;
+    
+    // Toggle the theme
     toggleTheme();
-    // We need to get the NEW theme after toggling
-    const newTheme = theme === "light" ? "dark" : "light";
+    
+    // Get next theme name for the toast
+    const newTheme = currentTheme === "light" ? "dark" : "light";
+    
     toast({
       title: `Theme changed to ${newTheme}`,
       description: "Your theme preference has been saved.",

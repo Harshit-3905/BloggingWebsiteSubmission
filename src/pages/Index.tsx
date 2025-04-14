@@ -10,6 +10,7 @@ import { BlogCard } from "@/components/BlogCard";
 import { AnimatedCodeBlock } from "@/components/AnimatedCodeBlock";
 import { TrendingTopicsSection } from "@/components/home/TrendingTopicsSection";
 import { glassMorphismClass } from "@/utils/tailwindClasses";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const { isLoggedIn } = useAuthStore();
@@ -18,6 +19,7 @@ const Index = () => {
   const subscribeRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
   const [animateStats, setAnimateStats] = useState(false);
+  const navigate = useNavigate();
   
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -708,6 +710,7 @@ const Index = () => {
               <AnimatedSection key={feature.title} delay={index * 0.1}>
                 <motion.div
                   whileHover={{ y: -8, transition: { duration: 0.2 } }}
+                  whileTap={{ scale: 0.98 }}
                   className={`${glassMorphismClass} overflow-hidden h-full`}
                 >
                   <div className="p-6 h-full flex flex-col">
@@ -741,6 +744,7 @@ const Index = () => {
                         <Button 
                           variant="default"
                           size="sm"
+                          onClick={()=>navigate('/blogs')}
                           className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
                         >
                           Learn More

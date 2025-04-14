@@ -144,7 +144,7 @@ export function AnimatedCodeBlock() {
         {/* Line numbers column */}
         <div className="line-numbers py-6 pl-4 pr-2 text-white select-none bg-black/90 border-r border-white/10 font-mono text-xs md:text-sm text-right">
           {Array.from({ length: isTyping ? typedText.split('\n').length : codeLines.length }).map((_, i) => (
-            <div key={i} className="leading-relaxed text-white">
+            <div key={i} className="leading-relaxed text-white h-6">
               {i + 1}
             </div>
           ))}
