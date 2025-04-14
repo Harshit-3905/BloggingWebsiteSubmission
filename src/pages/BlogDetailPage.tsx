@@ -426,7 +426,7 @@ export default function BlogDetailPage() {
       {/* Blog Content */}
       <div className="container-custom mb-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
-          <div className="bg-background rounded-lg border p-4 md:p-6 lg:p-8 shadow-sm col-span-3">
+          <div className="bg-background rounded-lg border p-4 md:p-6 lg:p-8 shadow-sm col-span-1 lg:col-span-3">
             {/* FIX: Enhanced styling for markdown content to ensure visibility */}
             <div
               className="markdown-content w-full max-w-none text-foreground inline-block
@@ -436,8 +436,8 @@ export default function BlogDetailPage() {
             </div>
           </div>
 
-           {/* Sidebar */}
-          <div className="lg:sticky lg:top-20 space-y-8 col-span-1">
+           {/* Sidebar - Hidden on mobile */}
+          <div className="hidden lg:block lg:sticky lg:top-20 space-y-8 col-span-1">
             {/* Blog Stats */}
             <div className="bg-muted/30 border rounded-lg p-6 hover:border-[var(--accent-color)]/20 transition-colors">
               <h3 className="text-lg font-medium mb-4">Blog Stats</h3>
@@ -490,7 +490,7 @@ export default function BlogDetailPage() {
             )}
 
             {/* Article Tagcloud on desktop */}
-            <div className="hidden sm:block">
+            <div>
               <h3 className="text-lg font-medium mb-4">Tags</h3>
               <div className="flex flex-wrap gap-2">
                 {blog.tags.map((tag) => (
@@ -506,8 +506,36 @@ export default function BlogDetailPage() {
             </div>
           </div>
 
+          {/* Related Blogs for Mobile */}
+          {relatedBlogs.length > 0 && (
+            <div className="lg:hidden col-span-1">
+              <h3 className="text-lg font-medium mb-4">Related Articles</h3>
+              <div className="space-y-4">
+                {relatedBlogs.map((relatedBlog) => (
+                  <BlogCard key={relatedBlog.id} blog={relatedBlog} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Mobile Tags */}
+          <div className="lg:hidden col-span-1">
+            <h3 className="text-lg font-medium mb-4">Tags</h3>
+            <div className="flex flex-wrap gap-2">
+              {blog.tags.map((tag) => (
+                <Badge
+                  key={tag}
+                  variant="outline"
+                  className="cursor-pointer hover:bg-[var(--accent-color)]/10 hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]/20"
+                >
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
           {/* Author Bio */}
-          <div className="mt-8 bg-muted/30 border rounded-lg p-6 col-span-4">
+          <div className="mt-8 bg-muted/30 border rounded-lg p-6 col-span-1 lg:col-span-4">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
               <Avatar className="h-16 w-16 border-2 border-[var(--accent-color)]/20">
                 <AvatarImage src={blog.author.avatar} alt={blog.author.name} />
@@ -524,7 +552,7 @@ export default function BlogDetailPage() {
           </div>
 
           {/* Comments Section */}
-          <div className="mt-8 col-span-4" ref={contentRef}>
+          <div className="mt-8 col-span-1 lg:col-span-4" ref={contentRef}>
             <h3 className="text-xl font-bold flex items-center gap-2 mb-4">
               <MessageSquare className="h-5 w-5" />
               Comments ({blog.comments.length})
@@ -708,8 +736,6 @@ export default function BlogDetailPage() {
               </motion.div>
             </div>
           </div>
-
-         
 
         </div>
       </div>
