@@ -154,29 +154,35 @@ const Index = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Hero Section - completely revamped with better positioned elements */}
+      {/* Hero Section - Enhanced with better background */}
       <motion.section 
         ref={heroRef}
         className="relative min-h-[90vh] flex items-center overflow-hidden
                   bg-background text-foreground"
         style={{ opacity, scale }}
       >
-        {/* Background overlay with gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background/90 z-10"></div>
+        {/* Enhanced Background with multiple layers */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[var(--accent-color)]/5 via-[var(--accent-color-bright)]/10 to-[var(--accent-color)]/15"></div>
         
-        {/* Animated background elements - Fixed positioning */}
+        {/* Animated texture overlay */}
+        <div className="absolute inset-0 bg-[url('/patterns/topography.svg')] bg-repeat opacity-20"></div>
+        
+        {/* Gradient overlay with higher contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/60 to-background/90 z-10"></div>
+        
+        {/* Animated background elements - Fixed positioning with enhanced visibility */}
         <div className="absolute inset-0 overflow-hidden">
-          {/* Subtle pattern background */}
-          <div className="absolute inset-0 bg-[url('/patterns/circuit-board.svg')] bg-repeat opacity-10"></div>
+          {/* Enhanced subtle pattern background */}
+          <div className="absolute inset-0 bg-[url('/patterns/circuit-board.svg')] bg-repeat opacity-20"></div>
           
-          {/* Animated orbs with properly distributed positions */}
+          {/* Animated orbs with enhanced colors */}
           <motion.div 
-            className="absolute h-56 w-56 rounded-full bg-[var(--accent-color)]/20 filter blur-3xl"
+            className="absolute h-72 w-72 rounded-full bg-[var(--accent-color)]/30 filter blur-3xl"
             style={{ top: '15%', left: '10%' }}
             animate={{ 
               y: [0, 40, 0],
               x: [0, 20, 0],
-              opacity: [0.5, 0.7, 0.5]
+              opacity: [0.6, 0.8, 0.6]
             }}
             transition={{ 
               duration: 15,
@@ -185,12 +191,12 @@ const Index = () => {
             }}
           />
           <motion.div 
-            className="absolute h-64 w-64 rounded-full bg-[var(--accent-color-bright)]/20 filter blur-3xl"
+            className="absolute h-80 w-80 rounded-full bg-[var(--accent-color-bright)]/30 filter blur-3xl"
             style={{ top: '35%', right: '15%' }}
             animate={{ 
               y: [0, -50, 0],
               x: [0, -30, 0],
-              opacity: [0.3, 0.5, 0.3]
+              opacity: [0.4, 0.7, 0.4]
             }}
             transition={{ 
               duration: 18,
@@ -199,69 +205,19 @@ const Index = () => {
             }}
           />
           <motion.div 
-            className="absolute h-72 w-72 rounded-full bg-[var(--accent-color-text)]/10 filter blur-3xl"
+            className="absolute h-96 w-96 rounded-full bg-[var(--accent-color-text)]/20 filter blur-3xl"
             style={{ bottom: '20%', left: '30%' }}
             animate={{ 
               y: [0, 30, 0],
               x: [0, -20, 0],
-              opacity: [0.2, 0.4, 0.2]
+              opacity: [0.3, 0.5, 0.3]
             }}
             transition={{ 
               duration: 20,
               repeat: Infinity,
               repeatType: "reverse"
             }}
-          />
-          
-          {/* Code particles distributed across the screen */}
-          {Array.from({ length: 15 }).map((_, i) => {
-            // Create a more distributed pattern
-            const quadrant = i % 4; // Split into 4 quadrants
-            let xPos, yPos;
-            
-            switch(quadrant) {
-              case 0: // Top left
-                xPos = Math.random() * 30;
-                yPos = Math.random() * 40;
-                break;
-              case 1: // Top right
-                xPos = 70 + Math.random() * 30;
-                yPos = Math.random() * 40;
-                break;
-              case 2: // Bottom left
-                xPos = Math.random() * 30;
-                yPos = 60 + Math.random() * 40;
-                break;
-              case 3: // Bottom right
-                xPos = 70 + Math.random() * 30;
-                yPos = 60 + Math.random() * 40;
-                break;
-            }
-            
-            return (
-              <motion.div
-                key={i}
-                className="absolute font-code text-sm text-[var(--accent-color)]/20 dark:text-white/10 text-black/10"
-                initial={{ 
-                  x: `${xPos}%`, 
-                  y: `${yPos}%`,
-                  opacity: 0,
-                  scale: Math.random() * 0.5 + 0.5
-                }}
-                animate={{ 
-                  y: [null, `${yPos - 20}%`],
-                  opacity: [0, 0.7, 0]
-                }}
-                transition={{ 
-                  duration: 10 + Math.random() * 20,
-                  repeat: Infinity,
-                  delay: Math.random() * 5
-                }}
-              >
-                {['<>', '/>', '{}', '()', '[]', '&&', '||', '=>', '+=', '*='][i % 10]}
-              </motion.div>
-            )
-          })}
+          />           
         </div>
         
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 relative z-20 grid grid-cols-1 md:grid-cols-2 gap-8 items-center min-h-[70vh]">
@@ -276,13 +232,14 @@ const Index = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.7 }}
             >
-              <span className="px-4 py-1.5 bg-[var(--accent-color)]/10 text-[var(--accent-color-text)] 
-                                rounded-full text-sm font-medium backdrop-blur-sm mb-4 inline-block">
+              <span className="px-4 py-1.5 bg-[var(--accent-color)]/20 text-[var(--accent-color-text)] 
+                                rounded-full text-sm font-medium backdrop-blur-sm mb-4 inline-block
+                                border border-[var(--accent-color)]/20 shadow-lg shadow-[var(--accent-color)]/10">
                 For Developers, By Developers
               </span>
             </motion.div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground drop-shadow-sm">
               Where <span className="font-code bg-clip-text text-transparent bg-gradient-to-r 
                                 from-[var(--accent-color)] to-[var(--accent-color-bright)]">Code</span> 
               Meets <span className="font-code bg-clip-text text-transparent bg-gradient-to-r 
@@ -365,17 +322,17 @@ const Index = () => {
             transition={{ delay: 0.4, duration: 0.8 }}
           >
             {/* Enhanced glow effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent-color)]/10 
-                          to-[var(--accent-color-bright)]/20 rounded-full filter blur-3xl opacity-40"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--accent-color)]/20 
+                          to-[var(--accent-color-bright)]/30 rounded-full filter blur-3xl opacity-60"></div>
             
-            {/* Floating elements around the code block */}
+            {/* Floating elements around the code block with enhanced visibility */}
             <motion.div 
-              className="absolute -top-10 -left-10 p-2 px-4 rounded-lg border border-[var(--accent-color)]/20 
-                        bg-background/80 backdrop-blur-sm text-xs font-code shadow-lg"
+              className="absolute -top-10 -left-10 p-2 px-4 rounded-lg border border-[var(--accent-color)]/30 
+                        bg-background/90 backdrop-blur-sm text-xs font-code shadow-lg z-10"
               animate={{ 
                 y: [0, -10, 0],
                 rotate: [0, -5, 0],
-                opacity: [0.7, 1, 0.7]
+                opacity: [0.8, 1, 0.8]
               }}
               transition={{ 
                 duration: 5,
@@ -387,12 +344,12 @@ const Index = () => {
             </motion.div>
             
             <motion.div 
-              className="absolute -bottom-8 -right-5 p-2 px-4 rounded-lg border border-[var(--accent-color)]/20 
-                        bg-background/80 backdrop-blur-sm text-xs font-code shadow-lg"
+              className="absolute -bottom-8 -right-5 p-2 px-4 rounded-lg border border-[var(--accent-color)]/30 
+                        bg-background/90 backdrop-blur-sm text-xs font-code shadow-lg z-10"
               animate={{ 
                 y: [0, 10, 0],
                 rotate: [0, 5, 0],
-                opacity: [0.7, 1, 0.7]
+                opacity: [0.8, 1, 0.8]
               }}
               transition={{ 
                 duration: 6,
@@ -404,12 +361,12 @@ const Index = () => {
             </motion.div>
             
             <motion.div 
-              className="absolute -top-5 right-10 p-2 px-4 rounded-lg border border-[var(--accent-color)]/20 
-                        bg-background/80 backdrop-blur-sm text-xs font-code shadow-lg"
+              className="absolute -top-10 right-10 p-2 px-4 rounded-lg border border-[var(--accent-color)]/30 
+                        bg-background/90 backdrop-blur-sm text-xs font-code shadow-lg z-10"
               animate={{ 
                 y: [0, 8, 0],
                 rotate: [0, 3, 0],
-                opacity: [0.7, 1, 0.7]
+                opacity: [0.8, 1, 0.8]
               }}
               transition={{ 
                 duration: 7,
@@ -436,8 +393,8 @@ const Index = () => {
             repeatType: "loop" 
           }}
         >
-          <div className="w-10 h-14 rounded-full border-2 border-[var(--accent-color)]/40 flex justify-center items-start pt-3 
-                        backdrop-blur-sm bg-background/30 shadow-lg">
+          <div className="w-10 h-14 rounded-full border-2 border-[var(--accent-color)]/50 flex justify-center items-start pt-3 
+                        backdrop-blur-sm bg-background/50 shadow-lg">
             <motion.div 
               className="w-2 h-2 rounded-full bg-[var(--accent-color)]"
               animate={{ 
@@ -661,7 +618,7 @@ const Index = () => {
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <span className="gradient-text">Powerful Developer Tools</span>
-              </h2>
+                </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 Interactive tools to enhance your coding workflow and productivity
               </p>

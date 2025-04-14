@@ -1,11 +1,9 @@
-
 import { useState, useEffect, useRef, useCallback } from "react";
 import { BlogCard } from "@/components/BlogCard";
 import { TagFilter } from "@/components/TagFilter";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useBlogStore } from "@/store/useBlogStore";
-import type { BlogTag } from "@/types/blogTypes";
 import { Search, Filter, Loader2, RefreshCw } from "lucide-react";
 import {
   Sheet,
@@ -17,11 +15,27 @@ import {
 import { useLocation } from "react-router-dom";
 import { AnimatedSection } from "@/components/AnimatedSection";
 import { motion, AnimatePresence } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
+
+// Featured tags that should be prioritized (matching the ones in TagFilter)
+const FEATURED_TAGS = [
+  "JavaScript",
+  "TypeScript",
+  "React",
+  "Vue",
+  "Next.js",
+  "Node.js",
+  "CSS",
+  "HTML",
+  "Python",
+  "Frontend",
+  "Backend"
+];
 
 export default function BlogsPage() {
   const { blogs, initializeStore } = useBlogStore();
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTags, setSelectedTags] = useState<BlogTag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [filteredBlogs, setFilteredBlogs] = useState(blogs);
   const [visibleBlogs, setVisibleBlogs] = useState(6);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,47 +49,45 @@ export default function BlogsPage() {
     }
   }, [blogs.length, initializeStore]);
 
-  // Extract all unique tags from blogs
-  const allTags = Array.from(
-    new Set(blogs.flatMap((blog) => blog.tags))
-  ) as BlogTag[];
-
-  // Handle tag filtering from URL params
+  // Simplified filtering logic - only blogs that match ALL selected tags and search term
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-    const tagParam = queryParams.get("tag");
-    
-    if (tagParam && allTags.includes(tagParam as BlogTag)) {
-      setSelectedTags([tagParam as BlogTag]);
-    }
-  }, [location.search, allTags]);
-
-  // Filter blogs based on search and tags
-  useEffect(() => {
-    let result = blogs;
+    let filtered = blogs;
     
     // Filter by search term
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      result = result.filter(
-        (blog) =>
-          blog.title.toLowerCase().includes(term) ||
-          blog.excerpt.toLowerCase().includes(term) ||
-          blog.author.name.toLowerCase().includes(term) ||
-          blog.tags.some((tag) => tag.toLowerCase().includes(term))
+      filtered = filtered.filter(blog => 
+        blog.title.toLowerCase().includes(term) ||
+        blog.excerpt.toLowerCase().includes(term) ||
+        blog.tags.some(tag => tag.toLowerCase().includes(term))
       );
     }
     
-    // Filter by selected tags
+    // Filter by selected tags (blog must have ALL selected tags)
     if (selectedTags.length > 0) {
-      result = result.filter((blog) =>
-        selectedTags.every((tag) => blog.tags.includes(tag))
+      filtered = filtered.filter(blog => 
+        selectedTags.every(tag => blog.tags.includes(tag))
       );
     }
     
-    setFilteredBlogs(result);
+    setFilteredBlogs(filtered);
     setVisibleBlogs(6); // Reset visible blogs when filters change
   }, [blogs, searchTerm, selectedTags]);
+
+  // Toggle tag selection
+  const handleTagSelect = (tag: string) => {
+    setSelectedTags(prev => 
+      prev.includes(tag) 
+        ? prev.filter(t => t !== tag) 
+        : [...prev, tag]
+    );
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSelectedTags([]);
+    setSearchTerm("");
+  };
 
   // Load more blogs with a simulated delay for UX
   const loadMoreBlogs = useCallback(() => {
@@ -113,14 +125,6 @@ export default function BlogsPage() {
       }
     };
   }, [loadMoreBlogs]);
-
-  const handleTagSelect = (tag: BlogTag) => {
-    setSelectedTags((prev) =>
-      prev.includes(tag)
-        ? prev.filter((t) => t !== tag)
-        : [...prev, tag]
-    );
-  };
 
   const handleRefresh = () => {
     initializeStore();
@@ -169,25 +173,41 @@ export default function BlogsPage() {
               <SheetTrigger asChild>
                 <Button variant="outline" className="md:hidden gap-2">
                   <Filter className="h-4 w-4" />
-                  Filter
+                  Filter {selectedTags.length > 0 && `(${selectedTags.length})`}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right">
+              <SheetContent side="right" className="overflow-y-auto">
                 <SheetHeader>
                   <SheetTitle>Filter Blogs</SheetTitle>
                 </SheetHeader>
                 <div className="mt-4">
-                  <h3 className="text-sm font-medium mb-2">Categories</h3>
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-sm font-medium">Categories</h3>
+                    {selectedTags.length > 0 && (
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={clearFilters}
+                        className="text-xs h-7 px-2"
+                      >
+                        Clear All
+                      </Button>
+                    )}
+                  </div>
                   <div className="flex flex-wrap gap-2">
-                    {allTags.map((tag) => (
-                      <Button
+                    {FEATURED_TAGS.map((tag) => (
+                      <Badge
                         key={tag}
                         variant={selectedTags.includes(tag) ? "default" : "outline"}
-                        size="sm"
+                        className={`cursor-pointer ${
+                          FEATURED_TAGS.includes(tag) && !selectedTags.includes(tag) 
+                            ? "border-[var(--accent-color)]/30 text-[var(--accent-color-text)]" 
+                            : ""
+                        } ${selectedTags.includes(tag) ? "border border-white/20" : "border"}`}
                         onClick={() => handleTagSelect(tag)}
                       >
                         {tag}
-                      </Button>
+                      </Badge>
                     ))}
                   </div>
                 </div>
@@ -208,6 +228,17 @@ export default function BlogsPage() {
                 <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
               </Button>
             </motion.div>
+            
+            {(selectedTags.length > 0 || searchTerm) && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={clearFilters}
+                className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
+              >
+                Clear Filters
+              </Button>
+            )}
           </div>
         </div>
       </AnimatedSection>
@@ -215,11 +246,36 @@ export default function BlogsPage() {
       <AnimatedSection delay={0.2}>
         <div className="hidden md:block">
           <TagFilter
-            tags={allTags}
+            tags={FEATURED_TAGS}
             selectedTags={selectedTags}
             onTagSelect={handleTagSelect}
           />
         </div>
+        
+        {selectedTags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            <div className="text-sm text-muted-foreground mr-1 flex items-center">
+              <Filter className="h-3.5 w-3.5 mr-1" /> Active filters:
+            </div>
+            {selectedTags.map(tag => (
+              <Badge 
+                key={tag} 
+                variant="secondary"
+                className="pl-2 pr-1 py-1 flex items-center gap-1 border border-[var(--accent-color)]/20"
+              >
+                {tag}
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-4 w-4 p-0 ml-1 rounded-full" 
+                  onClick={() => handleTagSelect(tag)}
+                >
+                  ✕
+                </Button>
+              </Badge>
+            ))}
+          </div>
+        )}
       </AnimatedSection>
 
       {filteredBlogs.length > 0 ? (
@@ -294,6 +350,14 @@ export default function BlogsPage() {
             <p className="text-muted-foreground">
               Try adjusting your search or filter criteria.
             </p>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={clearFilters}
+              className="mt-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
+            >
+              Clear All Filters
+            </Button>
           </div>
         </AnimatedSection>
       )}

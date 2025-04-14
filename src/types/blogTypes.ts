@@ -1,40 +1,3 @@
-export type BlogTag =
-  | "React"
-  | "JavaScript"
-  | "TypeScript"
-  | "CSS"
-  | "HTML"
-  | "Node.js"
-  | "Python"
-  | "Design"
-  | "Database"
-  | "API"
-  | "Mobile"
-  | "DevOps"
-  | "Security"
-  | "Career"
-  | "Tutorial"
-  | "Guide"
-  | "Opinion"
-  | "News"
-  | "AWS"
-  | "Serverless"
-  | "Accessibility"
-  | "Performance"
-  | "Optimization"
-  | "Architecture"
-  | "Microservices"
-  | "Backend"
-  | "AI"
-  | "NLP"
-  | "Programming"
-  | "Web Development"
-  | "Frontend"
-  | "State Management"
-  | "Redux"
-  | "Git"
-  | "Next.js";
-
 export type Comment = {
   id: string;
   userId: string;
@@ -57,7 +20,7 @@ export type Blog = {
   content: string;
   excerpt: string;
   coverImage: string;
-  tags: BlogTag[];
+  tags: string[];
   createdAt: number;
   updatedAt: number;
   views: number;

@@ -1,5 +1,3 @@
-import { BlogTag } from "@/types/blogTypes";
-
 // Extend with additional dummy blog data
 export const demoBlogs = [
   {
@@ -162,7 +160,7 @@ React Hooks have transformed how we write React components by enabling more conc
       "Learn how to use React Hooks to simplify your components and share stateful logic between them. This guide covers useState, useEffect, useContext, useReducer, and custom hooks.",
     coverImage:
       "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    tags: ["React", "JavaScript", "Tutorial"] as BlogTag[],
+    tags: ["React", "JavaScript", "Tutorial"],
     createdAt: Date.now() - 7 * 24 * 60 * 60 * 1000, // 7 days ago
     updatedAt: Date.now() - 3 * 24 * 60 * 60 * 1000, // 3 days ago
     views: 542,
@@ -561,7 +559,7 @@ Building a design system with Tailwind CSS gives you the flexibility of utility 
       "Learn how to create a comprehensive design system using Tailwind CSS, including theming, component variants, and documentation for your team.",
     coverImage:
       "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    tags: ["CSS", "Design", "TypeScript", "Guide"] as BlogTag[],
+    tags: ["CSS", "Design", "TypeScript", "Guide"],
     createdAt: Date.now() - 14 * 24 * 60 * 60 * 1000, // 14 days ago
     updatedAt: Date.now() - 10 * 24 * 60 * 60 * 1000, // 10 days ago
     views: 821,
@@ -869,7 +867,7 @@ Generics in TypeScript provide a powerful way to build flexible, reusable compon
       "Dive into TypeScript generics with practical examples of how to use them for more reusable code while maintaining type safety.",
     coverImage:
       "https://images.unsplash.com/photo-1593720219276-0b1eacd0aef4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1461&q=80",
-    tags: ["TypeScript", "JavaScript", "Tutorial"] as BlogTag[],
+    tags: ["TypeScript", "JavaScript", "Tutorial"],
     createdAt: Date.now() - 10 * 24 * 60 * 60 * 1000, // 10 days ago
     updatedAt: Date.now() - 10 * 24 * 60 * 60 * 1000, // 10 days ago
     views: 743,
@@ -1034,7 +1032,7 @@ These patterns can help you build more robust TypeScript applications by leverag
     },
     coverImage:
       "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-    tags: ["TypeScript", "Programming", "Advanced"] as BlogTag[],
+    tags: ["TypeScript", "Programming", "Advanced"],
     createdAt: "2023-04-18T12:00:00.000Z",
     views: 3845,
     likes: 276,
@@ -1265,7 +1263,7 @@ Building microservices with Node.js allows you to create scalable, maintainable 
     },
     coverImage:
       "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-    tags: ["Node.js", "Backend", "Architecture"] as BlogTag[],
+    tags: ["Node.js", "Backend", "Architecture"],
     createdAt: "2023-04-15T10:30:00.000Z",
     views: 5621,
     likes: 412,
@@ -1486,7 +1484,7 @@ Optimizing React performance requires a combination of techniques and a good und
     },
     coverImage:
       "https://images.unsplash.com/photo-1581276879432-15e50529f34b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-    tags: ["React", "JavaScript", "Performance", "Frontend"] as BlogTag[],
+    tags: ["React", "JavaScript", "Performance", "Frontend"],
     createdAt: "2023-04-10T08:15:00.000Z",
     views: 7834,
     likes: 589,
@@ -1822,7 +1820,7 @@ Remember that browser support for the newest features (like subgrid) may vary, s
     },
     coverImage:
       "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-    tags: ["CSS", "Frontend", "Design"] as BlogTag[],
+    tags: ["CSS", "Frontend", "Design"],
     createdAt: "2023-04-02T11:45:00.000Z",
     views: 6752,
     likes: 531,

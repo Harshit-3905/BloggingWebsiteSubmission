@@ -5,13 +5,12 @@ import  BlogEditor  from "@/components/BlogEditor";
 import { useBlogStore } from "@/store/useBlogStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useToast } from "@/hooks/use-toast";
-import { BlogTag } from "@/types/blogTypes";
 
 export default function NewBlogPage() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [coverImage, setCoverImage] = useState("");
-  const [tags, setTags] = useState<BlogTag[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
   const { addBlog } = useBlogStore();
   const { user } = useAuthStore();
   const { toast } = useToast();

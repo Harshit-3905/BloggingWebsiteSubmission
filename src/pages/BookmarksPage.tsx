@@ -1,15 +1,37 @@
-
 import { useEffect, useState } from "react";
 import { useBlogStore } from "@/store/useBlogStore";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import { BlogCard } from "@/components/BlogCard";
-import { Bookmark, BookmarkPlus, Search, Filter } from "lucide-react";
+import { Bookmark, BookmarkPlus, Search, Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
 import { AnimatedSection } from "@/components/AnimatedSection";
-import { BlogTag } from "@/types/blogTypes";
+import { TagFilter } from "@/components/TagFilter";
+import { Badge } from "@/components/ui/badge";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
+// Featured tags that should be prioritized (matching the ones in TagFilter)
+const FEATURED_TAGS = [
+  "JavaScript",
+  "TypeScript",
+  "React",
+  "Vue",
+  "Next.js",
+  "Node.js",
+  "CSS",
+  "HTML",
+  "Python",
+  "Frontend",
+  "Backend"
+];
 
 export default function BookmarksPage() {
   const { blogs, bookmarkedBlogs, toggleBookmark } = useBlogStore();
@@ -21,7 +43,6 @@ export default function BookmarksPage() {
   );
   
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [allTags, setAllTags] = useState<string[]>([]);
 
   // Add some demo bookmarks for better UX if there are none
   useEffect(() => {
@@ -39,25 +60,14 @@ export default function BookmarksPage() {
     }
   }, [isLoggedIn, navigate]);
 
-  // Update bookmarked blogs when the store changes
-  useEffect(() => {
-    const filteredBlogs = blogs.filter((blog) => blog.bookmarked || bookmarkedBlogs.includes(blog.id));
-    setBookmarkedBlogsList(filteredBlogs);
-    
-    // Extract all unique tags from bookmarked blogs
-    const tags = Array.from(new Set(filteredBlogs.flatMap(blog => blog.tags)));
-    setAllTags(tags);
-  }, [blogs, bookmarkedBlogs]);
-
   // Filter bookmarked blogs based on search and tags
   const filteredBookmarks = bookmarkedBlogsList.filter(blog => {
     const matchesSearch = searchTerm === "" || 
       blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      blog.author.name.toLowerCase().includes(searchTerm.toLowerCase());
+      blog.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesTags = selectedTags.length === 0 || 
-      selectedTags.every(tag => blog.tags.includes(tag as BlogTag));
+      selectedTags.every(tag => blog.tags.includes(tag));
     
     return matchesSearch && matchesTags;
   });
@@ -68,6 +78,11 @@ export default function BookmarksPage() {
         ? prev.filter(t => t !== tag) 
         : [...prev, tag]
     );
+  };
+  
+  const clearFilters = () => {
+    setSelectedTags([]);
+    setSearchTerm("");
   };
 
   const containerVariants = {
@@ -106,28 +121,97 @@ export default function BookmarksPage() {
               className="pl-10"
             />
           </div>
-          <Button variant="outline" className="md:w-auto w-full gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
-            <Filter className="h-4 w-4" />
-            Filter
-          </Button>
+          
+          <div className="flex gap-2">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" className="md:hidden gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
+                  <Filter className="h-4 w-4" />
+                  Filter {selectedTags.length > 0 && `(${selectedTags.length})`}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="overflow-y-auto">
+                <SheetHeader>
+                  <SheetTitle>Filter Bookmarks</SheetTitle>
+                </SheetHeader>
+                <div className="mt-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <h3 className="text-sm font-medium">Categories</h3>
+                    {selectedTags.length > 0 && (
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={clearFilters}
+                        className="text-xs h-7 px-2"
+                      >
+                        Clear All
+                      </Button>
+                    )}
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {FEATURED_TAGS.map((tag) => (
+                      <Badge
+                        key={tag}
+                        variant={selectedTags.includes(tag) ? "default" : "outline"}
+                        className={`cursor-pointer ${
+                          FEATURED_TAGS.includes(tag) && !selectedTags.includes(tag) 
+                            ? "border-[var(--accent-color)]/30 text-[var(--accent-color-text)]" 
+                            : ""
+                        } ${selectedTags.includes(tag) ? "border border-white/20" : "border"}`}
+                        onClick={() => handleTagSelect(tag)}
+                      >
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+            
+            {(selectedTags.length > 0 || searchTerm) && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={clearFilters}
+                className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
+              >
+                <X className="h-4 w-4" />
+                Clear Filters
+              </Button>
+            )}
+          </div>
         </div>
 
-        {allTags.length > 0 && (
-          <div className="mb-6">
-            <h3 className="text-sm font-medium mb-2">Filter by Tags</h3>
-            <div className="flex flex-wrap gap-2">
-              {allTags.map((tag) => (
-                <Button
-                  key={tag}
-                  variant={selectedTags.includes(tag) ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => handleTagSelect(tag)}
-                  className={selectedTags.includes(tag) ? "bg-primary text-white" : ""}
-                >
-                  {tag}
-                </Button>
-              ))}
+        <div className="hidden md:block">
+          <TagFilter
+            tags={FEATURED_TAGS}
+            selectedTags={selectedTags}
+            onTagSelect={handleTagSelect}
+          />
+        </div>
+        
+        {selectedTags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            <div className="text-sm text-muted-foreground mr-1 flex items-center">
+              <Filter className="h-3.5 w-3.5 mr-1" /> Active filters:
             </div>
+            {selectedTags.map(tag => (
+              <Badge 
+                key={tag} 
+                variant="secondary"
+                className="pl-2 pr-1 py-1 flex items-center gap-1 border border-[var(--accent-color)]/20"
+              >
+                {tag}
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="h-4 w-4 p-0 ml-1 rounded-full" 
+                  onClick={() => handleTagSelect(tag)}
+                >
+                  ✕
+                </Button>
+              </Badge>
+            ))}
           </div>
         )}
       </AnimatedSection>

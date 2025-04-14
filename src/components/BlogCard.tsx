@@ -1,14 +1,10 @@
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Bookmark, Heart, Clock, Star } from "lucide-react";
+import { Bookmark, Heart, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useBlogStore } from "@/store/useBlogStore";
 import { type Blog } from "@/types/blogTypes";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
-import { cardHoverClass } from "@/utils/tailwindClasses";
 
 interface BlogCardProps {
   blog: Blog;
@@ -105,6 +101,22 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
   const getTagColor = (tag: string) => {
     return "bg-[var(--accent-color)]/10 text-[var(--accent-color-text)] border-[var(--accent-color)]/20";
   };
+  
+  // Animated underline variants
+  const underlineVariants = {
+    hidden: { 
+      width: "0%",
+      opacity: 0
+    },
+    hover: { 
+      width: "100%", 
+      opacity: 1,
+      transition: { 
+        duration: 0.4,
+        ease: "easeOut" 
+      } 
+    }
+  };
 
   return (
     <motion.div
@@ -113,7 +125,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
       animate="visible"
       whileHover="hover"
       variants={cardVariants}
-      className="blog-card overflow-hidden rounded-xl bg-white shadow-md dark:bg-card border border-[var(--accent-color)]/10 hover:border-[var(--accent-color)]/30 transition-all duration-300"
+      className="blog-card relative overflow-hidden rounded-xl bg-white shadow-md dark:bg-card border border-[var(--accent-color)]/10 hover:border-[var(--accent-color)]/30 transition-all duration-300 after:content-[''] after:absolute after:bottom-0 after:left-0 after:h-[6px] after:bg-[var(--accent-color)] after:w-full after:scale-x-0 after:origin-left hover:after:scale-x-100 after:transition-transform after:duration-300"
     >
       <div className="relative">
         <Link to={`/blog/${blog.slug}`} className="block">
@@ -127,7 +139,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
             
             {/* Category Badge */}
             <div className="absolute left-3 top-3 z-10">
-              <span className={`px-3 py-1 rounded-full text-xs font-medium bg-gray-600`}>
+              <span className={`px-3 py-1 rounded-full text-xs font-medium bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700`}>
                 {mainCategory}
               </span>
             </div>
@@ -142,7 +154,7 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
                 className="rounded-full bg-white p-2 shadow-md transition hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700"
               >
                 <Heart 
-                  className={`h-4 w-4 ${isLiked ? "fill-[var(--accent-color)] text-[var(--accent-color)]" : "text-gray-400"}`} 
+                  className={`h-4 w-4 ${isLiked ? "fill-red-600 text-red-600" : "text-gray-400"}`} 
                 />
               </button>
             </motion.div>
@@ -162,15 +174,11 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
               {tag}
             </span>
           ))}
-          
-          <span className="inline-block rounded-full px-2.5 py-0.5 text-xs bg-gray-50 text-gray-600 border border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700">
-            Quick
-          </span>
         </div>
         
         {/* Title */}
         <Link to={`/blog/${blog.slug}`}>
-          <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white hover:text-[var(--accent-color-text)] transition-colors">
+          <h3 className="mb-2 text-xl font-bold text-gray-900 dark:text-white hover:text-[var(--accent-color-text)] transition-colors line-clamp-1">
             {blog.title}
           </h3>
         </Link>

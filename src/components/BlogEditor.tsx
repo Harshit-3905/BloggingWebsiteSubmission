@@ -27,15 +27,14 @@ import { Switch } from "./ui/switch";
 import { useBlogStore } from "@/store/useBlogStore";
 import { nanoid } from "nanoid";
 import { useToast } from "@/hooks/use-toast";
-import { BlogTag } from "@/types/blogTypes";
 
 interface BlogEditorProps {
   initialTitle?: string;
   initialContent?: string;
   initialCoverImage?: string;
-  initialTags?: BlogTag[];
+  initialTags?: string[];
   initialExcerpt?: string;
-  onSave?: (data: { title: string; content: string; coverImage: string; tags: BlogTag[]; excerpt: string }) => void;
+  onSave?: (data: { title: string; content: string; coverImage: string; tags: string[]; excerpt: string }) => void;
   isSubmitting?: boolean;
 }
 
@@ -54,7 +53,7 @@ export default function BlogEditor({
   // Basic blog state
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
-  const [tags, setTags] = useState<string[]>(initialTags as string[]);
+  const [tags, setTags] = useState<string[]>(initialTags);
   const [currentTag, setCurrentTag] = useState("");
   const [coverImage, setCoverImage] = useState(initialCoverImage);
   const [excerpt, setExcerpt] = useState(initialExcerpt);
@@ -188,7 +187,7 @@ export default function BlogEditor({
         title,
         content,
         coverImage,
-        tags: tags as BlogTag[],
+        tags: tags,
         excerpt: excerpt || content.replace(/<[^>]*>/g, '').slice(0, 150) + "..."
       });
       return;
@@ -207,7 +206,7 @@ export default function BlogEditor({
         avatar: "/images/avatar.jpg",
         bio: "Bio placeholder" // Add appropriate bio if available
       },
-      tags: tags as BlogTag[],
+      tags: tags,
       date: new Date().toISOString(),
       readTime: Math.ceil(content.split(" ").length / 200),
       slug: title.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-'),

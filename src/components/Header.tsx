@@ -113,35 +113,6 @@ export function Header() {
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className={cn(
-                  "transition-colors duration-200 border border-transparent",
-                  "hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]/20 hover:bg-[var(--accent-color)]/5"
-                )}>
-                  Categories
-                </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                    {[
-                      {name: "JavaScript", desc: "Modern JS concepts and tutorials", path: "/blogs?tag=JavaScript"},
-                      {name: "React", desc: "Component patterns and state management", path: "/blogs?tag=React"},
-                      {name: "Node.js", desc: "Server-side JavaScript development", path: "/blogs?tag=Node.js"},
-                      {name: "TypeScript", desc: "Static typing for JavaScript", path: "/blogs?tag=TypeScript"},
-                      {name: "CSS", desc: "Styling and animations", path: "/blogs?tag=CSS"},
-                      {name: "Backend", desc: "Server-side development", path: "/blogs?category=Backend"}
-                    ].map((item) => (
-                      <ListItem 
-                        key={item.name} 
-                        title={item.name} 
-                        href={item.path}
-                        className="hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)]"
-                      >
-                        {item.desc}
-                      </ListItem>
-                    ))}
-                  </ul>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
         </div>
@@ -339,30 +310,6 @@ export function Header() {
                         <PenSquare className="h-4 w-4 inline-block mr-2" /> New Blog
                       </Link>
                     )}
-                  </div>
-                </div>
-                
-                <div className="space-y-1">
-                  <h2 className="text-lg font-medium mb-2 text-[var(--accent-color)]">Popular Categories</h2>
-                  <div className="flex flex-col space-y-2">
-                    <Link 
-                      to="/blogs?tag=React" 
-                      className="py-2 px-3 rounded-md hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] flex items-center gap-2"
-                    >
-                      <Code className="h-4 w-4" /> React
-                    </Link>
-                    <Link 
-                      to="/blogs?tag=JavaScript" 
-                      className="py-2 px-3 rounded-md hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] flex items-center gap-2"
-                    >
-                      <Code className="h-4 w-4" /> JavaScript
-                    </Link>
-                    <Link 
-                      to="/blogs?tag=TypeScript" 
-                      className="py-2 px-3 rounded-md hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] flex items-center gap-2"
-                    >
-                      <Code className="h-4 w-4" /> TypeScript
-                    </Link>
                   </div>
                 </div>
                 

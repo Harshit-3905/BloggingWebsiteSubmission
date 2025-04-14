@@ -240,7 +240,7 @@ export const useThemeStore = create<ThemeState>()(
           theme: "dark",
           selectedColorName: "Purple",
           accentColor: COLOR_SCHEMES[0].value,
-          fontFamily: "sans",
+          fontFamily: "code",
         });
         get().setColorScheme("Purple");
       },

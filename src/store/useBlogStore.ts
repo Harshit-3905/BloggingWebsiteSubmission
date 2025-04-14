@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { v4 as uuidv4 } from "uuid";
 import { demoBlogs } from "@/data/demoBlogs";
-import { Blog, Comment, BlogTag } from "@/types/blogTypes";
+import { Blog, Comment } from "@/types/blogTypes";
 
 export type BlogStore = {
   blogs: Blog[];
@@ -145,7 +145,7 @@ export const useBlogStore = create<BlogStore>()(
         const state = get();
         const now = Date.now();
 
-        // Convert to proper Blog format with proper BlogTag[] type
+        // Convert to proper Blog format with proper string[] type
         const transformedBlogs: Blog[] = demoBlogs.map((blog) => {
           // Convert any "author" format comments to the right format
           const comments = Array.isArray(blog.comments)

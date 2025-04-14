@@ -12,19 +12,10 @@ export function Footer() {
   const handleSubscribe = () => {
     if (email.trim() !== "") {
       setSubscribed(true);
+      setEmail("");
       setTimeout(() => setSubscribed(false), 3000);
     }
   };
-
-  const categories = [
-    { name: "JavaScript", link: "/blogs?tag=JavaScript" },
-    { name: "React", link: "/blogs?tag=React" },
-    { name: "Node.js", link: "/blogs?tag=Node.js" },
-    { name: "CSS", link: "/blogs?tag=CSS" },
-    { name: "TypeScript", link: "/blogs?tag=TypeScript" },
-    { name: "Next.js", link: "/blogs?tag=Next.js" }
-  ];
-  
   const quickLinks = [
     { name: "Home", link: "/" },
     { name: "All Blogs", link: "/blogs" },
@@ -60,7 +51,7 @@ export function Footer() {
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       exit={{ scale: 0.8, opacity: 0 }}
-                      className="bg-green-500 text-white h-10 px-4 rounded-md flex items-center gap-2 font-medium"
+                      className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent h-10 px-4 rounded-md flex items-center shrink-0 font-medium cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
                     >
                       <Check className="h-4 w-4" />
                       Subscribed
@@ -71,7 +62,7 @@ export function Footer() {
                       onClick={handleSubscribe}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent h-10 px-4 rounded-md flex items-center shrink-0 font-medium"
+                      className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent h-10 px-4 rounded-md flex items-center shrink-0 font-medium cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
                       disabled={!email.trim()}
                     >
                       Subscribe
@@ -175,25 +166,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
-            <h3 className="font-bold mb-4 text-lg">Popular Categories</h3>
-            <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
-                <motion.div 
-                  key={category.name}
-                  whileHover={{ y: -2, scale: 1.05 }}
-                >
-                  <Link 
-                    to={category.link}
-                    className="inline-block px-3 py-1 bg-muted/50 hover:bg-[var(--accent-color)]/10 hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border border-transparent rounded-md text-sm transition-colors"
-                  >
-                    {category.name}
-                  </Link>
-                </motion.div>
-              ))}
-            </div>
-            
-            <div className="mt-8">
+          <div>            
               <h3 className="font-bold mb-4 text-lg">Write For Us</h3>
               <p className="text-muted-foreground text-sm mb-3">
                 Share your expertise with our community
@@ -224,7 +197,6 @@ export function Footer() {
             <Link to="/contact" className="hover:text-[var(--accent-color)]">Contact Us</Link>
           </div>
         </div>
-      </div>
     </footer>
   );
 }
