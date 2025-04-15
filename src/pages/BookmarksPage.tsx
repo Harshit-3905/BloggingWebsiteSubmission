@@ -121,65 +121,7 @@ export default function BookmarksPage() {
               className="pl-10"
             />
           </div>
-          
-          <div className="flex gap-2">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="md:hidden gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
-                  <Filter className="h-4 w-4" />
-                  Filter {selectedTags.length > 0 && `(${selectedTags.length})`}
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right" className="overflow-y-auto">
-                <SheetHeader>
-                  <SheetTitle>Filter Bookmarks</SheetTitle>
-                </SheetHeader>
-                <div className="mt-4">
-                  <div className="flex justify-between items-center mb-3">
-                    <h3 className="text-sm font-medium">Categories</h3>
-                    {selectedTags.length > 0 && (
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        onClick={clearFilters}
-                        className="text-xs h-7 px-2"
-                      >
-                        Clear All
-                      </Button>
-                    )}
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {FEATURED_TAGS.map((tag) => (
-                      <Badge
-                        key={tag}
-                        variant={selectedTags.includes(tag) ? "default" : "outline"}
-                        className={`cursor-pointer ${
-                          FEATURED_TAGS.includes(tag) && !selectedTags.includes(tag) 
-                            ? "border-[var(--accent-color)]/30 text-[var(--accent-color-text)]" 
-                            : ""
-                        } ${selectedTags.includes(tag) ? "border border-white/20" : "border"}`}
-                        onClick={() => handleTagSelect(tag)}
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-            
-            {(selectedTags.length > 0 || searchTerm) && (
-              <Button 
-                variant="outline" 
-                size="default" 
-                onClick={clearFilters}
-                className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
-              >
-                <X className="h-4 w-4" />
-                Clear Filters
-              </Button>
-            )}
-          </div>
+        
         </div>
 
         <div className="hidden md:block">
