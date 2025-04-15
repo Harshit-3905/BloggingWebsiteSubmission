@@ -169,11 +169,11 @@ export function TrendingTopicsSection() {
                   
                   <Button 
                     size="sm" 
-                    variant={followedTopics.includes(trend.name) ? "default" : "ghost"} 
+                    variant="secondary"
                     className={`rounded-full transition-all duration-300 ${
                       followedTopics.includes(trend.name) 
                         ? "bg-[var(--accent-color)] text-white opacity-100" 
-                        : "hover:bg-[var(--accent-color)] opacity-0 group-hover:opacity-100"
+                        : "hover:bg-[var(--accent-color)]"
                     }`}
                     onClick={() => toggleFollow(trend.name)}
                   >

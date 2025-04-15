@@ -17,6 +17,7 @@ import {
   ArrowLeft,
   Clock,
   ThumbsUp,
+  Loader2,
 } from "lucide-react";
 import { BlogCard } from "@/components/BlogCard";
 import { useBlogStore } from "@/store/useBlogStore";
@@ -37,12 +38,16 @@ export default function BlogDetailPage() {
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [blog, setBlog] = useState(null);
   const [relatedBlogs, setRelatedBlogs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Reference to content div for scrolling
   const contentRef = useRef<HTMLDivElement>(null);
   const viewIncremented = useRef(false);
 
   useEffect(() => {
+    // Set loading state
+    setIsLoading(true);
+    
     // Find the blog by slug
     const foundBlog = blogs.find((b) => b.slug === slug);
     setBlog(foundBlog);
@@ -58,6 +63,13 @@ export default function BlogDetailPage() {
         .slice(0, 3);
       setRelatedBlogs(related);
     }
+    
+    // Small delay to prevent immediate "not found" flash
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
+    
+    return () => clearTimeout(timer);
   }, [blogs, slug]);
 
   useEffect(() => {
@@ -99,6 +111,16 @@ export default function BlogDetailPage() {
       }, 100);
     }
   };
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="container-custom py-20 flex flex-col items-center justify-center min-h-[90vh]">
+        <Loader2 className="h-12 w-12 animate-spin text-[var(--accent-color)] mb-4" />
+        <p className="text-muted-foreground">Loading blog content...</p>
+      </div>
+    );
+  }
 
   if (!blog) {
     return (

@@ -29,6 +29,9 @@ export default function SettingsPage() {
   const [commentNotificationsEnabled, setCommentNotificationsEnabled] = useState(true);
   const [mentionNotificationsEnabled, setMentionNotificationsEnabled] = useState(true);
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -56,6 +59,56 @@ export default function SettingsPage() {
       description: `${title} has been ${!currentValue ? "enabled" : "disabled"} successfully.`,
       className: "bg-card border-primary shadow-lg"
     });
+  };
+
+  const handlePasswordChange = () => {
+    if (!currentPassword) {
+      toast({
+        title: "Missing Current Password",
+        description: "Please enter your current password.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (!newPassword) {
+      toast({
+        title: "Missing New Password",
+        description: "Please enter a new password.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (!confirmPassword) {
+      toast({
+        title: "Missing Confirmation",
+        description: "Please confirm your new password.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    if (newPassword !== confirmPassword) {
+      toast({
+        title: "Passwords Don't Match",
+        description: "New password and confirmation do not match.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // If we get here, all validations have passed
+    toast({
+      title: "Password Updated",
+      description: "Your password has been updated successfully.",
+      variant: "success"
+    });
+    
+    // Clear the form
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
   };
 
   const MotionButton = motion(Button);
@@ -189,7 +242,16 @@ export default function SettingsPage() {
                       />
                     </div>
                   </div>
-                  <Button className="mt-4 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">Update Profile</Button>
+                  <Button 
+                    className="mt-4 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
+                    onClick={() => {
+                      toast({
+                        title: "Cannot update profile",
+                        description: "Guest profiles cannot be updated in this demo.",
+                        variant: "destructive"
+                      });
+                    }}
+                  >Update Profile</Button>
                 </div>
 
                 <div className="space-y-4 pt-4 border-t">
@@ -202,6 +264,8 @@ export default function SettingsPage() {
                         type="password"
                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         placeholder="••••••••"
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
                       />
                     </div>
                     <div className="flex flex-col space-y-1.5">
@@ -211,10 +275,26 @@ export default function SettingsPage() {
                         type="password"
                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         placeholder="••••••••"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                      />
+                    </div>
+                    <div className="flex flex-col space-y-1.5">
+                      <Label htmlFor="confirm-password">Confirm New Password</Label>
+                      <input
+                        id="confirm-password"
+                        type="password"
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="••••••••"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                       />
                     </div>
                   </div>
-                  <Button className="mt-4 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">Change Password</Button>
+                  <Button 
+                    className="mt-4 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
+                    onClick={handlePasswordChange}
+                  >Change Password</Button>
                 </div>
               </CardContent>
             </Card>

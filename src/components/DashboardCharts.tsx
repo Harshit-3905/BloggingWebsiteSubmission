@@ -24,6 +24,16 @@ export function DashboardCharts({ blogs }: DashboardChartsProps) {
   const isMobile = windowWidth < 640;
   const isTablet = windowWidth >= 640 && windowWidth < 1024;
   
+  // Add CSS variables for tooltip styling
+  const tooltipStyle = {
+    backgroundColor: 'hsl(var(--background) / 0.85)',
+    backdropFilter: 'blur(8px)',
+    borderColor: 'var(--accent-color)',
+    borderRadius: '8px',
+    boxShadow: '0 2px 15px rgba(0,0,0,0.2)',
+    fontSize: isMobile ? '12px' : '14px'
+  };
+  
   // Generate proper demo data for line chart - views over time
   const generateViewsData = () => {
     const data = [];
@@ -320,13 +330,7 @@ export function DashboardCharts({ blogs }: DashboardChartsProps) {
                       width={isMobile ? 30 : 40}
                     />
                     <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'var(--background)', 
-                        borderColor: 'var(--accent-color)', 
-                        borderRadius: '8px',
-                        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-                        fontSize: isMobile ? '12px' : '14px'
-                      }}
+                      contentStyle={tooltipStyle}
                     />
                     <Legend />
                     <Area
@@ -395,14 +399,8 @@ export function DashboardCharts({ blogs }: DashboardChartsProps) {
                     ))}
                   </Pie>
                     <Tooltip 
-                      formatter={(value) => [`${value}`, '']} 
-                      contentStyle={{ 
-                        backgroundColor: 'var(--background)', 
-                        borderColor: 'var(--accent-color)', 
-                        borderRadius: '8px',
-                        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-                        fontSize: isMobile ? '12px' : '14px'
-                      }}
+                      formatter={(value, name) => [`${value.toLocaleString()}`, name]}
+                      contentStyle={tooltipStyle}
                     />
                 </PieChart>
               </ResponsiveContainer>
@@ -528,14 +526,8 @@ export function DashboardCharts({ blogs }: DashboardChartsProps) {
                       width={isMobile ? 60 : 100}
                     />
                     <Tooltip 
-                      formatter={(value) => [`${value}%`, 'Traffic']} 
-                      contentStyle={{ 
-                        backgroundColor: 'var(--background)', 
-                        borderColor: 'var(--accent-color)', 
-                        borderRadius: '8px',
-                        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-                        fontSize: isMobile ? '12px' : '14px'
-                      }}
+                      formatter={(value) => [`${value}%`, 'Traffic']}
+                      contentStyle={tooltipStyle}
                     />
                     <Bar 
                       dataKey="value" 
