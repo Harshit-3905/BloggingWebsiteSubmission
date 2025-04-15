@@ -7,6 +7,7 @@ import { Blog, Comment } from "@/types/blogTypes";
 export type BlogStore = {
   blogs: Blog[];
   bookmarkedBlogs: string[];
+  likedBlogs: string[];
   addBlog: (
     blog: Omit<
       Blog,
@@ -23,6 +24,7 @@ export type BlogStore = {
   deleteBlog: (id: string) => void;
   toggleBookmark: (id: string) => void;
   likeBlog: (id: string) => void;
+  isLikedByUser: (id: string) => boolean;
   addComment: (
     blogId: string,
     comment: Omit<Comment, "id" | "createdAt">
@@ -39,6 +41,7 @@ export const useBlogStore = create<BlogStore>()(
     (set, get) => ({
       blogs: [],
       bookmarkedBlogs: [],
+      likedBlogs: [],
       addBlog: (blog) => {
         const now = Date.now();
         const newBlog: Blog = {
@@ -102,19 +105,41 @@ export const useBlogStore = create<BlogStore>()(
       },
       likeBlog: (id) => {
         set((state) => {
-          // Find the blog
-          const blog = state.blogs.find((b) => b.id === id);
-          if (!blog) return { blogs: state.blogs };
+          // Check if the blog is already liked by the user
+          const isLiked = state.likedBlogs.includes(id);
 
-          // Toggle likes - decrease if already liked, otherwise increase
-          const newLikes = blog.likes > 0 ? blog.likes - 1 : blog.likes + 1;
+          // Update likes count - decrease if already liked, increase if not
+          const updatedBlogs = state.blogs.map((blog) => {
+            if (blog.id === id) {
+              return {
+                ...blog,
+                likes: isLiked ? blog.likes - 1 : blog.likes + 1,
+              };
+            }
+            return blog;
+          });
+
+          // Update the likedBlogs array
+          let updatedLikedBlogs = [...state.likedBlogs];
+          if (isLiked) {
+            // Remove from liked blogs
+            updatedLikedBlogs = updatedLikedBlogs.filter(
+              (blogId) => blogId !== id
+            );
+          } else {
+            // Add to liked blogs
+            updatedLikedBlogs.push(id);
+          }
 
           return {
-            blogs: state.blogs.map((blog) =>
-              blog.id === id ? { ...blog, likes: newLikes } : blog
-            ),
+            blogs: updatedBlogs,
+            likedBlogs: updatedLikedBlogs,
           };
         });
+      },
+      isLikedByUser: (id) => {
+        const state = get();
+        return state.likedBlogs.includes(id);
       },
       addComment: (blogId, comment) => {
         set((state) => ({
@@ -165,11 +190,18 @@ export const useBlogStore = create<BlogStore>()(
                   comment.author &&
                   "avatar" in comment.author
                 ) {
+                  // Fix the type assertion by using type guards
+                  const author = comment.author as {
+                    id?: string;
+                    name?: string;
+                    avatar?: string;
+                  };
+
                   return {
                     id: comment.id,
-                    userId: comment.author.id as string,
-                    userName: comment.author.name as string,
-                    userAvatar: comment.author.avatar as string,
+                    userId: author.id as string,
+                    userName: author.name as string,
+                    userAvatar: author.avatar as string,
                     content: comment.content,
                     createdAt:
                       typeof comment.createdAt === "string"

@@ -30,7 +30,7 @@ import { getRelativeTime } from "@/utils/dateUtils";
 export default function BlogDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { blogs, toggleBookmark, likeBlog, addComment, incrementView } =
+  const { blogs, toggleBookmark, likeBlog, addComment, incrementView, isLikedByUser } =
     useBlogStore();
   const { user, isLoggedIn } = useAuthStore();
   const { toast } = useToast();
@@ -149,8 +149,10 @@ export default function BlogDetailPage() {
     
     likeBlog(blog.id);
     toast({
-      title: "Blog liked!",
-      description: "Thank you for your appreciation.",
+      title: isLikedByUser(blog.id) ? "Blog unliked" : "Blog liked!",
+      description: isLikedByUser(blog.id) 
+        ? "You have unliked this blog."
+        : "Thank you for your appreciation.",
     });
   };
 
@@ -269,7 +271,7 @@ export default function BlogDetailPage() {
               >
                 <Heart
                   className={`h-4 w-4 ${
-                    blog.likes > 0
+                    isLikedByUser(blog.id)
                       ? "fill-[var(--accent-color)] text-[var(--accent-color)]"
                       : ""
                   }`}
@@ -372,7 +374,7 @@ export default function BlogDetailPage() {
                   >
                     <ThumbsUp
                       className={`h-4 w-4 ${
-                        blog.likes > 0
+                        isLikedByUser(blog.id)
                           ? "fill-[var(--accent-color)] text-[var(--accent-color)]"
                           : ""
                       }`}
@@ -673,7 +675,7 @@ export default function BlogDetailPage() {
                 >
                   <ThumbsUp
                     className={`h-4 w-4 ${
-                      blog.likes > 0
+                      isLikedByUser(blog.id)
                         ? "fill-[var(--accent-color)] text-[var(--accent-color)]"
                         : ""
                     }`}

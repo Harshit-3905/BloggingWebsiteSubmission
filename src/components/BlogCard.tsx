@@ -12,9 +12,8 @@ interface BlogCardProps {
 }
 
 function BlogCardComponent({ blog, index = 0 }: BlogCardProps) {
-  const { toggleBookmark, likeBlog } = useBlogStore();
+  const { toggleBookmark, likeBlog, isLikedByUser } = useBlogStore();
   const { toast } = useToast();
-  const [isLiked, setIsLiked] = useState(blog.likes > 0);
   const [isBookmarked, setIsBookmarked] = useState(blog.bookmarked);
 
   // Get main category for the category badge
@@ -52,17 +51,15 @@ function BlogCardComponent({ blog, index = 0 }: BlogCardProps) {
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const newStatus = !isLiked;
-    setIsLiked(newStatus);
     
     // Update in store
-    if (newStatus) {
-      likeBlog(blog.id);
-    }
+    likeBlog(blog.id);
     
     toast({
-      title: newStatus ? "Blog liked!" : "Like removed",
-      description: newStatus ? "Thank you for your appreciation." : "You've removed your like from this blog.",
+      title: isLikedByUser(blog.id) ? "Like removed" : "Blog liked!",
+      description: isLikedByUser(blog.id) 
+        ? "You've removed your like from this blog." 
+        : "Thank you for your appreciation.",
       className: "bg-card border-[var(--accent-color)] shadow-lg"
     });
   };
@@ -154,7 +151,7 @@ function BlogCardComponent({ blog, index = 0 }: BlogCardProps) {
                 className="rounded-full bg-white p-2 shadow-md transition hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700"
               >
                 <Heart 
-                  className={`h-4 w-4 ${isLiked ? "fill-red-600 text-red-600" : "text-gray-400"}`} 
+                  className={`h-4 w-4 ${isLikedByUser(blog.id) ? "fill-red-600 text-red-600" : "text-gray-400"}`} 
                 />
               </button>
             </motion.div>
