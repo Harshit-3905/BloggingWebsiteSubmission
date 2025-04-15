@@ -317,7 +317,7 @@ export default function BlogDetailPage() {
                 <Badge
                   key={tag}
                   variant="secondary"
-                  className="bg-[var(--accent-color)]/10 hover:bg-[var(--accent-color)]/20 text-[var(--accent-color)]"
+                  className="bg-[var(--accent-color)]/10 hover:bg-[var(--accent-color)]/20 text-[var(--accent-color)] border-2 border-[var(--accent-color)]/20"
                 >
                   {tag}
                 </Badge>

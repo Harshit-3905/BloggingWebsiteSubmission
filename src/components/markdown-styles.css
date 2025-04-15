@@ -1,5 +1,6 @@
 /* Custom styles for markdown content */
 
+/* Code block styling - Support both dark and light modes */
 .code-block-wrapper {
     position: relative;
     border-radius: 0.375rem;
@@ -7,8 +8,17 @@
     margin: 0.75rem 0;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode styles */
+.code-block-wrapper {
     background-color: #2d2d2d;
-    /* Dark background for all code blocks */
+}
+
+/* Light mode styles */
+:root:not(.dark) .code-block-wrapper {
+    background-color: #f5f5f5;
+    border-color: rgba(0, 0, 0, 0.1);
 }
 
 .code-block-wrapper pre {
@@ -16,26 +26,19 @@
     padding: 0.5rem 0.75rem;
     padding-top: 1.5rem;
     border-radius: 0;
-    /* Remove border radius from pre */
     font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     font-size: 0.875rem;
     line-height: 1.4;
     tab-size: 2;
-    /* Remove the fixed height causing unwanted scrolling */
     max-height: none;
     overflow-y: visible;
-    overflow-x: auto;
-    white-space: pre;
-    word-wrap: normal;
-    background-color: transparent !important;
-    /* Force transparent background */
-    color: #e9e9e9;
-    /* Light text color for contrast */
+    overflow-x: visible;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    background: transparent !important;
     width: 100%;
     -ms-overflow-style: none;
-    /* Hide scrollbar in IE and Edge */
     scrollbar-width: thin;
-    /* Thin scrollbar in Firefox */
 }
 
 /* Only add scrolling for very long code blocks */
@@ -59,8 +62,16 @@
     border-radius: 4px;
 }
 
+:root:not(.dark) .code-block-wrapper pre::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+}
+
 .code-block-wrapper pre::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.3);
+}
+
+:root:not(.dark) .code-block-wrapper pre::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
 }
 
 .code-block-wrapper code {
@@ -70,10 +81,9 @@
     width: 100%;
     overflow: visible;
     white-space: inherit;
+    word-break: break-word;
     background-color: transparent !important;
-    /* Force transparent background */
     font-family: inherit;
-    color: inherit;
 }
 
 /* Make sure Prism styles are applied */
@@ -81,7 +91,81 @@
     background: transparent !important;
 }
 
-/* Emphasized colors for token types to ensure visibility */
+/* Language label */
+.code-block-wrapper::before {
+    content: attr(data-language);
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.1rem 0.5rem;
+    font-size: 0.65rem;
+    background: rgba(0, 0, 0, 0.5);
+    color: rgba(255, 255, 255, 0.8);
+    border-bottom-right-radius: 0.375rem;
+    z-index: 5;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+:root:not(.dark) .code-block-wrapper::before {
+    background: rgba(0, 0, 0, 0.3);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.code-block-wrapper:hover::before {
+    opacity: 1;
+}
+
+/* Hide language tag if it's "text" */
+.code-block-wrapper[data-language="text"]::before {
+    display: none;
+}
+
+.copy-code-button {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #e2e2e2;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    z-index: 10;
+    opacity: 0;
+}
+
+:root:not(.dark) .copy-code-button {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+.code-block-wrapper:hover .copy-code-button {
+    opacity: 1;
+}
+
+.copy-code-button.copied {
+    background-color: #22c55e;
+    color: white;
+}
+
+.copy-code-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+:root:not(.dark) .copy-code-button:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Syntax highlighting for dark mode */
 .prism-highlighted .token.comment,
 .prism-highlighted .token.prolog,
 .prism-highlighted .token.doctype,
@@ -115,8 +199,8 @@
 .prism-highlighted .token.operator,
 .prism-highlighted .token.entity,
 .prism-highlighted .token.url,
-.prism-highlighted .language-css .token.string,
-.prism-highlighted .style .token.string {
+.language-css .prism-highlighted .token.string,
+.style .prism-highlighted .token.string {
     color: #d2a8ff !important;
 }
 
@@ -137,65 +221,60 @@
     color: #c9d1d9 !important;
 }
 
-/* Language label */
-.code-block-wrapper::before {
-    content: attr(data-language);
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 0.1rem 0.5rem;
-    font-size: 0.65rem;
-    background: rgba(0, 0, 0, 0.5);
-    color: rgba(255, 255, 255, 0.8);
-    border-bottom-right-radius: 0.375rem;
-    z-index: 5;
-    text-transform: uppercase;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    opacity: 0.8;
-    transition: opacity 0.2s ease;
+/* Syntax highlighting for light mode */
+:root:not(.dark) .prism-highlighted .token.comment,
+:root:not(.dark) .prism-highlighted .token.prolog,
+:root:not(.dark) .prism-highlighted .token.doctype,
+:root:not(.dark) .prism-highlighted .token.cdata {
+    color: #6e7781 !important;
 }
 
-.code-block-wrapper:hover::before {
-    opacity: 1;
+:root:not(.dark) .prism-highlighted .token.punctuation {
+    color: #24292f !important;
 }
 
-/* Hide language tag if it's "text" */
-.code-block-wrapper[data-language="text"]::before {
-    display: none;
+:root:not(.dark) .prism-highlighted .token.property,
+:root:not(.dark) .prism-highlighted .token.tag,
+:root:not(.dark) .prism-highlighted .token.boolean,
+:root:not(.dark) .prism-highlighted .token.number,
+:root:not(.dark) .prism-highlighted .token.constant,
+:root:not(.dark) .prism-highlighted .token.symbol,
+:root:not(.dark) .prism-highlighted .token.deleted {
+    color: #0550ae !important;
 }
 
-.copy-code-button {
-    position: absolute;
-    top: 0.25rem;
-    right: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: #e2e2e2;
-    border: none;
-    border-radius: 0.25rem;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-    z-index: 10;
-    opacity: 0;
+:root:not(.dark) .prism-highlighted .token.selector,
+:root:not(.dark) .prism-highlighted .token.attr-name,
+:root:not(.dark) .prism-highlighted .token.string,
+:root:not(.dark) .prism-highlighted .token.char,
+:root:not(.dark) .prism-highlighted .token.builtin,
+:root:not(.dark) .prism-highlighted .token.inserted {
+    color: #116329 !important;
 }
 
-.code-block-wrapper:hover .copy-code-button {
-    opacity: 1;
+:root:not(.dark) .prism-highlighted .token.operator,
+:root:not(.dark) .prism-highlighted .token.entity,
+:root:not(.dark) .prism-highlighted .token.url,
+:root:not(.dark) .language-css .prism-highlighted .token.string,
+:root:not(.dark) .style .prism-highlighted .token.string {
+    color: #8250df !important;
 }
 
-.copy-code-button.copied {
-    background-color: #22c55e;
-    /* Success green */
-    color: white;
+:root:not(.dark) .prism-highlighted .token.atrule,
+:root:not(.dark) .prism-highlighted .token.attr-value,
+:root:not(.dark) .prism-highlighted .token.keyword {
+    color: #cf222e !important;
 }
 
-.copy-code-button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+:root:not(.dark) .prism-highlighted .token.function,
+:root:not(.dark) .prism-highlighted .token.class-name {
+    color: #953800 !important;
+}
+
+:root:not(.dark) .prism-highlighted .token.regex,
+:root:not(.dark) .prism-highlighted .token.important,
+:root:not(.dark) .prism-highlighted .token.variable {
+    color: #24292f !important;
 }
 
 /* Line numbering (add if needed) */

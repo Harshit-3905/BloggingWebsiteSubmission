@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Prism from "prismjs";
-// First, load the main theme
-import "prismjs/themes/prism-tomorrow.css";
+// Load our custom theme instead of the default
+import "./prism-theme.css";
 // Then load language components
 // Core languages
 import "prismjs/components/prism-markup";
@@ -145,7 +145,19 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         };
         
         // Get the correct language identifier or default to plain text
-        const language = languageMap[lang] || lang || 'text';
+        let language = languageMap[lang] || lang || 'text';
+        
+        // Safe languages that have been confirmed to work
+        const safeLanguages = [
+          'javascript', 'typescript', 'jsx', 'tsx', 'css', 'scss', 
+          'markup', 'json', 'yaml', 'python', 'csharp', 'java', 
+          'bash', 'go', 'rust', 'sql', 'c', 'cpp', 'markdown'
+        ];
+        
+        // If the language isn't in our safe list, default to text
+        if (!safeLanguages.includes(language)) {
+          language = 'text';
+        }
         
         return `
           <div class="code-block-wrapper relative group" data-language="${language}">
@@ -153,7 +165,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
               Copy
             </button>
-            <pre class="language-${language}"><code class="language-${language}">${normalizedCode}</code></pre>
+            <pre class="language-${language} text-wrap"><code class="language-${language} wrap">${normalizedCode}</code></pre>
           </div>
         `;
       }
