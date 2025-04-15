@@ -189,7 +189,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-muted-foreground text-sm">
+        <div className="py-8 px-4 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-muted-foreground text-sm">
           <p>© {new Date().getFullYear()} Binary Blogs. All rights reserved.</p>
           <div className="flex gap-6">
             <Link to="/privacy" className="hover:text-[var(--accent-color)]">Privacy Policy</Link>

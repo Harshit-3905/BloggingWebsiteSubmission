@@ -572,37 +572,6 @@ export default function BlogDetailPage() {
 
            {/* Sidebar - Hidden on mobile */}
           <div className="hidden lg:block lg:sticky lg:top-20 space-y-8 col-span-1 h-fit">
-            {/* Blog Stats */}
-            <div className="bg-muted/30 border rounded-lg p-6 hover:border-[var(--accent-color)]/20 transition-colors">
-              <h3 className="text-lg font-medium mb-4">Blog Stats</h3>
-              <div className="space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground flex items-center gap-2">
-                    <Eye className="h-4 w-4" /> Views
-                  </span>
-                  <span className="font-medium">{blog.views}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground flex items-center gap-2">
-                    <ThumbsUp className="h-4 w-4" /> Likes
-                  </span>
-                  <span className="font-medium">{blog.likes}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground flex items-center gap-2">
-                    <MessageSquare className="h-4 w-4" /> Comments
-                  </span>
-                  <span className="font-medium">{blog.comments.length}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground flex items-center gap-2">
-                    <Clock className="h-4 w-4" /> Reading Time
-                  </span>
-                  <span className="font-medium">{readingTime} min</span>
-                </div>
-              </div>
-            </div>
-
             {/* Related Blogs */}
             {relatedBlogs.length > 0 && (
               <div>
