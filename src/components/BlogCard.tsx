@@ -4,14 +4,14 @@ import { useBlogStore } from "@/store/useBlogStore";
 import { type Blog } from "@/types/blogTypes";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { useState, memo } from "react";
 
 interface BlogCardProps {
   blog: Blog;
   index?: number;
 }
 
-export function BlogCard({ blog, index = 0 }: BlogCardProps) {
+function BlogCardComponent({ blog, index = 0 }: BlogCardProps) {
   const { toggleBookmark, likeBlog } = useBlogStore();
   const { toast } = useToast();
   const [isLiked, setIsLiked] = useState(blog.likes > 0);
@@ -218,3 +218,11 @@ export function BlogCard({ blog, index = 0 }: BlogCardProps) {
     </motion.div>
   );
 }
+
+// Memoize the component to prevent unnecessary re-renders
+export const BlogCard = memo(BlogCardComponent, (prevProps, nextProps) => {
+  // Only re-render when the blog content changes, not when global state changes
+  return prevProps.blog.id === nextProps.blog.id && 
+         prevProps.blog.bookmarked === nextProps.blog.bookmarked &&
+         prevProps.blog.likes === nextProps.blog.likes;
+});

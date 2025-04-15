@@ -582,7 +582,7 @@ Both Flexbox and Grid are essential tools for modern CSS layout. Flexbox excels 
     excerpt:
       "A practical comparison between CSS Flexbox and Grid layout modules, helping you decide when to use each for building responsive web interfaces.",
     coverImage:
-      "https://images.unsplash.com/photo-1604937455095-4239d8b61379?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+      "https://images.unsplash.com/photo-1718803448073-90ebd0d982e0?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     tags: ["CSS", "Frontend", "Layout", "Web Development"],
     createdAt: Date.now() - 15 * 24 * 60 * 60 * 1000, // 15 days ago
     updatedAt: Date.now() - 14 * 24 * 60 * 60 * 1000, // 14 days ago
@@ -1288,7 +1288,7 @@ Both Context API and Zustand are valuable tools. Context is readily available, w
     excerpt:
       "A comparison between React's built-in Context API and the Zustand library for state management, covering pros, cons, performance, and use cases.",
     coverImage:
-      "https://images.unsplash.com/photo-1618421149851-a09ff77d017a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+      "https://images.unsplash.com/photo-1687603921109-46401b201195?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     tags: [
       "React",
       "State Management",
@@ -1444,7 +1444,7 @@ Jest and React Testing Library provide a powerful and user-centric way to test y
     excerpt:
       "Learn the fundamentals of testing React components using Jest and React Testing Library. Covers setup, core concepts, writing tests, querying elements, and simulating user interactions.",
     coverImage:
-      "https://images.unsplash.com/photo-1516131206008-dd041a9764fd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+      "https://images.unsplash.com/photo-1687603917313-ccae1a289a9d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     tags: [
       "React",
       "Testing",
@@ -1557,7 +1557,7 @@ There's no single "best" database. SQL databases excel with structured data, con
     excerpt:
       "A comparison of SQL (Relational) and NoSQL (Non-relational) databases for Node.js applications. Covers characteristics, pros, cons, and key considerations for choosing the right database type.",
     coverImage:
-      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1634&q=80",
+      "https://images.unsplash.com/photo-1719255416533-952910e38824?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDh8fGNvZGluZ3xlbnwwfDB8Mnx8fDA%3D",
     tags: [
       "Database",
       "Node.js",

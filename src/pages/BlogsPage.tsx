@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { BlogCard } from "@/components/BlogCard";
 import { TagFilter } from "@/components/TagFilter";
 import { Input } from "@/components/ui/input";
@@ -36,7 +36,6 @@ export default function BlogsPage() {
   const { blogs, initializeStore } = useBlogStore();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [filteredBlogs, setFilteredBlogs] = useState(blogs);
   const [visibleBlogs, setVisibleBlogs] = useState(6);
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
@@ -49,8 +48,8 @@ export default function BlogsPage() {
     }
   }, [blogs.length, initializeStore]);
 
-  // Simplified filtering logic - only blogs that match ALL selected tags and search term
-  useEffect(() => {
+  // Memoize filtered blogs to prevent unnecessary recalculations
+  const filteredBlogs = useMemo(() => {
     let filtered = blogs;
     
     // Filter by search term
@@ -70,24 +69,28 @@ export default function BlogsPage() {
       );
     }
     
-    setFilteredBlogs(filtered);
-    setVisibleBlogs(6); // Reset visible blogs when filters change
+    return filtered;
   }, [blogs, searchTerm, selectedTags]);
 
+  // Reset visible blogs when filters change
+  useEffect(() => {
+    setVisibleBlogs(6);
+  }, [searchTerm, selectedTags]);
+
   // Toggle tag selection
-  const handleTagSelect = (tag: string) => {
+  const handleTagSelect = useCallback((tag: string) => {
     setSelectedTags(prev => 
       prev.includes(tag) 
         ? prev.filter(t => t !== tag) 
         : [...prev, tag]
     );
-  };
+  }, []);
 
   // Clear all filters
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setSelectedTags([]);
     setSearchTerm("");
-  };
+  }, []);
 
   // Load more blogs with a simulated delay for UX
   const loadMoreBlogs = useCallback(() => {
@@ -126,13 +129,13 @@ export default function BlogsPage() {
     };
   }, [loadMoreBlogs]);
 
-  const handleRefresh = () => {
+  const handleRefresh = useCallback(() => {
     initializeStore();
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
     }, 800);
-  };
+  }, [initializeStore]);
 
   const staggerContainer = {
     hidden: { opacity: 0 },
@@ -143,6 +146,11 @@ export default function BlogsPage() {
       }
     }
   };
+
+  // Memoize the visible blogs slice to prevent unnecessary re-renders
+  const visibleBlogsList = useMemo(() => {
+    return filteredBlogs.slice(0, visibleBlogs);
+  }, [filteredBlogs, visibleBlogs]);
 
   return (
     <div className="container-custom py-8 md:py-12">
@@ -287,7 +295,7 @@ export default function BlogsPage() {
             animate="visible"
           >
             <AnimatePresence>
-              {filteredBlogs.slice(0, visibleBlogs).map((blog, index) => (
+              {visibleBlogsList.map((blog, index) => (
                 <BlogCard key={blog.id} blog={blog} index={index} />
               ))}
             </AnimatePresence>
