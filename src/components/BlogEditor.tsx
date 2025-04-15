@@ -75,16 +75,6 @@ export default function BlogEditor({
   // Editor action helpers
   const handleBold = () => execCommand("bold");
   const handleItalic = () => execCommand("italic");
-  const handleLink = () => {
-    const url = prompt("Enter URL:");
-    if (url) execCommand("createLink", url);
-  };
-  const handleUnorderedList = () => execCommand("insertUnorderedList");
-  const handleOrderedList = () => execCommand("insertOrderedList");
-  const handleImage = () => {
-    const url = prompt("Enter image URL:");
-    if (url) execCommand("insertImage", url);
-  };
   const handleCode = () => {
     const selection = window.getSelection();
     if (selection && selection.toString()) {
@@ -104,33 +94,6 @@ export default function BlogEditor({
   const handleAlignRight = () => execCommand("justifyRight");
   const handleUndo = () => execCommand("undo");
   const handleRedo = () => execCommand("redo");
-  const handleTable = () => {
-    const rows = prompt("Enter number of rows:", "3");
-    const cols = prompt("Enter number of columns:", "3");
-    
-    if (rows && cols) {
-      let table = "<table border='1' style='border-collapse: collapse; width: 100%;'>";
-      
-      // Header row
-      table += "<tr>";
-      for (let j = 0; j < parseInt(cols); j++) {
-        table += "<th style='border: 1px solid #ddd; padding: 8px; text-align: left;'>Header " + (j+1) + "</th>";
-      }
-      table += "</tr>";
-      
-      // Data rows
-      for (let i = 0; i < parseInt(rows) - 1; i++) {
-        table += "<tr>";
-        for (let j = 0; j < parseInt(cols); j++) {
-          table += "<td style='border: 1px solid #ddd; padding: 8px;'>Cell " + (i+1) + "-" + (j+1) + "</td>";
-        }
-        table += "</tr>";
-      }
-      
-      table += "</table><p></p>";
-      document.execCommand("insertHTML", false, table);
-    }
-  };
 
   // Track editor content changes
   const handleEditorChange = () => {
@@ -367,15 +330,6 @@ export default function BlogEditor({
             >
               <Italic className="h-4 w-4" />
             </Button>
-            <Button 
-              type="button" 
-              size="sm" 
-              variant="ghost" 
-              onClick={handleLink}
-              className="h-8 px-2 hover:bg-[var(--accent-color)]/10"
-            >
-              <Link className="h-4 w-4" />
-            </Button>
             <Separator orientation="vertical" className="h-6 mx-1" />
             <Button 
               type="button" 
@@ -409,46 +363,10 @@ export default function BlogEditor({
               type="button" 
               size="sm" 
               variant="ghost" 
-              onClick={handleUnorderedList}
-              className="h-8 px-2 hover:bg-[var(--accent-color)]/10"
-            >
-              <List className="h-4 w-4" />
-            </Button>
-            <Button 
-              type="button" 
-              size="sm" 
-              variant="ghost" 
-              onClick={handleOrderedList}
-              className="h-8 px-2 hover:bg-[var(--accent-color)]/10"
-            >
-              <ListOrdered className="h-4 w-4" />
-            </Button>
-            <Button 
-              type="button" 
-              size="sm" 
-              variant="ghost" 
-              onClick={handleImage}
-              className="h-8 px-2 hover:bg-[var(--accent-color)]/10"
-            >
-              <ImageIcon className="h-4 w-4" />
-            </Button>
-            <Button 
-              type="button" 
-              size="sm" 
-              variant="ghost" 
               onClick={handleCode}
               className="h-8 px-2 hover:bg-[var(--accent-color)]/10"
             >
               <Code className="h-4 w-4" />
-            </Button>
-            <Button 
-              type="button" 
-              size="sm" 
-              variant="ghost" 
-              onClick={handleTable}
-              className="h-8 px-2 hover:bg-[var(--accent-color)]/10"
-            >
-              <Table className="h-4 w-4" />
             </Button>
             <Button 
               type="button" 
