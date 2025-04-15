@@ -143,7 +143,7 @@ export function Header() {
           <ThemeToggle />
 
           {isLoggedIn ? (
-            <div className="flex items-center gap-2">
+            <div className="items-center gap-2 hidden md:flex">
               <motion.div 
                 whileHover={{ scale: 1.05 }} 
                 whileTap={{ scale: 0.95 }} 
@@ -152,7 +152,7 @@ export function Header() {
                 <Button
                   size="sm"
                   onClick={() => navigate("/new-blog")}
-                  className="rounded-full hidden md:flex bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
+                  className="rounded-full flex bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
                 >
                   <PenSquare className="h-4 w-4 mr-2" />
                   New Blog
@@ -234,7 +234,7 @@ export function Header() {
               </div>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               <AnimatePresence mode="wait">
                 <motion.div
                   key="login-buttons"

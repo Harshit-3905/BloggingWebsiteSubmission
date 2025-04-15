@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useToast } from "@/hooks/use-toast";
+import { motion } from "framer-motion";
+import { AtSign, KeyRound, Lock, User, ArrowRight, UserPlus } from "lucide-react";
 
 export default function AuthPage() {
   const navigate = useNavigate();
@@ -119,154 +120,238 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="container-custom flex items-center justify-center min-h-[calc(100vh-4rem)] py-8">
-      <div className="w-full max-w-md">
-        <Tabs defaultValue={isLoginPage ? "login" : "signup"}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger 
-              value="login" 
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </TabsTrigger>
-            <TabsTrigger 
-              value="signup" 
-              onClick={() => navigate("/signup")}
-            >
-              Sign Up
-            </TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="login">
-            <Card>
-              <CardHeader>
-                <CardTitle>Login</CardTitle>
-                <CardDescription>
-                  Welcome back! Login to continue to Binary Blogs.
-                </CardDescription>
-              </CardHeader>
-              <form onSubmit={handleLoginSubmit}>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="login-email">Email</Label>
-                    <Input
-                      id="login-email"
-                      name="email"
-                      type="email"
-                      placeholder="Your email"
-                      value={loginForm.email}
-                      onChange={handleLoginChange}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="login-password">Password</Label>
-                    <Input
-                      id="login-password"
-                      name="password"
-                      type="password"
-                      placeholder="Your password"
-                      value={loginForm.password}
-                      onChange={handleLoginChange}
-                      required
-                    />
-                  </div>
-                </CardContent>
-                <CardFooter className="flex flex-col space-y-2">
-                  <Button type="submit" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? "Logging in..." : "Login"}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    className="w-full bg-primary/10 hover:bg-primary/20 text-primary"
-                    onClick={handleGuestLogin}
-                    disabled={isSubmitting}
-                  >
-                    Continue as Guest
-                  </Button>
-                </CardFooter>
-              </form>
-            </Card>
-          </TabsContent>
-          
-          <TabsContent value="signup">
-            <Card>
-              <CardHeader>
-                <CardTitle>Create an Account</CardTitle>
-                <CardDescription>
-                  Join the Binary Blogs community today!
-                </CardDescription>
-              </CardHeader>
-              <form onSubmit={handleSignupSubmit}>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-name">Name</Label>
-                    <Input
-                      id="signup-name"
-                      name="name"
-                      placeholder="Your name"
-                      value={signupForm.name}
-                      onChange={handleSignupChange}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
-                    <Input
-                      id="signup-email"
-                      name="email"
-                      type="email"
-                      placeholder="Your email"
-                      value={signupForm.email}
-                      onChange={handleSignupChange}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-password">Password</Label>
-                    <Input
-                      id="signup-password"
-                      name="password"
-                      type="password"
-                      placeholder="Create a password"
-                      value={signupForm.password}
-                      onChange={handleSignupChange}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-confirm-password">Confirm Password</Label>
-                    <Input
-                      id="signup-confirm-password"
-                      name="confirmPassword"
-                      type="password"
-                      placeholder="Confirm your password"
-                      value={signupForm.confirmPassword}
-                      onChange={handleSignupChange}
-                      required
-                    />
-                  </div>
-                </CardContent>
-                <CardFooter className="flex flex-col space-y-2">
-                  <Button type="submit" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? "Creating account..." : "Create Account"}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full bg-primary/10 hover:bg-primary/20 text-primary"
-                    onClick={handleGuestLogin}
-                    disabled={isSubmitting}
-                  >
-                    Continue as Guest
-                  </Button>
-                </CardFooter>
-              </form>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+    <div className="container flex items-center justify-center min-h-[calc(100vh-4rem)] py-8 px-4">
+      <motion.div 
+        className="w-full max-w-md"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className="text-center mb-6">
+          <motion.h1 
+            className="text-3xl font-bold mb-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            Binary Blogs
+          </motion.h1>
+          <motion.p 
+            className="text-muted-foreground"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            Your platform for sharing coding stories
+          </motion.p>
+        </div>
+        
+        <motion.div
+          className="backdrop-blur-sm bg-card/90 border-2 border-[var(--accent-color)] rounded-xl shadow-xl overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+        >
+          <Tabs defaultValue={isLoginPage ? "login" : "signup"} className="w-full">
+            <TabsList className="grid w-full grid-cols-2 p-1 bg-muted/50 mb-2">
+              <TabsTrigger 
+                value="login" 
+                onClick={() => navigate("/login")}
+                className="rounded-md data-[state=active]:bg-[var(--accent-color)] data-[state=active]:text-white transition-all"
+              >
+                <Lock className="w-4 h-4 mr-2" />
+                Login
+              </TabsTrigger>
+              <TabsTrigger 
+                value="signup" 
+                onClick={() => navigate("/signup")}
+                className="rounded-md data-[state=active]:bg-[var(--accent-color)] data-[state=active]:text-white transition-all"
+              >
+                <UserPlus className="w-4 h-4 mr-2" />
+                Sign Up
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="login" className="m-0">
+              <Card className="border-0 shadow-none bg-transparent">
+                <CardHeader>
+                  <CardTitle className="text-center text-2xl">Welcome Back</CardTitle>
+                  <CardDescription className="text-center">
+                    Sign in to continue your blogging journey
+                  </CardDescription>
+                </CardHeader>
+                <form onSubmit={handleLoginSubmit}>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="login-email" className="text-sm font-medium">Email</Label>
+                      <div className="relative">
+                        <AtSign className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                        <Input
+                          id="login-email"
+                          name="email"
+                          type="email"
+                          placeholder="Your email"
+                          value={loginForm.email}
+                          onChange={handleLoginChange}
+                          required
+                          className="pl-10 border-[var(--accent-color)]/30 focus:border-[var(--accent-color)] transition-colors"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="login-password" className="text-sm font-medium">Password</Label>
+                      <div className="relative">
+                        <KeyRound className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                        <Input
+                          id="login-password"
+                          name="password"
+                          type="password"
+                          placeholder="Your password"
+                          value={loginForm.password}
+                          onChange={handleLoginChange}
+                          required
+                          className="pl-10 border-[var(--accent-color)]/30 focus:border-[var(--accent-color)] transition-colors"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="flex flex-col space-y-3 pb-6">
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-[var(--accent-color)] hover:bg-[var(--accent-color)]/90 text-white shadow-md shadow-[var(--accent-color)]/20 h-11 transition-all"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Logging in..." : (
+                        <span className="flex items-center">
+                          Login <ArrowRight className="ml-2 h-4 w-4" />
+                        </span>
+                      )}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full border-[var(--accent-color)]/50 text-[var(--accent-color)] hover:bg-[var(--accent-color)]/10 transition-colors h-11"
+                      onClick={handleGuestLogin}
+                      disabled={isSubmitting}
+                    >
+                      Continue as Guest
+                    </Button>
+                  </CardFooter>
+                </form>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="signup" className="m-0">
+              <Card className="border-0 shadow-none bg-transparent">
+                <CardHeader>
+                  <CardTitle className="text-center text-2xl">Join Us Today</CardTitle>
+                  <CardDescription className="text-center">
+                    Create your account to start blogging
+                  </CardDescription>
+                </CardHeader>
+                <form onSubmit={handleSignupSubmit}>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-name" className="text-sm font-medium">Name</Label>
+                      <div className="relative">
+                        <User className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                        <Input
+                          id="signup-name"
+                          name="name"
+                          placeholder="Your name"
+                          value={signupForm.name}
+                          onChange={handleSignupChange}
+                          required
+                          className="pl-10 border-[var(--accent-color)]/30 focus:border-[var(--accent-color)] transition-colors"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-email" className="text-sm font-medium">Email</Label>
+                      <div className="relative">
+                        <AtSign className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                        <Input
+                          id="signup-email"
+                          name="email"
+                          type="email"
+                          placeholder="Your email"
+                          value={signupForm.email}
+                          onChange={handleSignupChange}
+                          required
+                          className="pl-10 border-[var(--accent-color)]/30 focus:border-[var(--accent-color)] transition-colors"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-password" className="text-sm font-medium">Password</Label>
+                      <div className="relative">
+                        <KeyRound className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                        <Input
+                          id="signup-password"
+                          name="password"
+                          type="password"
+                          placeholder="Create a password"
+                          value={signupForm.password}
+                          onChange={handleSignupChange}
+                          required
+                          className="pl-10 border-[var(--accent-color)]/30 focus:border-[var(--accent-color)] transition-colors"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-confirm-password" className="text-sm font-medium">Confirm Password</Label>
+                      <div className="relative">
+                        <KeyRound className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
+                        <Input
+                          id="signup-confirm-password"
+                          name="confirmPassword"
+                          type="password"
+                          placeholder="Confirm your password"
+                          value={signupForm.confirmPassword}
+                          onChange={handleSignupChange}
+                          required
+                          className="pl-10 border-[var(--accent-color)]/30 focus:border-[var(--accent-color)] transition-colors"
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="flex flex-col space-y-3 pb-6">
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-[var(--accent-color)] hover:bg-[var(--accent-color)]/90 text-white shadow-md shadow-[var(--accent-color)]/20 h-11 transition-all"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Creating account..." : (
+                        <span className="flex items-center">
+                          Create Account <ArrowRight className="ml-2 h-4 w-4" />
+                        </span>
+                      )}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full border-[var(--accent-color)]/50 text-[var(--accent-color)] hover:bg-[var(--accent-color)]/10 transition-colors h-11"
+                      onClick={handleGuestLogin}
+                      disabled={isSubmitting}
+                    >
+                      Continue as Guest
+                    </Button>
+                  </CardFooter>
+                </form>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </motion.div>
+        
+        <motion.p 
+          className="text-center text-xs text-muted-foreground mt-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+        >
+          By signing up, you agree to our Terms of Service and Privacy Policy
+        </motion.p>
+      </motion.div>
     </div>
   );
 }
