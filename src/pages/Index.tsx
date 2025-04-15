@@ -240,8 +240,9 @@ const Index = () => {
             </motion.div>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-foreground drop-shadow-sm">
-              Where <span className="font-code bg-clip-text text-transparent bg-gradient-to-r 
-                                from-[var(--accent-color)] to-[var(--accent-color-bright)]">Code</span>{' '}
+              Where
+              <span className="font-code bg-clip-text text-transparent bg-gradient-to-r 
+                              from-[var(--accent-color)] to-[var(--accent-color-bright)] px-2">&lt;Code&gt;</span>
               Meets <span className="font-code bg-clip-text text-transparent bg-gradient-to-r 
                               from-[var(--accent-color-bright)] to-[var(--accent-color)]">Community</span>
             </h1>

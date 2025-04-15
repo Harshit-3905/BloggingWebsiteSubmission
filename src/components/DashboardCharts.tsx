@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowUp, TrendingUp, Eye, ThumbsUp, MessageSquare, Bookmark } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
+import { useBlogStore } from "@/store/useBlogStore";
 
 interface DashboardChartsProps {
   blogs: Blog[];
@@ -137,15 +138,9 @@ export function DashboardCharts({ blogs }: DashboardChartsProps) {
     'hsl(var(--primary))', 
     'hsl(var(--secondary))'
   ];
-  
+  const { blogs: storeBlogs } = useBlogStore();
   // Format data for top performing blogs
-  const topBlogData = blogs.length > 0 ? blogs : [
-    { id: "1", title: "Getting Started with React Hooks", views: 325, likes: 47, comments: [], slug: "react-hooks" },
-    { id: "2", title: "Building a Modern API with Node.js", views: 287, likes: 39, comments: Array(12).fill({}), slug: "nodejs-api" },
-    { id: "3", title: "CSS Grid Layout Explained", views: 254, likes: 31, comments: Array(8).fill({}), slug: "css-grid" },
-    { id: "4", title: "TypeScript Best Practices", views: 198, likes: 28, comments: Array(5).fill({}), slug: "typescript-best-practices" },
-    { id: "5", title: "Deploying to AWS: A Complete Guide", views: 176, likes: 23, comments: Array(7).fill({}), slug: "aws-deploy" }
-  ].map(blog => ({
+  const topBlogData = blogs.length > 0 ? blogs : storeBlogs.map(blog => ({
     ...blog,
     comments: Array.isArray(blog.comments) ? blog.comments : []
   }));
