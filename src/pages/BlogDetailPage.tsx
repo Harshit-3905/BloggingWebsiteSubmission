@@ -25,6 +25,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
+import { getRelativeTime } from "@/utils/dateUtils";
 
 export default function BlogDetailPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -596,7 +597,7 @@ export default function BlogDetailPage() {
                     <Calendar className="h-4 w-4" /> Published
                   </span>
                   <span className="font-medium">
-                    {new Date(blog.createdAt).toLocaleDateString()}
+                    {getRelativeTime(blog.createdAt)}
                   </span>
                 </div>
                 <div className="flex justify-between">
