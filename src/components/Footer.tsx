@@ -4,18 +4,36 @@ import { Github, Twitter, Linkedin, Mail, Heart, ArrowRight, ChevronRight, Rss, 
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
+import { useToast } from "@/components/ui/use-toast";
 
 export function Footer() {
   const [subscribed, setSubscribed] = useState(false);
   const [email, setEmail] = useState("");
+  const {toast } = useToast();
+
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const handleSubscribe = () => {
-    if (email.trim() !== "") {
+    if (email.trim() !== "" && validateEmail(email)) {
       setSubscribed(true);
       setEmail("");
+      toast({
+        title: "Subscribed!",
+        description: "You have successfully subscribed to our newsletter.",
+        className: "border-primary"
+      });
       setTimeout(() => setSubscribed(false), 3000);
+    } else {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address",
+        className: "border-primary"
+      });
     }
   };
+
   const quickLinks = [
     { name: "Home", link: "/" },
     { name: "All Blogs", link: "/blogs" },

@@ -304,21 +304,6 @@ const Index = () => {
                       </Link>
                     </Button>
                   </motion.div>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Button
-                      asChild
-                      size="lg"
-                      variant="outline"
-                      className="gap-2 bg-[var(--accent-color)] border-transparent text-white
-                                hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]
-                                min-w-[160px] transition-all"
-                    >
-                      <Link to="/blogs">Browse Blogs</Link>
-                    </Button>
-                  </motion.div>
                 </div>
               ) : (
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -336,21 +321,6 @@ const Index = () => {
                         Explore Blogs
                         <ArrowRight className="h-4 w-4 ml-2" />
                       </Link>
-                    </Button>
-                  </motion.div>
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Button
-                      asChild
-                      size="lg"
-                      variant="outline"
-                      className="gap-2 bg-[var(--accent-color)] border-transparent text-white
-                                hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]
-                                min-w-[160px] transition-all"
-                    >
-                      <Link to="/new-blog">Write a Post</Link>
                     </Button>
                   </motion.div>
                 </div>

@@ -247,14 +247,14 @@ export function Header() {
                     variant="outline"
                     size="sm"
                     onClick={() => navigate("/login")}
-                    className="hidden sm:inline-flex border-[var(--accent-color)]/20 text-[var(--accent-color-text)] hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]/40"
+                    className="hidden sm:inline-flex border-[var(--accent-color)]/20 text-[var(--accent-color-text)] hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]"
                   >
                     Log In
                   </Button>
                   <Button
                     size="sm"
                     onClick={() => navigate("/signup")}
-                    className="hidden sm:inline-flex bg-[var(--accent-color)] hover:bg-[var(--accent-color-bright)]"
+                    className="hidden sm:inline-flex bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
                   >
                     Sign Up
                   </Button>

@@ -73,21 +73,6 @@ export default function DashboardPage() {
             Welcome back, {user.name}! Here's an overview of your blog performance.
           </p>
         </motion.div>
-        
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Button asChild>
-            <Link to="/new-blog" className="flex items-center gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
-              <PenSquare className="h-4 w-4" />
-              Create New Blog
-            </Link>
-          </Button>
-        </motion.div>
       </div>
       
       {/* Analytics Charts */}

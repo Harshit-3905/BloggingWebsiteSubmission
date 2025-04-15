@@ -218,7 +218,7 @@ export default function AuthPage() {
                   <CardFooter className="flex flex-col space-y-3 pb-6">
                     <Button 
                       type="submit" 
-                      className="w-full bg-[var(--accent-color)] hover:bg-[var(--accent-color)]/90 text-white shadow-md shadow-[var(--accent-color)]/20 h-11 transition-all"
+                      className="w-full bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? "Logging in..." : (
@@ -230,7 +230,7 @@ export default function AuthPage() {
                     <Button
                       type="button"
                       variant="outline"
-                      className="w-full border-[var(--accent-color)]/50 text-[var(--accent-color)] hover:bg-[var(--accent-color)]/10 transition-colors h-11"
+                      className="w-full border-[var(--accent-color)]/20 text-[var(--accent-color-text)] hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]"
                       onClick={handleGuestLogin}
                       disabled={isSubmitting}
                     >
@@ -318,7 +318,7 @@ export default function AuthPage() {
                   <CardFooter className="flex flex-col space-y-3 pb-6">
                     <Button 
                       type="submit" 
-                      className="w-full bg-[var(--accent-color)] hover:bg-[var(--accent-color)]/90 text-white shadow-md shadow-[var(--accent-color)]/20 h-11 transition-all"
+                      className="w-full bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? "Creating account..." : (
@@ -330,7 +330,7 @@ export default function AuthPage() {
                     <Button
                       type="button"
                       variant="outline"
-                      className="w-full border-[var(--accent-color)]/50 text-[var(--accent-color)] hover:bg-[var(--accent-color)]/10 transition-colors h-11"
+                      className="w-full border-[var(--accent-color)]/20 text-[var(--accent-color-text)] hover:bg-[var(--accent-color)]/5 hover:text-[var(--accent-color)] hover:border-[var(--accent-color)]"
                       onClick={handleGuestLogin}
                       disabled={isSubmitting}
                     >

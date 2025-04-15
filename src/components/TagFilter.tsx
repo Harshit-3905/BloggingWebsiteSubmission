@@ -56,14 +56,13 @@ export function TagFilter({ tags, selectedTags, onTagSelect }: TagFilterProps) {
           {sortedTags.map((tag) => (
             <motion.div
               key={tag}
-              whileHover={{ y: -2, scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               layout
             >
               <Badge
                 variant="outline"
                 className={`
-                  cursor-pointer text-sm py-1.5 px-3 font-medium transition-all duration-200
+                  cursor-pointer text-xs py-1 px-2 transition-all duration-200
                   ${isSelected(tag) 
                     ? getTagStyle(tag) + ' shadow-md scale-110 border border-white/20' 
                     : 'bg-muted/50 hover:bg-muted border border-muted-foreground/20 text-foreground'}

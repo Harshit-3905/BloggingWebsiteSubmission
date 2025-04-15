@@ -29,37 +29,15 @@ const App = () => {
 
   // Apply theme, accent color, and font family from store
   useEffect(() => {
-    // Apply theme based on system preference if set to system
-    if (theme === "system") {
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      document.documentElement.classList.remove("light", "dark");
-      document.documentElement.classList.add(prefersDark ? "dark" : "light");
-    } else {
-      // Apply explicit theme choice
-      document.documentElement.classList.remove("light", "dark");
-      document.documentElement.classList.add(theme);
-    }
+    // Apply explicit theme choice
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(theme);
     
     // Apply color scheme (this will set all necessary CSS variables)
     setColorScheme(selectedColorName);
     
     // Apply font family
     setFontFamily(fontFamily);
-    
-    // Listen for system theme changes when using system preference
-    if (theme === "system") {
-      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-      const handleChange = (e: MediaQueryListEvent) => {
-        document.documentElement.classList.remove("light", "dark");
-        document.documentElement.classList.add(e.matches ? "dark" : "light");
-        
-        // Reapply color scheme when theme changes to update text/background variables
-        setColorScheme(selectedColorName);
-      };
-      
-      mediaQuery.addEventListener("change", handleChange);
-      return () => mediaQuery.removeEventListener("change", handleChange);
-    }
   }, [theme, selectedColorName, accentColor, fontFamily, setColorScheme, setFontFamily]);
 
   return (

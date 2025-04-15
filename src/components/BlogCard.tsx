@@ -55,12 +55,15 @@ function BlogCardComponent({ blog, index = 0 }: BlogCardProps) {
     e.preventDefault();
     e.stopPropagation();
 
+    // Check current like state before updating
+    const wasLiked = isLikedByUser(blog.id);
+    
     // Update in store
     likeBlog(blog.id);
 
     toast({
-      title: isLikedByUser(blog.id) ? "Like removed" : "Blog liked!",
-      description: isLikedByUser(blog.id)
+      title: wasLiked ? "Like removed" : "Blog liked!",
+      description: wasLiked
         ? "You've removed your like from this blog."
         : "Thank you for your appreciation.",
       className: "bg-card border-[var(--accent-color)] shadow-lg",
@@ -102,22 +105,6 @@ function BlogCardComponent({ blog, index = 0 }: BlogCardProps) {
     return "bg-[var(--accent-color)]/10 text-[var(--accent-color-text)] border-[var(--accent-color)]/20";
   };
 
-  // Animated underline variants
-  const underlineVariants = {
-    hidden: {
-      width: "0%",
-      opacity: 0,
-    },
-    hover: {
-      width: "100%",
-      opacity: 1,
-      transition: {
-        duration: 0.4,
-        ease: "easeOut",
-      },
-    },
-  };
-
   return (
     <motion.div
       custom={index}
@@ -140,7 +127,7 @@ function BlogCardComponent({ blog, index = 0 }: BlogCardProps) {
             {/* Category Badge */}
             <div className="absolute left-3 top-3 z-10">
               <span
-                className={`px-3 py-1 rounded-full text-xs font-medium bg-white hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700`}
+                className={`px-3 py-1 rounded-full text-xs font-medium bg-white hover:bg-gray-50 dark:bg-[var(--accent-color)]`}
               >
                 {mainCategory}
               </span>
@@ -153,13 +140,13 @@ function BlogCardComponent({ blog, index = 0 }: BlogCardProps) {
             >
               <button
                 onClick={handleLike}
-                className="rounded-full bg-white p-2 shadow-md transition hover:bg-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700"
+                className="rounded-full bg-white p-2 shadow-md transition hover:bg-gray-50 dark:bg-[var(--accent-color)]"
               >
                 <Heart
                   className={`h-4 w-4 ${
                     isLikedByUser(blog.id)
                       ? "fill-red-600 text-red-600"
-                      : "text-gray-400"
+                      : "light:text-black dark:text-white"
                   }`}
                 />
               </button>
