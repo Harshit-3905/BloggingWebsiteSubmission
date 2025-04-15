@@ -594,14 +594,6 @@ export default function BlogDetailPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground flex items-center gap-2">
-                    <Calendar className="h-4 w-4" /> Published
-                  </span>
-                  <span className="font-medium">
-                    {getRelativeTime(blog.createdAt)}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground flex items-center gap-2">
                     <Clock className="h-4 w-4" /> Reading Time
                   </span>
                   <span className="font-medium">{readingTime} min</span>

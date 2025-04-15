@@ -188,414 +188,6 @@ React Hooks have transformed how we write React components by enabling more conc
     ],
   },
   {
-    id: "2",
-    author: {
-      id: "u2",
-      name: "Sophia Chen",
-      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-      bio: "Frontend architect specializing in React and design systems.",
-    },
-    title: "Building a Design System with Tailwind CSS",
-    slug: "building-a-design-system-with-tailwind-css",
-    content: `# Building a Design System with Tailwind CSS
-
-## Introduction
-Design systems are crucial for maintaining consistency across large applications. In this article, we'll explore how to build a comprehensive design system using Tailwind CSS.
-
-## Setting Up Your Project
-First, let's set up a new project with Tailwind CSS:
-
-\`\`\`bash
-# Create a new project
-mkdir design-system
-cd design-system
-npm init -y
-
-# Install dependencies
-npm install tailwindcss postcss autoprefixer
-npx tailwindcss init -p
-\`\`\`
-
-## Customizing Your Theme
-The heart of a design system is consistent design tokens. Let's configure Tailwind's theme:
-
-\`\`\`javascript
-// tailwind.config.js
-module.exports = {
-  content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
-  theme: {
-    extend: {
-      colors: {
-        primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-        },
-        secondary: {
-          // ... similar structure
-        },
-        // Add other brand colors
-      },
-      fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        heading: ['Poppins', 'sans-serif'],
-        mono: ['Fira Code', 'monospace'],
-      },
-      spacing: {
-        '0.5': '0.125rem',
-        // ... custom spacing
-      },
-      borderRadius: {
-        sm: '0.25rem',
-        md: '0.375rem',
-        lg: '0.5rem',
-        xl: '1rem',
-        '2xl': '2rem',
-      },
-      boxShadow: {
-        sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-        // ... custom shadows
-      },
-    },
-  },
-  plugins: [],
-}
-\`\`\`
-
-## Creating Component Variants with Tailwind
-Let's create variants for a button component:
-
-\`\`\`jsx
-// Button.jsx
-import React from 'react';
-import PropTypes from 'prop-types';
-
-const variants = {
-  primary: 'bg-primary-600 hover:bg-primary-700 text-white',
-  secondary: 'bg-secondary-600 hover:bg-secondary-700 text-white',
-  outline: 'border-2 border-primary-600 text-primary-600 hover:bg-primary-50',
-  ghost: 'text-primary-600 hover:bg-primary-50',
-};
-
-const sizes = {
-  sm: 'py-1 px-3 text-sm',
-  md: 'py-2 px-4 text-base',
-  lg: 'py-3 px-6 text-lg',
-};
-
-const Button = ({ 
-  variant = 'primary', 
-  size = 'md', 
-  children, 
-  className = '',
-  ...props 
-}) => {
-  return (
-    <button
-      className={\`font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-colors \${variants[variant]} \${sizes[size]} \${className}\`}
-      {...props}
-    >
-      {children}
-    </button>
-  );
-};
-
-Button.propTypes = {
-  variant: PropTypes.oneOf(['primary', 'secondary', 'outline', 'ghost']),
-  size: PropTypes.oneOf(['sm', 'md', 'lg']),
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-};
-
-export default Button;
-\`\`\`
-
-## Creating A Component Catalog
-Document your components in a central catalog for the team:
-
-\`\`\`jsx
-// ComponentCatalog.jsx
-import React from 'react';
-import Button from './components/Button';
-import Card from './components/Card';
-// Import other components
-
-const ComponentCatalog = () => {
-  return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-8">Design System Components</h1>
-      
-      <section className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">Buttons</h2>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <h3 className="text-lg mb-2">Primary</h3>
-            <div className="flex gap-2">
-              <Button variant="primary" size="sm">Small</Button>
-              <Button variant="primary" size="md">Medium</Button>
-              <Button variant="primary" size="lg">Large</Button>
-            </div>
-          </div>
-          
-          <div>
-            <h3 className="text-lg mb-2">Secondary</h3>
-            <div className="flex gap-2">
-              <Button variant="secondary" size="sm">Small</Button>
-              <Button variant="secondary" size="md">Medium</Button>
-              <Button variant="secondary" size="lg">Large</Button>
-            </div>
-          </div>
-          
-          <div>
-            <h3 className="text-lg mb-2">Outline</h3>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm">Small</Button>
-              <Button variant="outline" size="md">Medium</Button>
-              <Button variant="outline" size="lg">Large</Button>
-            </div>
-          </div>
-          
-          <div>
-            <h3 className="text-lg mb-2">Ghost</h3>
-            <div className="flex gap-2">
-              <Button variant="ghost" size="sm">Small</Button>
-              <Button variant="ghost" size="md">Medium</Button>
-              <Button variant="ghost" size="lg">Large</Button>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Repeat for other components */}
-    </div>
-  );
-};
-
-export default ComponentCatalog;
-\`\`\`
-
-## Implementing a Type Scale
-Create a consistent typography system:
-
-\`\`\`css
-/* typography.css */
-.h1 {
-  @apply text-4xl font-bold font-heading;
-}
-
-.h2 {
-  @apply text-3xl font-bold font-heading;
-}
-
-.h3 {
-  @apply text-2xl font-semibold font-heading;
-}
-
-.h4 {
-  @apply text-xl font-semibold font-heading;
-}
-
-.h5 {
-  @apply text-lg font-medium font-heading;
-}
-
-.body1 {
-  @apply text-base font-normal font-sans;
-}
-
-.body2 {
-  @apply text-sm font-normal font-sans;
-}
-
-.caption {
-  @apply text-xs font-normal font-sans;
-}
-\`\`\`
-
-## Creating Utility Patterns
-Create patterns for common layout needs:
-
-\`\`\`jsx
-// Container.jsx
-import React from 'react';
-import PropTypes from 'prop-types';
-
-const Container = ({ 
-  children, 
-  className = '', 
-  maxWidth = 'max-w-7xl', 
-  padding = 'px-4 sm:px-6 lg:px-8',
-  ...props 
-}) => {
-  return (
-    <div className={\`mx-auto \${maxWidth} \${padding} \${className}\`} {...props}>
-      {children}
-    </div>
-  );
-};
-
-Container.propTypes = {
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-  maxWidth: PropTypes.string,
-  padding: PropTypes.string,
-};
-
-export default Container;
-\`\`\`
-
-## Adding Animation Patterns
-Define consistent animations:
-
-\`\`\`javascript
-// tailwind.config.js (extended)
-module.exports = {
-  // ... other config
-  theme: {
-    extend: {
-      // ... other extensions
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: 0 },
-          '100%': { opacity: 1 },
-        },
-        slideInRight: {
-          '0%': { transform: 'translateX(100%)' },
-          '100%': { transform: 'translateX(0)' },
-        },
-        // ... other keyframes
-      },
-      animation: {
-        fadeIn: 'fadeIn 0.5s ease-out',
-        slideInRight: 'slideInRight 0.5s ease-out',
-        // ... other animations
-      },
-    },
-  },
-  // ... rest of config
-}
-\`\`\`
-
-## Documenting for Developers
-Create a documentation site to help your team:
-
-\`\`\`jsx
-// DocumentationPage.jsx
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import ComponentCatalog from './ComponentCatalog';
-import ColorPalette from './documentation/ColorPalette';
-import Typography from './documentation/Typography';
-import Spacing from './documentation/Spacing';
-import GettingStarted from './documentation/GettingStarted';
-
-const Sidebar = () => (
-  <div className="w-64 h-screen bg-gray-100 p-4 fixed left-0 top-0">
-    <h1 className="text-2xl font-bold mb-6">Design System</h1>
-    <nav>
-      <ul className="space-y-2">
-        <li>
-          <Link to="/" className="block p-2 hover:bg-gray-200 rounded">
-            Getting Started
-          </Link>
-        </li>
-        <li>
-          <Link to="/colors" className="block p-2 hover:bg-gray-200 rounded">
-            Colors
-          </Link>
-        </li>
-        <li>
-          <Link to="/typography" className="block p-2 hover:bg-gray-200 rounded">
-            Typography
-          </Link>
-        </li>
-        <li>
-          <Link to="/spacing" className="block p-2 hover:bg-gray-200 rounded">
-            Spacing
-          </Link>
-        </li>
-        <li>
-          <Link to="/components" className="block p-2 hover:bg-gray-200 rounded">
-            Components
-          </Link>
-        </li>
-      </ul>
-    </nav>
-  </div>
-);
-
-const DocumentationPage = () => {
-  return (
-    <Router>
-      <div className="flex min-h-screen">
-        <Sidebar />
-        <div className="ml-64 p-8 flex-1">
-          <Routes>
-            <Route path="/" element={<GettingStarted />} />
-            <Route path="/colors" element={<ColorPalette />} />
-            <Route path="/typography" element={<Typography />} />
-            <Route path="/spacing" element={<Spacing />} />
-            <Route path="/components" element={<ComponentCatalog />} />
-          </Routes>
-        </div>
-      </div>
-    </Router>
-  );
-};
-
-export default DocumentationPage;
-\`\`\`
-
-## Conclusion
-Building a design system with Tailwind CSS gives you the flexibility of utility classes with the consistency of a design system. By defining your design tokens, creating reusable components, and documenting everything clearly, you can create a system that scales with your application and keeps your UI consistent across the entire product.`,
-    excerpt:
-      "Learn how to create a comprehensive design system using Tailwind CSS, including theming, component variants, and documentation for your team.",
-    coverImage:
-      "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
-    tags: ["CSS", "Design", "TypeScript", "Guide"],
-    createdAt: Date.now() - 14 * 24 * 60 * 60 * 1000, // 14 days ago
-    updatedAt: Date.now() - 10 * 24 * 60 * 60 * 1000, // 10 days ago
-    views: 821,
-    likes: 132,
-    bookmarked: false,
-    comments: [
-      {
-        id: "c3",
-        userId: "u1",
-        userName: "Alex Turner",
-        userAvatar: "https://randomuser.me/api/portraits/men/62.jpg",
-        content:
-          "We implemented this approach on our latest project and it's been a game changer for consistency!",
-        createdAt: Date.now() - 9 * 24 * 60 * 60 * 1000, // 9 days ago
-      },
-      {
-        id: "c4",
-        userId: "u4",
-        userName: "Elena Rodriguez",
-        userAvatar: "https://randomuser.me/api/portraits/women/68.jpg",
-        content:
-          "Do you have any tips for transitioning an existing project to use this design system approach?",
-        createdAt: Date.now() - 8 * 24 * 60 * 60 * 1000, // 8 days ago
-      },
-      {
-        id: "c5",
-        userId: "u2",
-        userName: "Sophia Chen",
-        userAvatar: "https://randomuser.me/api/portraits/women/44.jpg",
-        content:
-          "Great question, Elena! I'd suggest starting with tokens (colors, spacing), then rolling out components gradually, focusing on the most used ones first.",
-        createdAt: Date.now() - 7 * 24 * 60 * 60 * 1000, // 7 days ago
-      },
-    ],
-  },
-  {
     id: "3",
     author: {
       id: "u3",
@@ -894,6 +486,310 @@ Generics in TypeScript provide a powerful way to build flexible, reusable compon
       },
     ],
   },
+  // --- NEW BLOG POST 1 ---
+  {
+    id: "4",
+    author: {
+      id: "u4",
+      name: "Chloe Davis",
+      avatar: "https://randomuser.me/api/portraits/women/79.jpg",
+      bio: "Frontend developer passionate about CSS, accessibility, and user experience.",
+    },
+    title: "CSS Grid vs. Flexbox: Choosing the Right Layout Module",
+    slug: "css-grid-vs-flexbox-choosing-layout-module",
+    content: `# CSS Grid vs. Flexbox: Choosing the Right Layout Module
+
+## Introduction
+Modern web development offers powerful CSS layout modules for building complex, responsive interfaces. Two of the most popular are Flexbox and CSS Grid. While both are used for layout, they excel in different areas. Understanding their strengths helps you choose the right tool for the job.
+
+## Flexbox (Flexible Box Layout)
+Flexbox is designed for **one-dimensional layout** – arranging items in a single row or column. It's perfect for distributing space and aligning items within a container.
+
+**Key Concepts:**
+*   **Container:** Apply \`display: flex;\` to the parent element.
+*   **Items:** The direct children of the flex container.
+*   **Main Axis:** The primary direction of layout (\`flex-direction: row | column\`).
+*   **Cross Axis:** The axis perpendicular to the main axis.
+
+**Common Properties:**
+*   \`flex-direction\`: Sets the main axis direction.
+*   \`justify-content\`: Aligns items along the main axis.
+*   \`align-items\`: Aligns items along the cross axis.
+*   \`flex-wrap\`: Allows items to wrap onto multiple lines.
+
+**Example:** Centering items horizontally and vertically in a container.
+
+\`\`\`css
+.container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;    /* Center vertically */
+  height: 200px;
+  border: 1px solid #ccc;
+}
+
+.item {
+  padding: 20px;
+  background-color: lightblue;
+}
+\`\`\`
+
+**Use Cases:** Navigation bars, component layouts (like cards with image and text), aligning form elements.
+
+## CSS Grid Layout
+CSS Grid is designed for **two-dimensional layout** – arranging items in both rows and columns simultaneously. It's ideal for creating complex page layouts.
+
+**Key Concepts:**
+*   **Container:** Apply \`display: grid;\` to the parent element.
+*   **Items:** The direct children of the grid container.
+*   **Tracks:** Rows and columns defined using \`grid-template-rows\` and \`grid-template-columns\`.
+*   **Gutters:** Space between tracks defined using \`gap\`, \`row-gap\`, \`column-gap\`.
+
+**Common Properties:**
+*   \`grid-template-columns\`: Defines the number and size of columns.
+*   \`grid-template-rows\`: Defines the number and size of rows.
+*   \`gap\`: Sets the spacing between grid items.
+*   \`grid-column\` / \`grid-row\`: Places items explicitly within the grid.
+
+**Example:** A simple 3-column grid layout.
+
+\`\`\`css
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three equal-width columns */
+  gap: 10px; /* Space between items */
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.grid-item {
+  padding: 20px;
+  background-color: lightcoral;
+  text-align: center;
+}
+\`\`\`
+
+**Use Cases:** Overall page structure (header, sidebar, main content, footer), image galleries, complex card layouts.
+
+## When to Use Which?
+*   **Flexbox:** Best for aligning items along a single axis (row or column). Great for component-level layout and distributing space within a container. Think **content-out** layout.
+*   **Grid:** Best for creating layouts in two dimensions (rows *and* columns). Ideal for overall page structure and complex alignments. Think **layout-in** design.
+
+**Can They Be Used Together?** Absolutely! It's very common to use Grid for the main page layout and Flexbox for aligning content *within* grid items.
+
+## Conclusion
+Both Flexbox and Grid are essential tools for modern CSS layout. Flexbox excels at one-dimensional alignment and space distribution, while Grid handles two-dimensional layouts with ease. By understanding their core purposes, you can build more effective and maintainable web interfaces.`,
+    excerpt:
+      "A practical comparison between CSS Flexbox and Grid layout modules, helping you decide when to use each for building responsive web interfaces.",
+    coverImage:
+      "https://images.unsplash.com/photo-1604937455095-4239d8b61379?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+    tags: ["CSS", "Frontend", "Layout", "Web Development"],
+    createdAt: Date.now() - 15 * 24 * 60 * 60 * 1000, // 15 days ago
+    updatedAt: Date.now() - 14 * 24 * 60 * 60 * 1000, // 14 days ago
+    views: 1150,
+    likes: 120,
+    bookmarked: false,
+    comments: [
+      {
+        id: "c8",
+        userId: "u1",
+        userName: "Alex Turner",
+        userAvatar: "https://randomuser.me/api/portraits/men/62.jpg",
+        content:
+          "This is exactly the comparison I needed! Makes it much clearer when to reach for Grid vs Flexbox.",
+        createdAt: Date.now() - 10 * 24 * 60 * 60 * 1000, // 10 days ago
+      },
+      {
+        id: "c9",
+        userId: "u5",
+        userName: "Jamal Washington",
+        userAvatar: "https://randomuser.me/api/portraits/men/75.jpg",
+        content:
+          "Helpful guide. I often find myself using both together, Grid for the page structure and Flexbox inside components.",
+        createdAt: Date.now() - 9 * 24 * 60 * 60 * 1000, // 9 days ago
+      },
+    ],
+  },
+  // --- NEW BLOG POST 2 ---
+  {
+    id: "5",
+    author: {
+      // Reusing Marcus Johnson
+      id: "u3",
+      name: "Marcus Johnson",
+      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+      bio: "Full stack developer with a passion for serverless architecture.",
+    },
+    title: "Building a Simple REST API with Node.js and Express",
+    slug: "building-rest-api-nodejs-express",
+    content: `# Building a Simple REST API with Node.js and Express
+
+## Introduction
+REST (Representational State Transfer) APIs are the backbone of many web applications, enabling communication between clients (like browsers or mobile apps) and servers. Node.js, combined with the Express framework, provides a fast and efficient way to build these APIs. Let's walk through creating a basic REST API.
+
+## What You'll Need
+*   Node.js and npm (or yarn) installed on your machine.
+
+## Project Setup
+1.  Create a new project directory: \`mkdir simple-api && cd simple-api\`
+2.  Initialize your project: \`npm init -y\`
+3.  Install Express: \`npm install express\`
+
+## Creating the Basic Server
+Create a file named \`index.js\` and add the following code:
+
+\`\`\`javascript
+const express = require('express');
+const app = express();
+const port = process.env.PORT || 3000; // Use environment variable or default to 3000
+
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// A simple root route
+app.get('/', (req, res) => {
+  res.send('Hello World! Welcome to our simple API.');
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(\`Server listening at http://localhost:\${port}\`);
+});
+\`\`\`
+Run your server using \`node index.js\`. You should see the "Server listening..." message. Open your browser to \`http://localhost:3000\` to see the "Hello World!" response.
+
+## Defining API Routes (Endpoints)
+Let's create endpoints for managing a simple list of items (in-memory for this example).
+
+**Data Store (In-Memory)**
+Add this near the top of \`index.js\`:
+
+\`\`\`javascript
+let items = [
+  { id: 1, name: 'Item 1' },
+  { id: 2, name: 'Item 2' }
+];
+let nextId = 3;
+\`\`\`
+
+**GET /items - Retrieve all items**
+Add this route definition:
+
+\`\`\`javascript
+app.get('/items', (req, res) => {
+  res.json(items); // Send the items array as JSON
+});
+\`\`\`
+
+**GET /items/:id - Retrieve a single item by ID**
+
+\`\`\`javascript
+app.get('/items/:id', (req, res) => {
+  const id = parseInt(req.params.id, 10); // Get ID from URL parameter
+  const item = items.find(i => i.id === id);
+
+  if (item) {
+    res.json(item);
+  } else {
+    res.status(404).json({ message: 'Item not found' }); // Send 404 if not found
+  }
+});
+\`\`\`
+
+**POST /items - Create a new item**
+
+\`\`\`javascript
+app.post('/items', (req, res) => {
+  const newItem = {
+    id: nextId++,
+    name: req.body.name // Get name from request body (requires express.json() middleware)
+  };
+
+  if (!newItem.name) {
+     return res.status(400).json({ message: 'Item name is required' });
+  }
+
+  items.push(newItem);
+  res.status(201).json(newItem); // Send 201 Created status and the new item
+});
+\`\`\`
+
+**PUT /items/:id - Update an existing item**
+
+\`\`\`javascript
+app.put('/items/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const itemIndex = items.findIndex(i => i.id === id);
+
+    if (itemIndex !== -1) {
+        if (!req.body.name) {
+            return res.status(400).json({ message: 'Item name is required for update' });
+        }
+        items[itemIndex].name = req.body.name;
+        res.json(items[itemIndex]); // Return the updated item
+    } else {
+        res.status(404).json({ message: 'Item not found' });
+    }
+});
+\`\`\`
+
+**DELETE /items/:id - Delete an item**
+
+\`\`\`javascript
+app.delete('/items/:id', (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const initialLength = items.length;
+    items = items.filter(i => i.id !== id);
+
+    if (items.length < initialLength) {
+        res.status(204).send(); // Send 204 No Content on successful deletion
+    } else {
+        res.status(404).json({ message: 'Item not found' });
+    }
+});
+\`\`\`
+
+## Testing Your API
+You can use tools like Postman, Insomnia, or \`curl\` to test your API endpoints:
+*   \`GET http://localhost:3000/items\`
+*   \`POST http://localhost:3000/items\` (with JSON body: \`{"name": "New Item"}\`)
+*   \`GET http://localhost:3000/items/1\`
+*   \`PUT http://localhost:3000/items/1\` (with JSON body: \`{"name": "Updated Item 1"}\`)
+*   \`DELETE http://localhost:3000/items/2\`
+
+## Conclusion
+You've successfully built a basic REST API using Node.js and Express! This foundation covers creating, reading, updating, and deleting resources (CRUD operations). From here, you can explore adding database integration, authentication, more robust error handling, and validation.`,
+    excerpt:
+      "A step-by-step tutorial on creating your first RESTful API using Node.js and the popular Express framework. Covers setup, routing, CRUD operations, and testing.",
+    coverImage:
+      "https://images.unsplash.com/photo-1587620962725-abab7fe55159?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1631&q=80",
+    tags: ["Node.js", "Express", "Backend", "API", "JavaScript", "Tutorial"],
+    createdAt: Date.now() - 5 * 24 * 60 * 60 * 1000, // 5 days ago
+    updatedAt: Date.now() - 5 * 24 * 60 * 60 * 1000, // 5 days ago
+    views: 890,
+    likes: 105,
+    bookmarked: false,
+    comments: [
+      {
+        id: "c10",
+        userId: "u2", // Sophia Chen
+        userName: "Sophia Chen",
+        userAvatar: "https://randomuser.me/api/portraits/women/44.jpg",
+        content:
+          "Perfect starting point for my backend project! Very clear examples.",
+        createdAt: Date.now() - 4 * 24 * 60 * 60 * 1000, // 4 days ago
+      },
+      {
+        id: "c11",
+        userId: "u1", // Alex Turner
+        userName: "Alex Turner",
+        userAvatar: "https://randomuser.me/api/portraits/men/62.jpg",
+        content:
+          "Clear and concise. Maybe cover error handling middleware or input validation in a follow-up?",
+        createdAt: Date.now() - 3 * 24 * 60 * 60 * 1000, // 3 days ago
+      },
+    ],
+  },
   {
     id: "blog11",
     title: "Advanced TypeScript Patterns for Enterprise Applications",
@@ -1033,7 +929,8 @@ These patterns can help you build more robust TypeScript applications by leverag
     coverImage:
       "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
     tags: ["TypeScript", "Programming", "Advanced"],
-    createdAt: "2023-04-18T12:00:00.000Z",
+    createdAt: Date.now() - 20 * 24 * 60 * 60 * 1000, // 20 days ago
+    updatedAt: Date.now() - 18 * 24 * 60 * 60 * 1000, // 18 days ago
     views: 3845,
     likes: 276,
     bookmarked: false,
@@ -1046,20 +943,18 @@ These patterns can help you build more robust TypeScript applications by leverag
           "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
         content:
           "Great article! The builder pattern has been especially useful in our codebase.",
-        createdAt: new Date("2023-04-18T14:30:00.000Z").getTime(),
+        createdAt: Date.now() - 17 * 24 * 60 * 60 * 1000, // 17 days ago
       },
       {
         id: "comment2",
-        author: {
-          id: "user3",
-          name: "Ava Williams",
-          avatar:
-            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
-        },
+        userId: "u6", // Use a unique ID for new user if needed
+        userName: "Ava Williams", // Changed from author object to match others
+        userAvatar:
+          "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
         content:
           "Do you have any recommendations for handling async operations with these patterns?",
-        createdAt: "2023-04-19T09:15:00.000Z",
-        likes: 8,
+        createdAt: Date.now() - 16 * 24 * 60 * 60 * 1000, // 16 days ago
+        // Removed likes as it's not present in other comment structures
       },
     ],
   },
@@ -1255,7 +1150,7 @@ CMD ["node", "index.js"]
 Building microservices with Node.js allows you to create scalable, maintainable applications. Start small, with just a few services, and expand as your needs grow. Remember to consider service discovery, inter-service communication, and resilience patterns like circuit breakers.
     `,
     author: {
-      id: "user4",
+      id: "u7", // Use a unique ID for new user
       name: "David Kim",
       avatar:
         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
@@ -1263,581 +1158,438 @@ Building microservices with Node.js allows you to create scalable, maintainable 
     },
     coverImage:
       "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-    tags: ["Node.js", "Backend", "Architecture"],
-    createdAt: "2023-04-15T10:30:00.000Z",
+    tags: ["Node.js", "Backend", "Architecture", "Microservices"],
+    createdAt: Date.now() - 25 * 24 * 60 * 60 * 1000, // 25 days ago
+    updatedAt: Date.now() - 25 * 24 * 60 * 60 * 1000, // 25 days ago
     views: 5621,
     likes: 412,
     bookmarked: false,
     comments: [
       {
         id: "comment3",
-        author: {
-          id: "user5",
-          name: "Olivia Martinez",
-          avatar:
-            "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
-        },
+        userId: "u8", // Use a unique ID for new user
+        userName: "Olivia Martinez", // Changed from author object to match others
+        userAvatar:
+          "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
         content:
           "Great overview! Have you considered covering message brokers like RabbitMQ or Kafka for async communication?",
-        createdAt: "2023-04-15T15:45:00.000Z",
-        likes: 18,
+        createdAt: Date.now() - 24 * 24 * 60 * 60 * 1000, // 24 days ago
+        // Removed likes as it's not present in other comment structures
       },
     ],
   },
   {
-    id: "blog13",
-    title: "Optimizing React Performance: Advanced Techniques",
-    slug: "optimizing-react-performance-advanced-techniques",
-    excerpt:
-      "Learn how to significantly improve your React application's performance with advanced optimization techniques such as memoization, code splitting, and virtualization.",
-    content: `
-# Optimizing React Performance: Advanced Techniques
+    id: "6",
+    author: {
+      id: "u4", // Chloe Davis
+      name: "Chloe Davis",
+      avatar: "https://randomuser.me/api/portraits/women/79.jpg",
+      bio: "Frontend developer passionate about CSS, accessibility, and user experience.",
+    },
+    title: "React State Management: Zustand vs. Context API",
+    slug: "react-state-management-zustand-vs-context-api",
+    content: `# React State Management: Zustand vs. Context API
 
-React applications can suffer from performance issues as they grow in complexity. In this blog post, we'll explore advanced techniques for optimizing React performance beyond the basics.
+## Introduction
+Managing state effectively is crucial in complex React applications. While React's built-in Context API provides a way to share state without prop drilling, libraries like Zustand offer alternative approaches with potential benefits. Let's compare the two.
 
-## Profiling with React DevTools
+## React Context API
+The Context API is designed to share data that can be considered "global" for a tree of React components, such as the current authenticated user, theme, or preferred language.
 
-Before optimizing, you need to identify performance bottlenecks. React DevTools provides a profiler for this purpose:
+**Pros:**
+*   Built into React, no extra dependencies.
+*   Good for low-frequency updates (like themes).
+*   Solves prop drilling.
 
-1. Install React DevTools browser extension
-2. Open your app and navigate to the React tab in your browser's developer tools
-3. Click on the "Profiler" tab
-4. Record a session by clicking the record button
-5. Perform the actions you want to analyze
-6. Stop recording and analyze the results
+**Cons:**
+*   Performance issues: Any consuming component re-renders when the context value changes, even if it only uses a part of the state that didn't change.
+*   Can lead to complex provider nesting.
+*   Boilerplate for setting up provider and consumer/hook.
 
-## Memoization with React.memo, useMemo, and useCallback
-
-Preventing unnecessary re-renders is one of the most effective optimization techniques in React.
-
-### React.memo for Function Components
-
+**Example:**
 \`\`\`jsx
-const ExpensiveComponent = React.memo(({ data }) => {
-  // Component implementation
-  return (
-    <div>
-      {/* Render data */}
-      {data.map(item => <Item key={item.id} {...item} />)}
-    </div>
-  );
-});
-\`\`\`
+// ThemeContext.js
+import React, { createContext, useState, useContext } from 'react';
 
-### useMemo for Expensive Calculations
+const ThemeContext = createContext();
 
-\`\`\`jsx
-function DataVisualizer({ data }) {
-  // Only recalculate when data changes
-  const processedData = React.useMemo(() => {
-    // Expensive operation
-    return data.map(item => ({
-      ...item,
-      value: complexCalculation(item)
-    }));
-  }, [data]);
-
-  return <Chart data={processedData} />;
-}
-\`\`\`
-
-### useCallback for Event Handlers
-
-\`\`\`jsx
-function Parent() {
-  const [count, setCount] = useState(0);
-  
-  // This function is memoized and doesn't change on re-renders
-  const handleClick = useCallback(() => {
-    setCount(c => c + 1);
-  }, []);
-  
-  return <Child onClick={handleClick} />;
-}
-\`\`\`
-
-## Code Splitting with React.lazy and Suspense
-
-Code splitting allows you to load parts of your application only when they're needed.
-
-\`\`\`jsx
-import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-// Dynamic imports
-const Home = lazy(() => import('./pages/Home'));
-const Dashboard = lazy(() => import('./pages/Dashboard'));
-const Settings = lazy(() => import('./pages/Settings'));
-
-function App() {
-  return (
-    <Router>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/settings" component={Settings} />
-        </Switch>
-      </Suspense>
-    </Router>
-  );
-}
-\`\`\`
-
-## Virtualization for Long Lists
-
-When rendering long lists, only render what's visible in the viewport:
-
-\`\`\`jsx
-import { FixedSizeList as List } from 'react-window';
-
-function VirtualizedList({ items }) {
-  const Row = ({ index, style }) => (
-    <div style={style}>
-      <div>{items[index].name}</div>
-      <div>{items[index].description}</div>
-    </div>
-  );
-
-  return (
-    <List
-      height={500}
-      width="100%"
-      itemCount={items.length}
-      itemSize={80}
-    >
-      {Row}
-    </List>
-  );
-}
-\`\`\`
-
-## Optimizing Context API Usage
-
-Context API can cause performance issues if not used correctly:
-
-\`\`\`jsx
-// Split contexts by update frequency
-const ThemeContext = React.createContext();
-const UserContext = React.createContext();
-const NotificationsContext = React.createContext();
-
-function App() {
+export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState('light');
-  const [user, setUser] = useState(null);
-  const [notifications, setNotifications] = useState([]);
+  const toggleTheme = () => setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
-      <UserContext.Provider value={{ user, setUser }}>
-        <NotificationsContext.Provider value={{ notifications, setNotifications }}>
-          <MainApp />
-        </NotificationsContext.Provider>
-      </UserContext.Provider>
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
     </ThemeContext.Provider>
   );
 }
-\`\`\`
 
-## Web Workers for CPU-Intensive Tasks
+export const useTheme = () => useContext(ThemeContext);
 
-Move CPU-intensive operations off the main thread:
-
-\`\`\`jsx
-import { useState, useEffect } from 'react';
-
-function DataProcessor({ rawData }) {
-  const [processedData, setProcessedData] = useState(null);
-
-  useEffect(() => {
-    // Create a web worker
-    const worker = new Worker('worker.js');
-    
-    // Set up message handler
-    worker.onmessage = (e) => {
-      setProcessedData(e.data);
-    };
-    
-    // Send data to worker
-    worker.postMessage(rawData);
-    
-    // Clean up
-    return () => worker.terminate();
-  }, [rawData]);
-
-  if (!processedData) return <div>Processing...</div>;
-  
-  return <Chart data={processedData} />;
+// Usage in a component
+function MyComponent() {
+    const { theme, toggleTheme } = useTheme();
+    return (
+        <div className={theme}>
+            Current theme: {theme}
+            <button onClick={toggleTheme}>Toggle Theme</button>
+        </div>
+    );
 }
 \`\`\`
 
-## Conclusion
+## Zustand
+Zustand is a small, fast, and scalable state management library based on simplified Flux principles. It uses hooks but doesn't rely on the Context API directly.
 
-Optimizing React performance requires a combination of techniques and a good understanding of how React works under the hood. Start by profiling your application to identify bottlenecks, then apply the appropriate optimization techniques. Remember that premature optimization can lead to code that's harder to maintain, so optimize where it matters most.
-    `,
-    author: {
-      id: "user6",
-      name: "Alex Rivera",
-      avatar:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
-      bio: "Frontend performance engineer specialized in React optimization techniques.",
-    },
+**Pros:**
+*   Minimal boilerplate.
+*   Performance: Components re-render only when the state slices they subscribe to change.
+*   Manages state outside the React component tree.
+*   Easier async operations.
+*   TypeScript support is excellent.
+
+**Cons:**
+*   Adds an external dependency.
+*   Requires learning a new library (though the API is small).
+
+**Example:**
+\`\`\`jsx
+// store.js
+import create from 'zustand';
+
+export const useThemeStore = create((set) => ({
+  theme: 'light',
+  toggleTheme: () => set((state) => ({ theme: state.theme === 'light' ? 'dark' : 'light' })),
+}));
+
+// Usage in a component
+function MyComponent() {
+  // Select only the needed state/actions
+  const theme = useThemeStore((state) => state.theme);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
+  // Alternatively, select multiple slices with shallow comparison for optimization
+  // const { theme, toggleTheme } = useThemeStore(state => ({ theme: state.theme, toggleTheme: state.toggleTheme }), shallow);
+
+  return (
+    <div className={theme}>
+      Current theme: {theme}
+      <button onClick={toggleTheme}>Toggle Theme</button>
+    </div>
+  );
+}
+\`\`\`
+
+## When to Choose Which?
+*   **Context API:** Suitable for low-frequency updates, passing static data, or when avoiding external dependencies is a priority. Good for simple global state needs like theming or authentication status.
+*   **Zustand:** Excellent for frequent updates, large state objects, performance-critical applications, and when you need a more decoupled state management solution. Often preferred for managing application-wide domain state.
+
+## Conclusion
+Both Context API and Zustand are valuable tools. Context is readily available, while Zustand offers performance benefits and a simpler API for complex state by decoupling state management from the component hierarchy. Choose based on your application's complexity, performance requirements, and dependency tolerance.`,
+    excerpt:
+      "A comparison between React's built-in Context API and the Zustand library for state management, covering pros, cons, performance, and use cases.",
     coverImage:
-      "https://images.unsplash.com/photo-1581276879432-15e50529f34b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-    tags: ["React", "JavaScript", "Performance", "Frontend"],
-    createdAt: "2023-04-10T08:15:00.000Z",
-    views: 7834,
-    likes: 589,
+      "https://images.unsplash.com/photo-1618421149851-a09ff77d017a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+    tags: [
+      "React",
+      "State Management",
+      "Zustand",
+      "Context API",
+      "JavaScript",
+      "Frontend",
+    ],
+    createdAt: Date.now() - 20 * 24 * 60 * 60 * 1000, // 20 days ago
+    updatedAt: Date.now() - 19 * 24 * 60 * 60 * 1000, // 19 days ago
+    views: 950,
+    likes: 110,
     bookmarked: false,
     comments: [
       {
-        id: "comment4",
-        author: {
-          id: "user7",
-          name: "Emma Wilson",
-          avatar:
-            "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
-        },
+        id: "c16",
+        userId: "u3", // Marcus Johnson
+        userName: "Marcus Johnson",
+        userAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
         content:
-          "This is exactly what I needed! The web worker tip is especially helpful for a data visualization project I'm working on.",
-        createdAt: "2023-04-10T10:00:00.000Z",
-        likes: 24,
+          "Interesting comparison. We switched to Zustand for performance reasons on a large project and haven't looked back.",
+        createdAt: Date.now() - 18 * 24 * 60 * 60 * 1000, // 18 days ago
       },
       {
-        id: "comment5",
-        author: {
-          id: "user8",
-          name: "Lucas Brown",
-          avatar:
-            "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
-        },
+        id: "c17",
+        userId: "u2", // Sophia Chen
+        userName: "Sophia Chen",
+        userAvatar: "https://randomuser.me/api/portraits/women/44.jpg",
         content:
-          "Great article! One thing I'd add is using the new startTransition API in React 18 for smoother UI during updates.",
-        createdAt: "2023-04-10T15:20:00.000Z",
-        likes: 31,
-      },
-      {
-        id: "comment6",
-        author: {
-          id: "user9",
-          name: "Sophia Rodriguez",
-          avatar:
-            "https://images.unsplash.com/photo-1560087637-bf797bc7796a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
-        },
-        content:
-          "Do you have any benchmarks to show the impact of these optimizations on a real-world app?",
-        createdAt: "2023-04-12T09:45:00.000Z",
-        likes: 15,
+          "Good explanation of the Context API pitfalls. Zustand seems much leaner.",
+        createdAt: Date.now() - 17 * 24 * 60 * 60 * 1000, // 17 days ago
       },
     ],
   },
   {
-    id: "blog15",
-    title: "Mastering CSS Grid: Advanced Layout Techniques",
-    slug: "mastering-css-grid-advanced-layout-techniques",
-    excerpt:
-      "Take your CSS Grid skills to the next level with advanced techniques for creating complex, responsive layouts for modern web applications.",
-    content: `
-# Mastering CSS Grid: Advanced Layout Techniques
+    id: "7",
+    author: {
+      id: "u1", // Alex Turner
+      name: "Alex Turner",
+      avatar: "https://randomuser.me/api/portraits/men/62.jpg",
+      bio: "Full stack developer with 8 years of experience in React and Node.js.",
+    },
+    title:
+      "Introduction to Testing React Components with Jest and React Testing Library",
+    slug: "testing-react-components-jest-rtl",
+    content: `# Introduction to Testing React Components with Jest and React Testing Library
 
-CSS Grid has revolutionized web layout design, providing a powerful two-dimensional system that makes complex layouts more intuitive to create. In this post, we'll explore advanced CSS Grid techniques for sophisticated layouts.
+## Why Test React Components?
+Testing ensures your components work as expected, prevents regressions when refactoring or adding features, and serves as documentation for component behavior. Jest (a JavaScript testing framework) and React Testing Library (RTL) provide a great environment for testing React applications.
 
-## Beyond the Basics: Grid Template Areas
+## Setting Up
+Most Create React App projects come with Jest and RTL pre-configured. If not, you can install them:
+\`\`\`bash
+npm install --save-dev jest @testing-library/react @testing-library/jest-dom @babel/preset-react @babel/preset-env babel-jest
+# or
+yarn add --dev jest @testing-library/react @testing-library/jest-dom @babel/preset-react @babel/preset-env babel-jest
+\`\`\`
+You'll also need basic Jest configuration (\`jest.config.js\`) and potentially Babel setup (\`.babelrc\`).
 
-Grid template areas provide a visual way to define your layout:
+## Core Concepts of React Testing Library
+RTL encourages testing components in a way that resembles how users interact with them. Key principles:
+*   Query elements by accessible roles, text content, or labels rather than implementation details (like CSS selectors or state).
+*   Focus on user interactions and observable output.
+*   Provide utilities for rendering components, querying the DOM, and firing events.
 
-\`\`\`css
-.container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: auto 1fr auto;
-  min-height: 100vh;
-  grid-template-areas:
-    "header header header header"
-    "sidebar main main main"
-    "footer footer footer footer";
+## Writing Your First Test
+Let's test a simple Counter component:
+
+**Counter.js:**
+\`\`\`jsx
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <button onClick={() => setCount(count - 1)} disabled={count === 0}>Decrement</button>
+    </div>
+  );
 }
 
-.header { grid-area: header; }
-.sidebar { grid-area: sidebar; }
-.main { grid-area: main; }
-.footer { grid-area: footer; }
-
-/* Responsive adjustment */
-@media (max-width: 768px) {
-  .container {
-    grid-template-areas:
-      "header header header header"
-      "main main main main"
-      "sidebar sidebar sidebar sidebar"
-      "footer footer footer footer";
-  }
-}
+export default Counter;
 \`\`\`
 
-## Creating Complex Card Layouts
+**Counter.test.js:**
+\`\`\`jsx
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom'; // Provides extra matchers like .toBeInTheDocument()
+import Counter from './Counter';
 
-For a dynamic magazine-style layout:
-
-\`\`\`css
-.magazine-layout {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-auto-rows: minmax(100px, auto);
-  grid-gap: 20px;
-}
-
-.card {
-  background: white;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.featured {
-  grid-column: span 4;
-  grid-row: span 2;
-}
-
-.normal {
-  grid-column: span 2;
-  grid-row: span 1;
-}
-
-.vertical {
-  grid-column: span 2;
-  grid-row: span 2;
-}
-\`\`\`
-
-Example HTML structure:
-
-\`\`\`html
-<div class="magazine-layout">
-  <div class="card featured">Featured Article</div>
-</div>
-\`\`\`
-
-\`\`\`html
-<div class="magazine-layout">
-  <div class="card featured">Featured Article</div>
-  <div class="card normal">Normal Card</div>
-  <div class="card normal">Normal Card</div>
-  <div class="card vertical">Vertical Card</div>
-  <div class="card normal">Normal Card</div>
-  <div class="card normal">Normal Card</div>
-  <div class="card normal">Normal Card</div>
-</div>
-\`\`\`
-
-## Masonry Layout with CSS Grid
-
-While not a true masonry layout, this technique gets close:
-
-\`\`\`css
-.masonry-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-auto-rows: 20px;
-  grid-gap: 20px;
-}
-
-.masonry-item {
-  background-color: #f0f0f0;
-  border-radius: 5px;
-  padding: 20px;
-}
-
-/* JavaScript will set the appropriate grid-row-end */
-\`\`\`
-
-\`\`\`javascript
-// Calculate and apply the appropriate height
-function resizeGridItems() {
-  const grid = document.querySelector('.masonry-grid');
-  const rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
-  const gap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-gap'));
-  
-  document.querySelectorAll('.masonry-item').forEach(item => {
-    const rowSpan = Math.ceil((item.getBoundingClientRect().height + gap) / (rowHeight + gap));
-    item.style.gridRowEnd = 'span ' + rowSpan;
+describe('Counter Component', () => {
+  test('renders initial count of 0', () => {
+    render(<Counter />);
+    // screen provides querying methods (getByText, findByRole, etc.)
+    const countElement = screen.getByText(/Count: 0/i);
+    expect(countElement).toBeInTheDocument();
   });
-}
 
-// Initialize and handle resize
-window.addEventListener('load', resizeGridItems);
-window.addEventListener('resize', resizeGridItems);
+  test('increments count when increment button is clicked', () => {
+    render(<Counter />);
+    const incrementButton = screen.getByRole('button', { name: /increment/i });
+    fireEvent.click(incrementButton);
+    expect(screen.getByText(/Count: 1/i)).toBeInTheDocument();
+  });
+
+  test('decrements count when decrement button is clicked (if count > 0)', () => {
+    render(<Counter />);
+    const incrementButton = screen.getByRole('button', { name: /increment/i });
+    const decrementButton = screen.getByRole('button', { name: /decrement/i });
+
+    // Increment first to enable decrement
+    fireEvent.click(incrementButton);
+    expect(screen.getByText(/Count: 1/i)).toBeInTheDocument();
+
+    fireEvent.click(decrementButton);
+    expect(screen.getByText(/Count: 0/i)).toBeInTheDocument();
+  });
+
+  test('decrement button is disabled when count is 0', () => {
+    render(<Counter />);
+    const decrementButton = screen.getByRole('button', { name: /decrement/i });
+    expect(decrementButton).toBeDisabled();
+  });
+
+  test('decrement button becomes enabled when count is greater than 0', () => {
+    render(<Counter />);
+    const incrementButton = screen.getByRole('button', { name: /increment/i });
+    const decrementButton = screen.getByRole('button', { name: /decrement/i });
+
+    expect(decrementButton).toBeDisabled(); // Initial state
+    fireEvent.click(incrementButton); // Increment
+    expect(decrementButton).not.toBeDisabled(); // Now enabled
+  });
+});
 \`\`\`
+Run tests using \`npm test\` or \`yarn test\`.
 
-## Subgrid for Nested Components
+## Common RTL Queries
+*   \`getBy...\`: Finds element or throws error if not found. (Sync)
+*   \`findBy...\`: Finds element or throws error; waits for appearance. (Async)
+*   \`queryBy...\`: Finds element or returns null. (Sync)
+*   Common selectors: \`Role\`, \`LabelText\`, \`PlaceholderText\`, \`Text\`, \`DisplayValue\`, \`AltText\`, \`Title\`, \`TestId\` (use sparingly).
 
-CSS Subgrid (part of CSS Grid Level 2) allows nested grids to use the parent's grid lines:
-
-\`\`\`css
-.parent-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(3, auto);
-  gap: 20px;
-}
-
-.child {
-  grid-column: 3 / span 8;
-  grid-row: 2;
-  
-  display: grid;
-  grid-template-columns: subgrid;
-  grid-template-rows: subgrid;
-}
-
-.grandchild-1 {
-  grid-column: 1 / span 4;
-}
-
-.grandchild-2 {
-  grid-column: 5 / span 4;
-}
-\`\`\`
-
-## Overlapping Elements
-
-Create dynamic overlapping layouts:
-
-\`\`\`css
-.overlap-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(12, 1fr);
-  height: 500px;
-}
-
-.background {
-  grid-area: 1 / 1 / -1 / -1; /* Covers the entire grid */
-  background-color: #f0f0f0;
-  z-index: 1;
-}
-
-.image {
-  grid-area: 2 / 2 / 10 / 8;
-  background-image: url('example.jpg');
-  background-size: cover;
-  z-index: 2;
-}
-
-.content {
-  grid-area: 5 / 6 / 12 / 12;
-  background-color: white;
-  padding: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  z-index: 3;
-}
-\`\`\`
-
-## Responsive Grid That Maintains Aspect Ratio
-
-Keep items at a consistent aspect ratio:
-
-\`\`\`css
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  grid-gap: 20px;
-}
-
-.gallery-item {
-  position: relative;
-  overflow: hidden;
-}
-
-.gallery-item::before {
-  content: "";
-  display: block;
-  padding-top: 75%; /* 4:3 aspect ratio */
-}
-
-.gallery-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-\`\`\`
-
-## Named Grid Lines for Better Readability
-
-Named grid lines make your layouts more maintainable:
-
-\`\`\`css
-.dashboard {
-  display: grid;
-  grid-template-columns:
-    [sidebar-start] 250px
-    [sidebar-end main-start] 1fr
-    [main-end];
-  grid-template-rows:
-    [header-start] 80px
-    [header-end content-start] 1fr
-    [content-end footer-start] 60px
-    [footer-end];
-  min-height: 100vh;
-}
-
-.header {
-  grid-column: sidebar-start / main-end;
-  grid-row: header-start / header-end;
-}
-
-.sidebar {
-  grid-column: sidebar-start / sidebar-end;
-  grid-row: content-start / footer-end;
-}
-
-.main {
-  grid-column: main-start / main-end;
-  grid-row: content-start / content-end;
-}
-
-.footer {
-  grid-column: sidebar-start / main-end;
-  grid-row: footer-start / footer-end;
-}
-\`\`\`
+## Simulating Events
+\`fireEvent\` (\`click\`, \`change\`, \`submit\`, etc.) simulates basic browser events. For more realistic user interactions, consider \`@testing-library/user-event\`.
 
 ## Conclusion
-
-CSS Grid provides powerful capabilities for creating complex layouts that were once difficult or impossible with CSS alone. By mastering these advanced techniques, you can create sophisticated, responsive designs while maintaining clean, semantic HTML.
-
-Remember that browser support for the newest features (like subgrid) may vary, so always check compatibility and consider fallbacks for critical layouts.
-    `,
-    author: {
-      id: "user13",
-      name: "Jordan Patel",
-      avatar:
-        "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
-      bio: "CSS expert and design systems engineer with a focus on modern layout techniques.",
-    },
+Jest and React Testing Library provide a powerful and user-centric way to test your React components. By focusing on user behavior rather than implementation details, you can write more resilient and maintainable tests that give you confidence in your application's quality.`,
+    excerpt:
+      "Learn the fundamentals of testing React components using Jest and React Testing Library. Covers setup, core concepts, writing tests, querying elements, and simulating user interactions.",
     coverImage:
-      "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80",
-    tags: ["CSS", "Frontend", "Design"],
-    createdAt: "2023-04-02T11:45:00.000Z",
-    views: 6752,
-    likes: 531,
+      "https://images.unsplash.com/photo-1516131206008-dd041a9764fd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80",
+    tags: [
+      "React",
+      "Testing",
+      "Jest",
+      "React Testing Library",
+      "JavaScript",
+      "Frontend",
+      "Tutorial",
+    ],
+    createdAt: Date.now() - 30 * 24 * 60 * 60 * 1000, // 30 days ago
+    updatedAt: Date.now() - 30 * 24 * 60 * 60 * 1000, // 30 days ago
+    views: 1650,
+    likes: 190,
     bookmarked: false,
     comments: [
       {
-        id: "comment9",
-        author: {
-          id: "user14",
-          name: "Riley Smith",
-          avatar:
-            "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
-        },
+        id: "c18",
+        userId: "u4", // Chloe Davis
+        userName: "Chloe Davis",
+        userAvatar: "https://randomuser.me/api/portraits/women/79.jpg",
         content:
-          "The named grid lines example is so much cleaner than using numbers. I'm definitely refactoring my layouts after reading this!",
-        createdAt: "2023-04-02T14:30:00.000Z",
-        likes: 22,
+          "Great intro to RTL! We use it extensively, helps catch accessibility issues early too.",
+        createdAt: Date.now() - 28 * 24 * 60 * 60 * 1000, // 28 days ago
+      },
+      {
+        id: "c19",
+        userId: "u5", // Jamal Washington
+        userName: "Jamal Washington",
+        userAvatar: "https://randomuser.me/api/portraits/men/75.jpg",
+        content:
+          "Finally starting to understand testing philosophy with RTL. Thanks for the clear examples!",
+        createdAt: Date.now() - 27 * 24 * 60 * 60 * 1000, // 27 days ago
+      },
+    ],
+  },
+  // --- NEW BLOG POST 5 ---
+  {
+    id: "8",
+    author: {
+      id: "u7", // David Kim
+      name: "David Kim",
+      avatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
+      bio: "Backend developer with a passion for microservices and cloud architecture.",
+    },
+    title: "Choosing a Database for Your Node.js Application: SQL vs NoSQL",
+    slug: "nodejs-database-sql-vs-nosql",
+    content: `# Choosing a Database for Your Node.js Application: SQL vs NoSQL
+
+## Introduction
+Selecting the right database is a critical decision when building a Node.js application. The choice often comes down to two main categories: SQL (Relational) databases and NoSQL (Non-relational) databases. Understanding their differences, strengths, and weaknesses helps you make an informed decision.
+
+## SQL (Relational Databases)
+Examples: PostgreSQL, MySQL, SQLite, SQL Server, Oracle DB.
+
+**Characteristics:**
+*   **Structure:** Data is stored in tables with predefined schemas (columns with specific data types).
+*   **Relationships:** Data is linked across tables using foreign keys, enforcing relationships.
+*   **Language:** Uses Structured Query Language (SQL) for data manipulation and querying.
+*   **Consistency:** Typically adheres to ACID properties (Atomicity, Consistency, Isolation, Durability), ensuring transaction reliability.
+
+**Pros:**
+*   **Data Integrity:** Strict schemas and relationship constraints ensure data consistency.
+*   **Powerful Querying:** SQL is a mature and powerful language for complex queries, joins, and aggregations.
+*   **Mature Technology:** Widely adopted, well-understood, large community support, many tools.
+*   **Good for Structured Data:** Ideal when data structure is well-defined and stable.
+
+**Cons:**
+*   **Scalability:** Vertical scaling (bigger servers) is often easier than horizontal scaling (distributing across multiple servers).
+*   **Schema Flexibility:** Modifying schemas can be complex and may require downtime, especially in large tables.
+*   **Object-Relational Impedance Mismatch:** Mapping application objects (like in JavaScript) to relational tables can sometimes be awkward (often addressed by ORMs like Prisma or Sequelize).
+
+**Node.js ORMs/Clients:** Sequelize, Prisma, TypeORM, Knex.js, \`pg\` (PostgreSQL), \`mysql2\` (MySQL).
+
+## NoSQL (Non-Relational Databases)
+Examples: MongoDB (Document), Redis (Key-Value), Cassandra (Column-Family), Neo4j (Graph).
+
+**Characteristics:**
+*   **Structure:** Flexible schemas (or schema-less). Data models vary (document, key-value, column-family, graph).
+*   **Relationships:** Relationships are less rigid, often handled within the application logic or through embedding.
+*   **Language:** Query languages vary by database type (e.g., MQL for MongoDB).
+*   **Consistency:** Often prioritize Availability and Partition tolerance (CAP theorem), sometimes offering "eventual consistency" over strict ACID.
+
+**Pros:**
+*   **Scalability:** Generally designed for easier horizontal scaling across commodity hardware.
+*   **Flexibility:** Dynamic schemas allow for rapid development and easy adaptation to changing data requirements.
+*   **Performance:** Can offer high performance for specific use cases (e.g., key-value lookups, handling large amounts of unstructured data).
+*   **Easier Object Mapping:** Document databases (like MongoDB) often map more naturally to JavaScript objects.
+
+**Cons:**
+*   **Consistency:** Eventual consistency might not be suitable for all applications (e.g., financial transactions).
+*   **Querying Complexity:** Complex queries involving relationships across different data types can be harder or less efficient than SQL joins.
+*   **Maturity & Standardization:** Less standardized than SQL; tools and expertise might vary more between different NoSQL databases.
+*   **Data Integrity:** Lack of rigid schemas can lead to inconsistent data if not managed carefully at the application level.
+
+**Node.js ODMs/Clients:** Mongoose (MongoDB), \`mongodb\` (MongoDB native driver), \`ioredis\` (Redis), \`cassandra-driver\`.
+
+## Making the Choice
+Consider these factors:
+1.  **Data Structure:** Is your data highly structured and relational? (Lean SQL). Is it unstructured, semi-structured, or evolving rapidly? (Lean NoSQL).
+2.  **Scalability Needs:** Do you anticipate massive scale requiring easy horizontal distribution? (Lean NoSQL). Can you scale vertically initially or have moderate scaling needs? (SQL often sufficient).
+3.  **Consistency Requirements:** Is immediate consistency critical for every transaction? (Lean SQL). Can you tolerate eventual consistency for better availability/scalability? (Lean NoSQL).
+4.  **Query Complexity:** Do you need complex joins and aggregations frequently? (Lean SQL). Are your queries mostly based on single keys or documents? (Lean NoSQL).
+5.  **Team Expertise:** What does your team know best?
+
+**Hybrid Approaches:** It's also common to use both! E.g., SQL for core transactional data and NoSQL (like Redis) for caching or session management.
+
+## Conclusion
+There's no single "best" database. SQL databases excel with structured data, consistency, and complex queries. NoSQL databases offer flexibility, scalability, and often better performance for specific unstructured data patterns. Analyze your application's specific requirements, data model, and future needs to choose the database (or databases) that best fits your Node.js project.`,
+    excerpt:
+      "A comparison of SQL (Relational) and NoSQL (Non-relational) databases for Node.js applications. Covers characteristics, pros, cons, and key considerations for choosing the right database type.",
+    coverImage:
+      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1634&q=80",
+    tags: [
+      "Database",
+      "Node.js",
+      "Backend",
+      "SQL",
+      "NoSQL",
+      "Architecture",
+      "Comparison",
+    ],
+    createdAt: Date.now() - 45 * 24 * 60 * 60 * 1000, // 45 days ago
+    updatedAt: Date.now() - 44 * 24 * 60 * 60 * 1000, // 44 days ago
+    views: 2800,
+    likes: 310,
+    bookmarked: false,
+    comments: [
+      {
+        id: "c20",
+        userId: "u3", // Marcus Johnson
+        userName: "Marcus Johnson",
+        userAvatar: "https://randomuser.me/api/portraits/men/32.jpg",
+        content:
+          "Excellent breakdown! The hybrid approach section is key; we often use Postgres for core data and Redis for caching.",
+        createdAt: Date.now() - 40 * 24 * 60 * 60 * 1000, // 40 days ago
+      },
+      {
+        id: "c21",
+        userId: "u2", // Sophia Chen
+        userName: "Sophia Chen",
+        userAvatar: "https://randomuser.me/api/portraits/women/44.jpg",
+        content:
+          "Really helpful clarification on consistency models (ACID vs eventual). This often trips people up.",
+        createdAt: Date.now() - 39 * 24 * 60 * 60 * 1000, // 39 days ago
       },
     ],
   },

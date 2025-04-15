@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import { v4 as uuidv4 } from "uuid";
 import { demoBlogs } from "@/data/demoBlogs";
 import { Blog, Comment } from "@/types/blogTypes";
@@ -34,178 +33,176 @@ export type BlogStore = {
   initializeStore: () => void;
 };
 
-export const useBlogStore = create<BlogStore>()(
-  persist(
-    (set, get) => ({
-      blogs: [],
-      bookmarkedBlogs: [],
-      addBlog: (blog) => {
-        const now = Date.now();
-        const newBlog: Blog = {
-          id: uuidv4(),
-          ...blog,
-          createdAt: now,
-          updatedAt: now,
-          views: 0,
-          likes: 0,
-          bookmarked: false,
-          comments: [],
-        };
+export const useBlogStore = create<BlogStore>()((set, get) => ({
+  blogs: [],
+  bookmarkedBlogs: [],
+  addBlog: (blog) => {
+    const now = Date.now();
+    const newBlog: Blog = {
+      id: uuidv4(),
+      ...blog,
+      createdAt: now,
+      updatedAt: now,
+      views: 0,
+      likes: 0,
+      bookmarked: false,
+      comments: [],
+    };
 
-        set((state) => ({
-          blogs: [newBlog, ...state.blogs],
-        }));
+    set((state) => ({
+      blogs: [newBlog, ...state.blogs],
+    }));
 
-        return newBlog;
-      },
-      updateBlog: (id, updatedFields) => {
-        set((state) => ({
-          blogs: state.blogs.map((blog) =>
-            blog.id === id
-              ? { ...blog, ...updatedFields, updatedAt: Date.now() }
-              : blog
-          ),
-        }));
-      },
-      deleteBlog: (id) => {
-        set((state) => ({
-          blogs: state.blogs.filter((blog) => blog.id !== id),
-        }));
-      },
-      toggleBookmark: (id) => {
-        set((state) => {
-          const blogToToggle = state.blogs.find((blog) => blog.id === id);
-          const isCurrentlyBookmarked = blogToToggle?.bookmarked || false;
+    return newBlog;
+  },
+  updateBlog: (id, updatedFields) => {
+    set((state) => ({
+      blogs: state.blogs.map((blog) =>
+        blog.id === id
+          ? { ...blog, ...updatedFields, updatedAt: Date.now() }
+          : blog
+      ),
+    }));
+  },
+  deleteBlog: (id) => {
+    set((state) => ({
+      blogs: state.blogs.filter((blog) => blog.id !== id),
+    }));
+  },
+  toggleBookmark: (id) => {
+    set((state) => {
+      const blogToToggle = state.blogs.find((blog) => blog.id === id);
+      const isCurrentlyBookmarked = blogToToggle?.bookmarked || false;
 
-          // Update the blogs array
-          const updatedBlogs = state.blogs.map((blog) =>
-            blog.id === id ? { ...blog, bookmarked: !blog.bookmarked } : blog
-          );
+      // Update the blogs array
+      const updatedBlogs = state.blogs.map((blog) =>
+        blog.id === id ? { ...blog, bookmarked: !blog.bookmarked } : blog
+      );
 
-          // Update the bookmarkedBlogs array
-          let updatedBookmarks = [...state.bookmarkedBlogs];
-          if (isCurrentlyBookmarked) {
-            // Remove from bookmarks
-            updatedBookmarks = updatedBookmarks.filter(
-              (bookmarkId) => bookmarkId !== id
-            );
-          } else {
-            // Add to bookmarks
-            updatedBookmarks.push(id);
-          }
+      // Update the bookmarkedBlogs array
+      let updatedBookmarks = [...state.bookmarkedBlogs];
+      if (isCurrentlyBookmarked) {
+        // Remove from bookmarks
+        updatedBookmarks = updatedBookmarks.filter(
+          (bookmarkId) => bookmarkId !== id
+        );
+      } else {
+        // Add to bookmarks
+        updatedBookmarks.push(id);
+      }
 
-          return {
-            blogs: updatedBlogs,
-            bookmarkedBlogs: updatedBookmarks,
-          };
-        });
-      },
-      likeBlog: (id) => {
-        set((state) => {
-          // Find the blog
-          const blog = state.blogs.find((b) => b.id === id);
-          if (!blog) return { blogs: state.blogs };
+      return {
+        blogs: updatedBlogs,
+        bookmarkedBlogs: updatedBookmarks,
+      };
+    });
+  },
+  likeBlog: (id) => {
+    set((state) => {
+      // Find the blog
+      const blog = state.blogs.find((b) => b.id === id);
+      if (!blog) return { blogs: state.blogs };
 
-          // Toggle likes - decrease if already liked, otherwise increase
-          const newLikes = blog.likes > 0 ? blog.likes - 1 : blog.likes + 1;
+      // Toggle likes - decrease if already liked, otherwise increase
+      const newLikes = blog.likes > 0 ? blog.likes - 1 : blog.likes + 1;
 
-          return {
-            blogs: state.blogs.map((blog) =>
-              blog.id === id ? { ...blog, likes: newLikes } : blog
-            ),
-          };
-        });
-      },
-      addComment: (blogId, comment) => {
-        set((state) => ({
-          blogs: state.blogs.map((blog) =>
-            blog.id === blogId
-              ? {
-                  ...blog,
-                  comments: [
-                    ...blog.comments,
-                    { ...comment, id: uuidv4(), createdAt: Date.now() },
-                  ],
-                }
-              : blog
-          ),
-        }));
-      },
-      incrementView: (id) => {
-        set((state) => ({
-          blogs: state.blogs.map((blog) =>
-            blog.id === id ? { ...blog, views: blog.views + 1 } : blog
-          ),
-        }));
-      },
-      getBookmarkedBlogs: () => {
-        const state = get();
-        return state.blogs.filter((blog) => blog.bookmarked);
-      },
-      getUserBlogs: (userId) => {
-        const state = get();
-        return state.blogs.filter((blog) => blog.author.id === userId);
-      },
-      getBlogBySlug: (slug) => {
-        const state = get();
-        return state.blogs.find((blog) => blog.slug === slug);
-      },
-      initializeStore: () => {
-        const state = get();
-        const now = Date.now();
+      return {
+        blogs: state.blogs.map((blog) =>
+          blog.id === id ? { ...blog, likes: newLikes } : blog
+        ),
+      };
+    });
+  },
+  addComment: (blogId, comment) => {
+    set((state) => ({
+      blogs: state.blogs.map((blog) =>
+        blog.id === blogId
+          ? {
+              ...blog,
+              comments: [
+                ...blog.comments,
+                { ...comment, id: uuidv4(), createdAt: Date.now() },
+              ],
+            }
+          : blog
+      ),
+    }));
+  },
+  incrementView: (id) => {
+    set((state) => ({
+      blogs: state.blogs.map((blog) =>
+        blog.id === id ? { ...blog, views: blog.views + 1 } : blog
+      ),
+    }));
+  },
+  getBookmarkedBlogs: () => {
+    const state = get();
+    return state.blogs.filter((blog) => blog.bookmarked);
+  },
+  getUserBlogs: (userId) => {
+    const state = get();
+    return state.blogs.filter((blog) => blog.author.id === userId);
+  },
+  getBlogBySlug: (slug) => {
+    const state = get();
+    return state.blogs.find((blog) => blog.slug === slug);
+  },
+  initializeStore: () => {
+    const state = get();
+    const now = Date.now();
 
-        // Convert to proper Blog format with proper string[] type
-        const transformedBlogs: Blog[] = demoBlogs.map((blog) => {
-          // Convert any "author" format comments to the right format
-          const comments = Array.isArray(blog.comments)
-            ? blog.comments.map((comment) => {
-                if ("author" in comment) {
-                  return {
-                    id: comment.id,
-                    userId: comment.author.id,
-                    userName: comment.author.name,
-                    userAvatar: comment.author.avatar,
-                    content: comment.content,
-                    createdAt:
-                      typeof comment.createdAt === "string"
-                        ? new Date(comment.createdAt).getTime()
-                        : comment.createdAt || now,
-                  };
-                }
-                return comment;
-              })
-            : [];
+    // Convert to proper Blog format with proper string[] type
+    const transformedBlogs: Blog[] = demoBlogs.map((blog) => {
+      // Convert any "author" format comments to the right format
+      const comments = Array.isArray(blog.comments)
+        ? blog.comments.map((comment) => {
+            if (
+              "author" in comment &&
+              typeof comment.author === "object" &&
+              comment.author &&
+              "avatar" in comment.author
+            ) {
+              return {
+                id: comment.id,
+                userId: comment.author.id as string,
+                userName: comment.author.name as string,
+                userAvatar: comment.author.avatar as string,
+                content: comment.content,
+                createdAt:
+                  typeof comment.createdAt === "string"
+                    ? new Date(comment.createdAt).getTime()
+                    : comment.createdAt || now,
+              };
+            }
+            return comment;
+          })
+        : [];
 
-          // Safely handle the type narrowing
-          const blogItem = blog as Blog;
+      // Safely handle the type narrowing
+      const blogItem = blog as Blog;
 
-          return {
-            ...blogItem,
-            id: blogItem.id || uuidv4(),
-            createdAt:
-              typeof blogItem.createdAt === "string"
-                ? new Date(blogItem.createdAt).getTime()
-                : blogItem.createdAt ||
-                  now - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000,
-            updatedAt:
-              typeof blogItem.updatedAt === "string"
-                ? new Date(blogItem.updatedAt).getTime()
-                : blogItem.updatedAt ||
-                  now - Math.floor(Math.random() * 10) * 24 * 60 * 60 * 1000,
-            views: blogItem.views || Math.floor(Math.random() * 1000) + 100,
-            likes: blogItem.likes || Math.floor(Math.random() * 200) + 10,
-            bookmarked: blogItem.bookmarked || false,
-            comments: comments,
-          };
-        });
+      return {
+        ...blogItem,
+        id: blogItem.id || uuidv4(),
+        createdAt:
+          typeof blogItem.createdAt === "string"
+            ? new Date(blogItem.createdAt).getTime()
+            : blogItem.createdAt ||
+              now - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000,
+        updatedAt:
+          typeof blogItem.updatedAt === "string"
+            ? new Date(blogItem.updatedAt).getTime()
+            : blogItem.updatedAt ||
+              now - Math.floor(Math.random() * 10) * 24 * 60 * 60 * 1000,
+        views: blogItem.views || Math.floor(Math.random() * 1000) + 100,
+        likes: blogItem.likes || Math.floor(Math.random() * 200) + 10,
+        bookmarked: blogItem.bookmarked || false,
+        comments: comments,
+      };
+    });
 
-        set({
-          blogs: [...state.blogs, ...transformedBlogs],
-        });
-      },
-    }),
-    {
-      name: "blog-store",
-    }
-  )
-);
+    set({
+      blogs: [...state.blogs, ...transformedBlogs],
+    });
+  },
+}));
