@@ -26,7 +26,7 @@ export function Footer() {
   ];
   
   return (
-    <footer className="border-t bg-background">
+    <footer className="border-t bg-background px-2">
       <div className="container-custom pt-16 pb-8">
         {/* Newsletter section */}
         <Card className="p-8 mb-16 bg-gradient-to-r from-[var(--accent-color)]/10 to-transparent border-[var(--accent-color)]/20 rounded-xl shadow-md">

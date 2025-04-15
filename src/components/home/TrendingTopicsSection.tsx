@@ -137,7 +137,7 @@ export function TrendingTopicsSection() {
             </div>
             
             <motion.div 
-              className="p-6 divide-y divide-border"
+              className="p-4 sm:p-6 divide-y divide-border"
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
@@ -146,20 +146,20 @@ export function TrendingTopicsSection() {
               {trends.map((trend, index) => (
                 <motion.div 
                   key={trend.name}
-                  className="py-4 flex items-center justify-between group"
+                  className="py-4 flex justify-between items-center group"
                   variants={cardVariants}
                   whileHover={{ x: 5 }}
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`h-12 w-12 rounded-lg ${trend.color} flex items-center justify-center text-white font-bold text-lg shadow-md`}>
-                      <Hash className="h-6 w-6" />
+                    <div className={`h-10 w-10 sm:h-12 sm:w-12 rounded-lg ${trend.color} flex items-center justify-center text-white font-bold text-lg shadow-md`}>
+                      <Hash className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg group-hover:text-[var(--accent-color-text)] transition-colors">
+                      <h3 className="font-semibold text-base sm:text-lg group-hover:text-[var(--accent-color-text)] transition-colors truncate">
                         #{trend.name}
                       </h3>
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm text-muted-foreground">{trend.posts}</span>
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">{trend.posts}</span>
                         <Badge variant="outline" className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 px-2 py-0 text-xs">
                           {trend.growth}
                         </Badge>
@@ -170,7 +170,7 @@ export function TrendingTopicsSection() {
                   <Button 
                     size="sm" 
                     variant="secondary"
-                    className={`rounded-full transition-all duration-300 ${
+                    className={`rounded-full transition-all duration-300 text-xs sm:text-sm ${
                       followedTopics.includes(trend.name) 
                         ? "bg-[var(--accent-color)] text-white opacity-100" 
                         : "hover:bg-[var(--accent-color)]"
@@ -183,13 +183,13 @@ export function TrendingTopicsSection() {
                         animate={{ scale: 1 }}
                         className="flex items-center"
                       >
-                        <CheckCircle className="h-3.5 w-3.5 mr-1" />
+                        <CheckCircle className="h-3 w-3 sm:h-3.5 sm:w-3.5 mr-1" />
                         <span>Following</span>
                       </motion.div>
                     ) : (
                       <span className="flex items-center">
                         <span className="mr-1">Follow</span>
-                        <Zap className="h-3.5 w-3.5" />
+                        <Zap className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                       </span>
                     )}
                   </Button>

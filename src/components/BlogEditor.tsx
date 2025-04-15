@@ -207,7 +207,7 @@ export default function BlogEditor({
   }, [excerpt]);
 
   return (
-    <div className="editor-container p-6 max-w-5xl mx-auto">
+    <div className="editor-container max-w-5xl mx-auto">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2 text-center">Create New Blog Post</h1>
         <p className="text-center text-muted-foreground mb-6">

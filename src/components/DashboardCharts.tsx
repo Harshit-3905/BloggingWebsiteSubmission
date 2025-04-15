@@ -241,7 +241,7 @@ export function DashboardCharts({ blogs }: DashboardChartsProps) {
               <ThumbsUp className="h-4 w-4" />
             </div>
             <CardHeader className="pb-2 p-4 sm:p-6">
-              <CardDescription>Avg. Views Per Post</CardDescription>
+              <CardDescription>Views Per Post</CardDescription>
               <CardTitle className="text-2xl sm:text-3xl">{totalStats.avgViewsPerPost.toLocaleString()}</CardTitle>
             </CardHeader>
             <CardContent className="p-4 sm:p-6 pt-0">
