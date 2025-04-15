@@ -46,9 +46,6 @@ export default function BlogDetailPage() {
   const viewIncremented = useRef(false);
 
   useEffect(() => {
-    // Set loading state
-    setIsLoading(true);
-    
     // Find the blog by slug
     const foundBlog = blogs.find((b) => b.slug === slug);
     setBlog(foundBlog);
