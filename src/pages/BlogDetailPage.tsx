@@ -130,7 +130,7 @@ export default function BlogDetailPage() {
         <p className="text-muted-foreground mb-6">
           The blog you're looking for doesn't exist or has been removed.
         </p>
-        <Button asChild>
+        <Button variant="default" asChild className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
           <Link to="/blogs">Browse all blogs</Link>
         </Button>
       </div>

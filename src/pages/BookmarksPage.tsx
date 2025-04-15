@@ -53,6 +53,13 @@ export default function BookmarksPage() {
     }
   }, [isLoggedIn, blogs, bookmarkedBlogs, toggleBookmark]);
 
+  // Update bookmarkedBlogsList when blogs or bookmarkedBlogs change
+  useEffect(() => {
+    setBookmarkedBlogsList(
+      blogs.filter((blog) => blog.bookmarked || bookmarkedBlogs.includes(blog.id))
+    );
+  }, [blogs, bookmarkedBlogs]);
+
   // Redirect if not logged in
   useEffect(() => {
     if (!isLoggedIn) {

@@ -57,7 +57,17 @@ export default function EditBlogPage() {
     setIsSubmitting(true);
     
     try {
-      updateBlog(blog.id, blogData);
+      // Generate slug properly
+      const slug = blogData.title.toLowerCase().replace(/[^\w\s]/gi, '').replace(/\s+/g, '-');
+      
+      // Process the excerpt if not provided and include slug
+      const updatedBlogData = {
+        ...blogData,
+        slug, // Include the slug in the update
+        excerpt: blogData.excerpt || blogData.content.replace(/<[^>]*>/g, '').slice(0, 150) + "..."
+      };
+      
+      updateBlog(blog.id, updatedBlogData);
       
       toast({
         title: "Blog updated!",
@@ -65,7 +75,7 @@ export default function EditBlogPage() {
       });
       
       // Redirect to the updated blog page
-      navigate(`/blog/${blogData.title ? blogData.title.toLowerCase().replace(/[^\w\s]/gi, '').replace(/\s+/g, '-') : blog.slug}`);
+      navigate(`/blog/${slug}`);
     } catch (error) {
       toast({
         title: "Error",

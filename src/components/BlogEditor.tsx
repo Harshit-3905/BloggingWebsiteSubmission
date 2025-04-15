@@ -21,10 +21,8 @@ import {
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
-import { useNavigate } from "react-router-dom";
 import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
-import { useBlogStore } from "@/store/useBlogStore";
 import { useToast } from "@/hooks/use-toast";
 import { DragDropImageUpload } from "@/components/DragDropImageUpload";
 import { Textarea } from "@/components/ui/textarea";
@@ -48,9 +46,6 @@ export default function BlogEditor({
   onSave,
   isSubmitting = false
 }: BlogEditorProps) {
-  const navigate = useNavigate();
-  const { addBlog } = useBlogStore();
-  
   // Basic blog state
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
@@ -118,6 +113,9 @@ export default function BlogEditor({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Prevent multiple submissions
+    if (isSubmitting) return;
+    
     if (!title.trim()) {
       toast({
       title: "Title Required",
@@ -156,44 +154,14 @@ export default function BlogEditor({
     
     // Use onSave prop if provided
     if (onSave) {
-    onSave({
+      onSave({
         title,
         content,
         coverImage,
         tags: tags,
         excerpt: excerpt || content.replace(/<[^>]*>/g, '').slice(0, 150) + "..."
       });
-      return;
     }
-    
-    // Otherwise, create new blog post
-    const slug = title.toLowerCase().replace(/[^\w ]+/g, '').replace(/ +/g, '-');
-    
-    const blogToAdd = {
-      title,
-      content,
-      excerpt: excerpt || content.replace(/<[^>]*>/g, '').slice(0, 150) + "...",
-      coverImage: coverImage,
-      author: {
-        id: "current-user", // Replace with actual user ID if available
-        name: "Current User",
-        avatar: "/images/avatar.jpg",
-        bio: "Bio placeholder" // Add appropriate bio if available
-      },
-      tags: tags,
-      slug
-    };
-    
-    // Add to store
-    addBlog(blogToAdd);
-    
-    // Show success and redirect
-    toast({
-      title: "Blog Published",
-      description: "Your blog post has been published successfully.",
-      className: "border-primary"
-    });
-    navigate(`/blog/${slug}`);
   };
   
   // Auto-resize excerpt textarea
@@ -206,12 +174,28 @@ export default function BlogEditor({
     }
   }, [excerpt]);
 
+  // Initialize contentEditable with initialContent
+  useEffect(() => {
+    if (editorRef.current) {
+      // Only set if the div is empty or if we have initialContent
+      if (!editorRef.current.innerHTML || editorRef.current.innerHTML === '<br>' || initialContent) {
+        editorRef.current.innerHTML = initialContent || '';
+        // Make sure content state is updated
+        setContent(initialContent || '');
+      }
+    }
+  }, [initialContent]);
+
   return (
     <div className="editor-container max-w-5xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 text-center">Create New Blog Post</h1>
+        <h1 className="text-3xl font-bold mb-2 text-center">
+          {initialContent ? "Edit Blog Post" : "Create New Blog Post"}
+        </h1>
         <p className="text-center text-muted-foreground mb-6">
-          Share your knowledge and ideas with the world
+          {initialContent 
+            ? "Update your knowledge and ideas" 
+            : "Share your knowledge and ideas with the world"}
         </p>
         
         <form onSubmit={handleSubmit}>
@@ -262,13 +246,13 @@ export default function BlogEditor({
               >
                 Add
               </Button>
-      </div>
+            </div>
 
             {/* Tags display */}
             <div className="flex flex-wrap gap-2 mt-3">
               {tags.map((tag) => (
                 <div 
-              key={tag}
+                  key={tag}
                   className="rounded-full bg-[var(--accent-color)]/10 border border-[var(--accent-color)]/20 px-3 py-1 text-sm flex items-center gap-1"
                 >
                   <span className="text-[var(--accent-color-text)]">{tag}</span>
@@ -280,9 +264,9 @@ export default function BlogEditor({
                     &times;
                   </button>
                 </div>
-          ))}
-        </div>
-      </div>
+              ))}
+            </div>
+          </div>
 
           {/* Excerpt */}
           <div className="mb-6">
@@ -433,19 +417,19 @@ export default function BlogEditor({
                 ref={editorRef}
                 contentEditable
                 onInput={handleEditorChange}
-                className="min-h-[400px] p-4 border border-[var(--accent-color)]/20 rounded-b-md focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] prose prose-sm max-w-none dark:prose-invert"
+                className="min-h-[500px] p-4 border border-[var(--accent-color)]/20 rounded-b-md focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] prose prose-sm max-w-none dark:prose-invert"
               ></div>
             </div>
             
             {/* Live Preview */}
             {isLivePreview && (
               <div className="w-full lg:w-1/2">
-                <div className="border border-[var(--accent-color)]/20 rounded-b-md p-4 min-h-[400px] prose prose-sm max-w-none dark:prose-invert bg-gray-50 dark:bg-gray-900/50">
+                <div className="border border-[var(--accent-color)]/20 rounded-b-md p-4 min-h-[500px] prose prose-sm max-w-none dark:prose-invert bg-gray-50 dark:bg-gray-900/50">
                   <div dangerouslySetInnerHTML={{ __html: content }} />
                 </div>
               </div>
             )}
-      </div>
+          </div>
 
           {/* Submit Button */}
           <div className="mt-6 flex justify-end">
@@ -454,10 +438,12 @@ export default function BlogEditor({
               className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Publishing..." : "Publish Blog Post"}
-      </Button>
+              {isSubmitting 
+                ? (initialContent ? "Updating..." : "Publishing...") 
+                : (initialContent ? "Update Blog Post" : "Publish Blog Post")}
+            </Button>
           </div>
-    </form>
+        </form>
       </div>
     </div>
   );
