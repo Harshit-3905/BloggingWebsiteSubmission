@@ -78,25 +78,16 @@ export default function EditBlogPage() {
   };
 
   return (
-    <div className="container-custom py-8 md:py-12">
-      <div className="max-w-3xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-4">Edit Blog</h1>
-          <p className="text-muted-foreground">
-            Update your blog content and settings.
-          </p>
-        </div>
-
-        <BlogEditor 
-          initialTitle={blog.title}
-          initialContent={blog.content}
-          initialExcerpt={blog.excerpt}
-          initialCoverImage={blog.coverImage}
-          initialTags={blog.tags}
-          onSave={handleUpdateBlog} 
-          isSubmitting={isSubmitting} 
-        />
-      </div>
+    <div className="container-custom py-8">
+      <BlogEditor 
+        initialTitle={blog.title}
+        initialContent={blog.content}
+        initialExcerpt={blog.excerpt}
+        initialCoverImage={blog.coverImage}
+        initialTags={blog.tags}
+        onSave={handleUpdateBlog} 
+        isSubmitting={isSubmitting} 
+      />
     </div>
   );
 }

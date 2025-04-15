@@ -439,7 +439,7 @@ export default function BlogDetailPage() {
                       variant="outline"
                       size="sm"
                       onClick={() => navigate(`/edit-blog/${blog.id}`)}
-                      className="rounded-full flex items-center gap-1 hover:border-[var(--accent-color)]/40 hover:text-[var(--accent-color)]"
+                      className="rounded-full bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent h-10 px-4  flex items-center shrink-0 font-medium cursor-pointer transition-colors"
                     >
                       <Edit className="h-4 w-4" />
                       <span>Edit</span>
@@ -510,8 +510,8 @@ export default function BlogDetailPage() {
                     />
                     <Button
                       type="submit"
-                      disabled={!isLoggedIn}
-                      className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent h-10 px-4 rounded-md flex items-center shrink-0 font-medium"
+                      disabled={!isLoggedIn || !commentText.trim()}
+                      className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent h-10 px-4 rounded-md flex items-center shrink-0 font-medium cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
                     >
                       {isLoggedIn ? "Post Comment" : "Login to Comment"}
                     </Button>
