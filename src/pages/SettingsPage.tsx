@@ -39,10 +39,11 @@ export default function SettingsPage() {
     }
   }, [isLoggedIn, navigate]);
 
-  const handleThemeChange = (theme: "light" | "dark") => {
-    setTheme(theme);
+  const handleThemeChange = (newTheme: "light" | "dark") => {
+    if(theme === newTheme) return;
+    setTheme(newTheme);
     toast({
-      title: `Theme changed to ${theme}`,
+      title: `Theme changed to ${newTheme}`,
       description: "Your theme preference has been saved.",
       className: "bg-card border-primary shadow-lg"
     });
@@ -164,16 +165,16 @@ export default function SettingsPage() {
               <CardContent className="space-y-8">
                 <div>
                   <h3 className="text-lg font-medium mb-4">Theme Mode</h3>
-                  <div className="flex flex-col md:flex-row gap-4">
+                    <div className="flex flex-col md:flex-row gap-4">
                     <MotionButton
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      variant={theme === "light" ? "default" : "outline"}
+                      variant="link"
                       className={`flex-1 gap-2 py-6 ${
-                        theme === "light" 
-                          ? "button-default hover:opacity-90" 
-                          : "button-outline hover:bg-transparent"
-                      }`}
+                      theme === 'light' 
+                        ? 'bg-[var(--accent-color)] text-white' 
+                        : ''
+                      } border-2 border-[var(--accent-color)]`}
                       onClick={() => handleThemeChange("light")}
                     >
                       <Sun className="h-5 w-5 mr-2" />
@@ -182,18 +183,18 @@ export default function SettingsPage() {
                     <MotionButton
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      variant={theme === "dark" ? "default" : "outline"}
+                      variant="link"
                       className={`flex-1 gap-2 py-6 ${
-                        theme === "dark" 
-                          ? "button-default hover:opacity-90" 
-                          : "button-outline hover:bg-transparent"
-                      }`}
+                      theme === 'dark' 
+                        ? 'bg-[var(--accent-color)] text-white' 
+                        : ''
+                      } border-2 border-[var(--accent-color)]`}
                       onClick={() => handleThemeChange("dark")}
                     >
                       <Moon className="h-5 w-5 mr-2" />
                       Dark Mode
                     </MotionButton>
-                  </div>
+                    </div>
                 </div>
 
                 <div>

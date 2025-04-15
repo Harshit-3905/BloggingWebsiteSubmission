@@ -502,7 +502,7 @@ const Index = () => {
                 </p>
               </div>
               <motion.div whileHover={{ x: 5 }}>
-                <Button asChild variant="secondary" className="gap-2">
+                <Button asChild variant="link" className="gap-2">
                   <Link to="/blogs">
                     View All Articles
                     <ArrowRight className="h-4 w-4" />
