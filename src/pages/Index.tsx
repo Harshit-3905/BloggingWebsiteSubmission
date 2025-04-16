@@ -539,11 +539,13 @@ const Index = () => {
             </div>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredBlogs.map((blog, index) => (
-              <BlogCard key={blog.id} blog={blog} index={index} />
-            ))}
-          </div>
+          <AnimatedSection>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featuredBlogs.map((blog, index) => (
+                <BlogCard key={blog.id} blog={blog} index={index} />
+              ))}
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -739,7 +741,7 @@ const Index = () => {
                     <h3 className="text-xl font-bold mb-2 flex items-center">
                       {feature.title}
                       {feature.comingSoon && (
-                        <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                        <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-1 rounded-full whitespace-nowrap">
                           Coming Soon
                         </span>
                       )}

@@ -429,14 +429,13 @@ export default function BlogDetailPage() {
                 </motion.div>
                 {isLoggedIn && user?.id === blog.author.id && (
                   <motion.div
-                    whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                   >
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => navigate(`/edit-blog/${blog.id}`)}
-                      className="rounded-full bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent h-10 px-4  flex items-center shrink-0 font-medium cursor-pointer transition-colors"
+                      className="rounded-full bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent px-2 flex items-center shrink-0 cursor-pointer transition-colors text-sm"
                     >
                       <Edit className="h-4 w-4" />
                       <span>Edit</span>
