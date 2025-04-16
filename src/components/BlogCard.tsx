@@ -140,7 +140,7 @@ function BlogCardComponent({ blog, index = 0 }: BlogCardProps) {
             >
               <button
                 onClick={handleLike}
-                className="rounded-full bg-white p-2 shadow-md transition hover:bg-gray-50 dark:bg-[var(--accent-color)]"
+                className="rounded-full bg-white p-2 shadow-md transition hover:bg-gray-50 dark:bg-card"
               >
                 <Heart
                   className={`h-4 w-4 ${
