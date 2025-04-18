@@ -26,6 +26,7 @@ import { Switch } from "./ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { DragDropImageUpload } from "@/components/DragDropImageUpload";
 import { Textarea } from "@/components/ui/textarea";
+import { useAuthStore } from "@/store/useAuthStore";
 
 interface BlogEditorProps {
   initialTitle?: string;
@@ -55,6 +56,7 @@ export default function BlogEditor({
   const [excerpt, setExcerpt] = useState(initialExcerpt);
   const [isLivePreview, setIsLivePreview] = useState(true);
   const { toast } = useToast();
+  const { isLoggedIn } = useAuthStore();
   
   // Ref for the editor
   const editorRef = useRef<HTMLDivElement>(null);
@@ -436,9 +438,11 @@ export default function BlogEditor({
             <Button 
               type="submit" 
               className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isLoggedIn}
             >
-              {isSubmitting 
+              {!isLoggedIn 
+              ? "Login to Create Post"
+              : isSubmitting 
                 ? (initialContent ? "Updating..." : "Publishing...") 
                 : (initialContent ? "Update Blog Post" : "Publish Blog Post")}
             </Button>

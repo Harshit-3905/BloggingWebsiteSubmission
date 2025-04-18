@@ -21,6 +21,7 @@ import AuthPage from "./pages/AuthPage";
 import SettingsPage from "./pages/SettingsPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
+import { Analytics } from "@vercel/analytics/react"
 
 const queryClient = new QueryClient();
 
@@ -67,6 +68,7 @@ const App = () => {
               </Routes>
             </main>
             <Footer />
+            <Analytics />
           </div>
         </BrowserRouter>
       </TooltipProvider>

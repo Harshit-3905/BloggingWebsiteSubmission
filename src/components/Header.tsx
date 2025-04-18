@@ -27,6 +27,7 @@ import { Search, PenSquare, LogOut, User, LayoutDashboard, BookmarkCheck, Settin
 import { motion, AnimatePresence } from "framer-motion";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 export function Header() {
   const { isLoggedIn, user, logout, guestLogin } = useAuthStore();
@@ -34,6 +35,7 @@ export function Header() {
   const location = useLocation();
   const [scrolled, setScrolled] = React.useState(false);
   const [sheetOpen, setSheetOpen] = React.useState(false);
+  const { toast } = useToast();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -48,6 +50,10 @@ export function Header() {
     logout();
     navigate("/");
     setSheetOpen(false);
+    toast({
+      title: "Logged out",
+      description: "You have successfully logged out.",
+      });
   };
 
   const navigateAndClose = (path: string) => {
