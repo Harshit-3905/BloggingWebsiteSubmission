@@ -166,7 +166,7 @@ export function Footer() {
             
             <div className="flex items-center">
               <Code className="h-5 w-5 text-[var(--accent-color)] mr-2" />
-              <span className="text-sm">Made with <Heart className="h-4 w-4 text-red-500 inline mx-1" /> by <Link to="https://harshitjoshi.me" target="_blank" rel="noopener noreferrer" className="text-[var(--accent-color)] hover:underline">Harshit Joshi</Link> for developers</span>
+              <span className="text-sm">Made with <Heart className="h-4 w-4 text-red-500 inline mx-1" /> by <Link to="https://harshitjoshi.me" target="_blank" className="text-[var(--accent-color)] hover:underline">Harshit Joshi</Link> for developers</span>
             </div>
           </div>
 
