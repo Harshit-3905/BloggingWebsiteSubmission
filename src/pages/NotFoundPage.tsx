@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -23,12 +22,16 @@ export default function NotFoundPage() {
               <span className="text-blue-500">at</span>{" "}
               <span className="text-green-500">BinaryBlogs.findPage</span>(
               <br />
-              {"  "}path: <span className="text-yellow-500">"{window.location.pathname}"</span>
+              {"  "}path:{" "}
+              <span className="text-yellow-500">
+                "{window.location.pathname}"
+              </span>
               <br />)
               <br />
               <br />
               <span className="text-purple-500">Try</span>:{" "}
-              <span className="text-green-500">BinaryBlogs.redirectToHome</span>()
+              <span className="text-green-500">BinaryBlogs.redirectToHome</span>
+              ()
             </code>
           </pre>
         </div>
@@ -37,7 +40,11 @@ export default function NotFoundPage() {
           <Button asChild>
             <Link to="/">Return Home</Link>
           </Button>
-          <Button variant="outline" asChild className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
+          <Button
+            variant="outline"
+            asChild
+            className="gap-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
+          >
             <Link to="/blogs">Browse Blogs</Link>
           </Button>
         </div>

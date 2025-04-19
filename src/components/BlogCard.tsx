@@ -57,7 +57,7 @@ function BlogCardComponent({ blog, index = 0 }: BlogCardProps) {
 
     // Check current like state before updating
     const wasLiked = isLikedByUser(blog.id);
-    
+
     // Update in store
     likeBlog(blog.id);
 

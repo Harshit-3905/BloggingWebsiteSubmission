@@ -25,13 +25,18 @@ import { useAuthStore } from "@/store/useAuthStore";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { Separator } from "@/components/ui/separator";
-import { getRelativeTime } from "@/utils/dateUtils";
 
 export default function BlogDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const { blogs, toggleBookmark, likeBlog, addComment, incrementView, isLikedByUser } =
-    useBlogStore();
+  const {
+    blogs,
+    toggleBookmark,
+    likeBlog,
+    addComment,
+    incrementView,
+    isLikedByUser,
+  } = useBlogStore();
   const { user, isLoggedIn } = useAuthStore();
   const { toast } = useToast();
   const [commentText, setCommentText] = useState("");
@@ -61,12 +66,12 @@ export default function BlogDetailPage() {
         .slice(0, 3);
       setRelatedBlogs(related);
     }
-    
+
     // Small delay to prevent immediate "not found" flash
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 300);
-    
+
     return () => clearTimeout(timer);
   }, [blogs, slug]);
 
@@ -127,7 +132,11 @@ export default function BlogDetailPage() {
         <p className="text-muted-foreground mb-6">
           The blog you're looking for doesn't exist or has been removed.
         </p>
-        <Button variant="default" asChild className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent">
+        <Button
+          variant="default"
+          asChild
+          className="bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
+        >
           <Link to="/blogs">Browse all blogs</Link>
         </Button>
       </div>
@@ -143,11 +152,11 @@ export default function BlogDetailPage() {
       });
       return;
     }
-    
+
     likeBlog(blog.id);
     toast({
       title: isLikedByUser(blog.id) ? "Blog unliked" : "Blog liked!",
-      description: isLikedByUser(blog.id) 
+      description: isLikedByUser(blog.id)
         ? "You have unliked this blog."
         : "Thank you for your appreciation.",
     });
@@ -428,9 +437,7 @@ export default function BlogDetailPage() {
                   </Button>
                 </motion.div>
                 {isLoggedIn && user?.id === blog.author.id && (
-                  <motion.div
-                    whileTap={{ scale: 0.9 }}
-                  >
+                  <motion.div whileTap={{ scale: 0.9 }}>
                     <Button
                       variant="outline"
                       size="sm"
@@ -466,11 +473,16 @@ export default function BlogDetailPage() {
             <div className="mt-8 bg-muted/30 border rounded-lg p-6">
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-4">
                 <Avatar className="h-16 w-16 border-2 border-[var(--accent-color)]/20">
-                  <AvatarImage src={blog.author.avatar} alt={blog.author.name} />
+                  <AvatarImage
+                    src={blog.author.avatar}
+                    alt={blog.author.name}
+                  />
                   <AvatarFallback>{blog.author.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <h3 className="text-xl font-bold">About {blog.author.name}</h3>
+                  <h3 className="text-xl font-bold">
+                    About {blog.author.name}
+                  </h3>
                   <p className="text-muted-foreground">
                     {blog.author.bio ||
                       "Tech enthusiast and avid writer sharing insights on the latest technologies and development practices."}
@@ -566,7 +578,7 @@ export default function BlogDetailPage() {
             </div>
           </div>
 
-           {/* Sidebar - Hidden on mobile */}
+          {/* Sidebar - Hidden on mobile */}
           <div className="hidden lg:block lg:sticky lg:top-20 space-y-8 col-span-1 h-fit">
             {/* Related Blogs */}
             {relatedBlogs.length > 0 && (
@@ -685,7 +697,9 @@ export default function BlogDetailPage() {
                         : ""
                     }`}
                   />
-                  <span className="text-sm ml-1">{blog.bookmarked ? "Saved" : "Save"}</span>
+                  <span className="text-sm ml-1">
+                    {blog.bookmarked ? "Saved" : "Save"}
+                  </span>
                 </Button>
               </motion.div>
 
@@ -725,7 +739,6 @@ export default function BlogDetailPage() {
               </motion.div>
             </div>
           </div>
-
         </div>
       </div>
     </div>

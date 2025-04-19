@@ -12,17 +12,17 @@ export default function EditBlogPage() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Find the blog by id
   const blog = blogs.find((b) => b.id === id);
-  
+
   // Redirect if not logged in or blog not found
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/login");
       return;
     }
-    
+
     if (!blog) {
       navigate("/blogs");
       toast({
@@ -32,7 +32,7 @@ export default function EditBlogPage() {
       });
       return;
     }
-    
+
     // Check if user is the author
     if (user?.id !== blog.author.id) {
       navigate(`/blog/${blog.slug}`);
@@ -55,25 +55,30 @@ export default function EditBlogPage() {
     tags: string[];
   }) => {
     setIsSubmitting(true);
-    
+
     try {
       // Generate slug properly
-      const slug = blogData.title.toLowerCase().replace(/[^\w\s]/gi, '').replace(/\s+/g, '-');
-      
+      const slug = blogData.title
+        .toLowerCase()
+        .replace(/[^\w\s]/gi, "")
+        .replace(/\s+/g, "-");
+
       // Process the excerpt if not provided and include slug
       const updatedBlogData = {
         ...blogData,
         slug, // Include the slug in the update
-        excerpt: blogData.excerpt || blogData.content.replace(/<[^>]*>/g, '').slice(0, 150) + "..."
+        excerpt:
+          blogData.excerpt ||
+          blogData.content.replace(/<[^>]*>/g, "").slice(0, 150) + "...",
       };
-      
+
       updateBlog(blog.id, updatedBlogData);
-      
+
       toast({
         title: "Blog updated!",
         description: "Your blog has been successfully updated.",
       });
-      
+
       // Redirect to the updated blog page
       navigate(`/blog/${slug}`);
     } catch (error) {
@@ -89,14 +94,14 @@ export default function EditBlogPage() {
 
   return (
     <div className="container-custom py-8">
-      <BlogEditor 
+      <BlogEditor
         initialTitle={blog.title}
         initialContent={blog.content}
         initialExcerpt={blog.excerpt}
         initialCoverImage={blog.coverImage}
         initialTags={blog.tags}
-        onSave={handleUpdateBlog} 
-        isSubmitting={isSubmitting} 
+        onSave={handleUpdateBlog}
+        isSubmitting={isSubmitting}
       />
     </div>
   );

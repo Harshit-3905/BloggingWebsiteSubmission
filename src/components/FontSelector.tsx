@@ -1,6 +1,4 @@
-
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useThemeStore } from "@/store/useThemeStore";
 import { fontOptions } from "@/components/ThemeToggle";
@@ -12,17 +10,17 @@ export function FontSelector() {
   const { toast } = useToast();
   const [selectedFont, setSelectedFont] = useState(fontFamily);
 
-  const handleFontChange = (font: string) => {
+  const handleFontChange = (font: "code" | "sans" | "serif" | "mono") => {
     setSelectedFont(font);
     setFontFamily(font);
     toast({
       title: "Font updated",
       description: `The application font has been changed.`,
-      className: "border-primary"
+      className: "border-primary",
     });
   };
 
-  const fonts = [
+  const fonts: Array<{ key: "code" | "sans" | "serif" | "mono"; name: string; value: string }> = [
     { key: "sans", name: "Sans Serif", value: fontOptions.sans },
     { key: "serif", name: "Serif", value: fontOptions.serif },
     { key: "mono", name: "Monospace", value: fontOptions.mono },
@@ -38,18 +36,17 @@ export function FontSelector() {
           whileTap={{ scale: 0.98 }}
           onClick={() => handleFontChange(font.key)}
           className={`cursor-pointer p-4 rounded-lg border-2 transition-all flex items-center justify-between
-            ${selectedFont === font.key 
-              ? "border-primary bg-primary/5" 
-              : "border-border hover:border-primary/50"}`}
+            ${
+              selectedFont === font.key
+                ? "border-primary bg-primary/5"
+                : "border-border hover:border-primary/50"
+            }`}
         >
           <div>
-            <p 
-              className="font-medium mb-1"
-              style={{ fontFamily: font.value }}
-            >
+            <p className="font-medium mb-1" style={{ fontFamily: font.value }}>
               {font.name}
             </p>
-            <p 
+            <p
               className="text-xs text-muted-foreground"
               style={{ fontFamily: font.value }}
             >

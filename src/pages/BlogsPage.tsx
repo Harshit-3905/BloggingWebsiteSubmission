@@ -29,7 +29,7 @@ const FEATURED_TAGS = [
   "HTML",
   "Python",
   "Frontend",
-  "Backend"
+  "Backend",
 ];
 
 export default function BlogsPage() {
@@ -51,24 +51,25 @@ export default function BlogsPage() {
   // Memoize filtered blogs to prevent unnecessary recalculations
   const filteredBlogs = useMemo(() => {
     let filtered = blogs;
-    
+
     // Filter by search term
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
-      filtered = filtered.filter(blog => 
-        blog.title.toLowerCase().includes(term) ||
-        blog.excerpt.toLowerCase().includes(term) ||
-        blog.tags.some(tag => tag.toLowerCase().includes(term))
+      filtered = filtered.filter(
+        (blog) =>
+          blog.title.toLowerCase().includes(term) ||
+          blog.excerpt.toLowerCase().includes(term) ||
+          blog.tags.some((tag) => tag.toLowerCase().includes(term))
       );
     }
-    
+
     // Filter by selected tags (blog must have ALL selected tags)
     if (selectedTags.length > 0) {
-      filtered = filtered.filter(blog => 
-        selectedTags.every(tag => blog.tags.includes(tag))
+      filtered = filtered.filter((blog) =>
+        selectedTags.every((tag) => blog.tags.includes(tag))
       );
     }
-    
+
     return filtered;
   }, [blogs, searchTerm, selectedTags]);
 
@@ -79,10 +80,8 @@ export default function BlogsPage() {
 
   // Toggle tag selection
   const handleTagSelect = useCallback((tag: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
-        ? prev.filter(t => t !== tag) 
-        : [...prev, tag]
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
     );
   }, []);
 
@@ -96,7 +95,7 @@ export default function BlogsPage() {
   const loadMoreBlogs = useCallback(() => {
     if (visibleBlogs < filteredBlogs.length && !isLoading) {
       setIsLoading(true);
-      
+
       // Simulate network delay
       setTimeout(() => {
         setVisibleBlogs((prev) => Math.min(prev + 6, filteredBlogs.length));
@@ -115,13 +114,13 @@ export default function BlogsPage() {
       },
       { threshold: 0.1 }
     );
-    
+
     const currentObserverTarget = observerTarget.current;
-    
+
     if (currentObserverTarget) {
       observer.observe(currentObserverTarget);
     }
-    
+
     return () => {
       if (currentObserverTarget) {
         observer.unobserve(currentObserverTarget);
@@ -142,9 +141,9 @@ export default function BlogsPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   // Memoize the visible blogs slice to prevent unnecessary re-renders
@@ -158,7 +157,8 @@ export default function BlogsPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-4">Explore Blogs</h1>
           <p className="text-muted-foreground">
-            Discover the latest articles, tutorials, and insights from our community of developers.
+            Discover the latest articles, tutorials, and insights from our
+            community of developers.
           </p>
         </div>
       </AnimatedSection>
@@ -186,23 +186,23 @@ export default function BlogsPage() {
             onTagSelect={handleTagSelect}
           />
         </div>
-        
+
         {selectedTags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
             <div className="text-sm text-muted-foreground mr-1 flex items-center">
               <Filter className="h-3.5 w-3.5 mr-1" /> Active filters:
             </div>
-            {selectedTags.map(tag => (
-              <Badge 
-                key={tag} 
+            {selectedTags.map((tag) => (
+              <Badge
+                key={tag}
                 variant="secondary"
                 className="pl-2 pr-1 py-1 flex items-center gap-1 border border-[var(--accent-color)]/20"
               >
                 {tag}
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="h-4 w-4 p-0 ml-1 rounded-full" 
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-4 w-4 p-0 ml-1 rounded-full"
                   onClick={() => handleTagSelect(tag)}
                 >
                   ✕
@@ -215,7 +215,7 @@ export default function BlogsPage() {
 
       {filteredBlogs.length > 0 ? (
         <>
-          <motion.div 
+          <motion.div
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             variants={staggerContainer}
             initial="hidden"
@@ -227,51 +227,56 @@ export default function BlogsPage() {
               ))}
             </AnimatePresence>
           </motion.div>
-          
+
           {visibleBlogs < filteredBlogs.length && (
-            <div ref={observerTarget} className="h-24 flex items-center justify-center my-4">
+            <div
+              ref={observerTarget}
+              className="h-24 flex items-center justify-center my-4"
+            >
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <Loader2 className="h-5 w-5 animate-spin text-primary" />
-                  <span className="text-sm font-medium">Loading more blogs...</span>
+                  <span className="text-sm font-medium">
+                    Loading more blogs...
+                  </span>
                 </div>
               ) : (
                 <div className="flex space-x-2">
                   <motion.div
                     className="w-2 h-2 bg-primary rounded-full"
-                    animate={{ 
+                    animate={{
                       y: [0, -8, 0],
-                      opacity: [0.5, 1, 0.5]
-                     }}
-                    transition={{ 
-                      duration: 1.5, 
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 1.5,
                       repeat: Infinity,
-                      delay: 0
-                     }}
+                      delay: 0,
+                    }}
                   />
                   <motion.div
                     className="w-2 h-2 bg-primary rounded-full"
-                    animate={{ 
+                    animate={{
                       y: [0, -8, 0],
-                      opacity: [0.5, 1, 0.5]
-                     }}
-                    transition={{ 
-                      duration: 1.5, 
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 1.5,
                       repeat: Infinity,
-                      delay: 0.2
-                     }}
+                      delay: 0.2,
+                    }}
                   />
                   <motion.div
                     className="w-2 h-2 bg-primary rounded-full"
-                    animate={{ 
+                    animate={{
                       y: [0, -8, 0],
-                      opacity: [0.5, 1, 0.5]
-                     }}
-                    transition={{ 
-                      duration: 1.5, 
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 1.5,
                       repeat: Infinity,
-                      delay: 0.4
-                     }}
+                      delay: 0.4,
+                    }}
                   />
                 </div>
               )}
@@ -285,9 +290,9 @@ export default function BlogsPage() {
             <p className="text-muted-foreground">
               Try adjusting your search or filter criteria.
             </p>
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={clearFilters}
               className="mt-2 bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
             >

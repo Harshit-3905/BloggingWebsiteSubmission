@@ -10,8 +10,8 @@ export function AccentColorSelector() {
   const colorSchemes = getColorSchemes();
   const [previewColors, setPreviewColors] = useState({
     accent: accentColor,
-    text: 'var(--accent-color-text)',
-    bg: 'var(--accent-color-bg)'
+    text: "var(--accent-color-text)",
+    bg: "var(--accent-color-bg)",
   });
 
   // Update preview colors when accent color changes
@@ -19,27 +19,35 @@ export function AccentColorSelector() {
     // Force a re-render of the preview section when accent color changes
     setPreviewColors({
       accent: accentColor,
-      text: getComputedStyle(document.documentElement).getPropertyValue('--accent-color-text').trim(),
-      bg: getComputedStyle(document.documentElement).getPropertyValue('--accent-color-bg').trim(),
+      text: getComputedStyle(document.documentElement)
+        .getPropertyValue("--accent-color-text")
+        .trim(),
+      bg: getComputedStyle(document.documentElement)
+        .getPropertyValue("--accent-color-bg")
+        .trim(),
     });
   }, [accentColor]);
 
   const handleAccentChange = (colorName: string) => {
     setColorScheme(colorName);
-    
+
     // Short delay to allow CSS variables to update before reading them
     setTimeout(() => {
       setPreviewColors({
         accent: accentColor,
-        text: getComputedStyle(document.documentElement).getPropertyValue('--accent-color-text').trim(),
-        bg: getComputedStyle(document.documentElement).getPropertyValue('--accent-color-bg').trim(),
+        text: getComputedStyle(document.documentElement)
+          .getPropertyValue("--accent-color-text")
+          .trim(),
+        bg: getComputedStyle(document.documentElement)
+          .getPropertyValue("--accent-color-bg")
+          .trim(),
       });
     }, 50);
-    
+
     toast({
       title: "Accent color updated",
       description: "The application color scheme has been changed.",
-      className: "border-primary"
+      className: "border-primary",
     });
   };
 
@@ -61,14 +69,18 @@ export function AccentColorSelector() {
               >
                 {/* Color preview with gradient */}
                 <div className="absolute inset-0 rounded-md overflow-hidden">
-                  <div className="absolute inset-0" style={{ backgroundColor: scheme.value }}></div>
-                  <div className="absolute bottom-0 left-0 right-0 h-8 opacity-30"
-                    style={{ 
-                      background: `linear-gradient(to bottom, transparent, ${scheme.darkModeBg})`
+                  <div
+                    className="absolute inset-0"
+                    style={{ backgroundColor: scheme.value }}
+                  ></div>
+                  <div
+                    className="absolute bottom-0 left-0 right-0 h-8 opacity-30"
+                    style={{
+                      background: `linear-gradient(to bottom, transparent, ${scheme.darkModeBg})`,
                     }}
                   ></div>
                 </div>
-                
+
                 {/* Selection indicator */}
                 {accentColor === scheme.value && (
                   <div className="absolute inset-0 flex items-center justify-center z-10">
@@ -83,7 +95,6 @@ export function AccentColorSelector() {
           </motion.div>
         ))}
       </div>
-
     </div>
   );
 }

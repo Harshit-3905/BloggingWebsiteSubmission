@@ -15,7 +15,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
-import { AtSign, KeyRound, Lock, User, ArrowRight, UserPlus } from "lucide-react";
+import {
+  AtSign,
+  KeyRound,
+  Lock,
+  User,
+  ArrowRight,
+  UserPlus,
+} from "lucide-react";
 
 export default function AuthPage() {
   const navigate = useNavigate();
@@ -23,19 +30,19 @@ export default function AuthPage() {
   const isLoginPage = location.pathname === "/login";
   const { login, guestLogin } = useAuthStore();
   const { toast } = useToast();
-  
+
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: "",
   });
-  
+
   const [signupForm, setSignupForm] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleLoginChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,16 +62,15 @@ export default function AuthPage() {
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       const result = login(loginForm.email, loginForm.password);
-      
-      toast({
-          title: "Login successful",
-          description: "Welcome back to Binary Blogs!",
-        });
-        navigate("/");
 
+      toast({
+        title: "Login successful",
+        description: "Welcome back to Binary Blogs!",
+      });
+      navigate("/");
     } catch (error) {
       toast({
         title: "Login error",
@@ -79,7 +85,7 @@ export default function AuthPage() {
   const handleSignupSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     try {
       // Validation
       if (signupForm.password !== signupForm.confirmPassword) {
@@ -90,14 +96,14 @@ export default function AuthPage() {
         });
         return;
       }
-      
+
       // In a real app, this would call an API
       // For demo purposes, we'll just show a success message and redirect
       toast({
         title: "Account created!",
         description: "Please login with your new credentials.",
       });
-      
+
       navigate("/login");
     } catch (error) {
       toast({
@@ -121,14 +127,14 @@ export default function AuthPage() {
 
   return (
     <div className="container flex items-center justify-center min-h-[calc(100vh-4rem)] py-8 px-4">
-      <motion.div 
+      <motion.div
         className="w-full max-w-md"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <div className="text-center mb-6">
-          <motion.h1 
+          <motion.h1
             className="text-3xl font-bold mb-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -136,7 +142,7 @@ export default function AuthPage() {
           >
             Binary Blogs
           </motion.h1>
-          <motion.p 
+          <motion.p
             className="text-muted-foreground"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -145,25 +151,28 @@ export default function AuthPage() {
             Your platform for sharing coding stories
           </motion.p>
         </div>
-        
+
         <motion.div
           className="backdrop-blur-sm bg-card/90 border-2 border-[var(--accent-color)] rounded-xl shadow-xl overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <Tabs defaultValue={isLoginPage ? "login" : "signup"} className="w-full">
+          <Tabs
+            defaultValue={isLoginPage ? "login" : "signup"}
+            className="w-full"
+          >
             <TabsList className="grid w-full grid-cols-2 p-1 bg-muted/50 mb-2">
-              <TabsTrigger 
-                value="login" 
+              <TabsTrigger
+                value="login"
                 onClick={() => navigate("/login")}
                 className="rounded-md data-[state=active]:bg-[var(--accent-color)] data-[state=active]:text-white transition-all"
               >
                 <Lock className="w-4 h-4 mr-2" />
                 Login
               </TabsTrigger>
-              <TabsTrigger 
-                value="signup" 
+              <TabsTrigger
+                value="signup"
                 onClick={() => navigate("/signup")}
                 className="rounded-md data-[state=active]:bg-[var(--accent-color)] data-[state=active]:text-white transition-all"
               >
@@ -171,11 +180,13 @@ export default function AuthPage() {
                 Sign Up
               </TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="login" className="m-0">
               <Card className="border-0 shadow-none bg-transparent">
                 <CardHeader>
-                  <CardTitle className="text-center text-2xl">Welcome Back</CardTitle>
+                  <CardTitle className="text-center text-2xl">
+                    Welcome Back
+                  </CardTitle>
                   <CardDescription className="text-center">
                     Sign in to continue your blogging journey
                   </CardDescription>
@@ -183,7 +194,12 @@ export default function AuthPage() {
                 <form onSubmit={handleLoginSubmit}>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="login-email" className="text-sm font-medium">Email</Label>
+                      <Label
+                        htmlFor="login-email"
+                        className="text-sm font-medium"
+                      >
+                        Email
+                      </Label>
                       <div className="relative">
                         <AtSign className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                         <Input
@@ -199,7 +215,12 @@ export default function AuthPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="login-password" className="text-sm font-medium">Password</Label>
+                      <Label
+                        htmlFor="login-password"
+                        className="text-sm font-medium"
+                      >
+                        Password
+                      </Label>
                       <div className="relative">
                         <KeyRound className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                         <Input
@@ -216,12 +237,14 @@ export default function AuthPage() {
                     </div>
                   </CardContent>
                   <CardFooter className="flex flex-col space-y-3 pb-6">
-                    <Button 
-                      type="submit" 
+                    <Button
+                      type="submit"
                       className="w-full bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
                       disabled={isSubmitting}
                     >
-                      {isSubmitting ? "Logging in..." : (
+                      {isSubmitting ? (
+                        "Logging in..."
+                      ) : (
                         <span className="flex items-center">
                           Login <ArrowRight className="ml-2 h-4 w-4" />
                         </span>
@@ -240,11 +263,13 @@ export default function AuthPage() {
                 </form>
               </Card>
             </TabsContent>
-            
+
             <TabsContent value="signup" className="m-0">
               <Card className="border-0 shadow-none bg-transparent">
                 <CardHeader>
-                  <CardTitle className="text-center text-2xl">Join Us Today</CardTitle>
+                  <CardTitle className="text-center text-2xl">
+                    Join Us Today
+                  </CardTitle>
                   <CardDescription className="text-center">
                     Create your account to start blogging
                   </CardDescription>
@@ -252,7 +277,12 @@ export default function AuthPage() {
                 <form onSubmit={handleSignupSubmit}>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="signup-name" className="text-sm font-medium">Name</Label>
+                      <Label
+                        htmlFor="signup-name"
+                        className="text-sm font-medium"
+                      >
+                        Name
+                      </Label>
                       <div className="relative">
                         <User className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                         <Input
@@ -267,7 +297,12 @@ export default function AuthPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="signup-email" className="text-sm font-medium">Email</Label>
+                      <Label
+                        htmlFor="signup-email"
+                        className="text-sm font-medium"
+                      >
+                        Email
+                      </Label>
                       <div className="relative">
                         <AtSign className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                         <Input
@@ -283,7 +318,12 @@ export default function AuthPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="signup-password" className="text-sm font-medium">Password</Label>
+                      <Label
+                        htmlFor="signup-password"
+                        className="text-sm font-medium"
+                      >
+                        Password
+                      </Label>
                       <div className="relative">
                         <KeyRound className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                         <Input
@@ -299,7 +339,12 @@ export default function AuthPage() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="signup-confirm-password" className="text-sm font-medium">Confirm Password</Label>
+                      <Label
+                        htmlFor="signup-confirm-password"
+                        className="text-sm font-medium"
+                      >
+                        Confirm Password
+                      </Label>
                       <div className="relative">
                         <KeyRound className="absolute left-3 top-2.5 h-5 w-5 text-muted-foreground" />
                         <Input
@@ -316,12 +361,14 @@ export default function AuthPage() {
                     </div>
                   </CardContent>
                   <CardFooter className="flex flex-col space-y-3 pb-6">
-                    <Button 
-                      type="submit" 
+                    <Button
+                      type="submit"
                       className="w-full bg-[var(--accent-color)] text-white hover:bg-background hover:text-[var(--accent-color)] hover:border-[var(--accent-color)] border-2 border-transparent"
                       disabled={isSubmitting}
                     >
-                      {isSubmitting ? "Creating account..." : (
+                      {isSubmitting ? (
+                        "Creating account..."
+                      ) : (
                         <span className="flex items-center">
                           Create Account <ArrowRight className="ml-2 h-4 w-4" />
                         </span>
@@ -342,8 +389,8 @@ export default function AuthPage() {
             </TabsContent>
           </Tabs>
         </motion.div>
-        
-        <motion.p 
+
+        <motion.p
           className="text-center text-xs text-muted-foreground mt-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

@@ -26,13 +26,16 @@ export default function NewBlogPage() {
   }) => {
     // Prevent multiple submissions
     if (isSubmitting) return;
-    
+
     setIsSubmitting(true);
-    
+
     try {
       // Generate slug from title
-      const slug = blogData.title.toLowerCase().replace(/[^\w\s]/gi, '').replace(/\s+/g, '-');
-      
+      const slug = blogData.title
+        .toLowerCase()
+        .replace(/[^\w\s]/gi, "")
+        .replace(/\s+/g, "-");
+
       addBlog({
         author: {
           id: user!.id,
@@ -47,12 +50,12 @@ export default function NewBlogPage() {
         coverImage: blogData.coverImage,
         tags: blogData.tags,
       });
-      
+
       toast({
         title: "Blog published!",
         description: "Your blog has been successfully published.",
       });
-      
+
       navigate(`/blog/${slug}`);
     } catch (error) {
       toast({
@@ -66,8 +69,8 @@ export default function NewBlogPage() {
   };
 
   return (
-    <div className="container-custom py-8">      
-      <BlogEditor 
+    <div className="container-custom py-8">
+      <BlogEditor
         initialTitle={title}
         initialContent={content}
         initialCoverImage={coverImage}
