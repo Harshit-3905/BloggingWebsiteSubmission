@@ -118,7 +118,7 @@ export function TagFilter({ tags, selectedTags, onTagSelect }: TagFilterProps) {
   return (
     <div className="w-full mb-6 px-1">
       <ScrollArea className="w-full whitespace-nowrap py-2">
-        <div className="flex gap-3 py-1">
+        <div className="flex gap-3 py-1 px-1">
           {sortedTags.map((tag) => (
             <motion.div key={tag} whileTap={{ scale: 0.95 }} layout>
               <Badge
