@@ -114,6 +114,14 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
       (_, lang, code) => {
         // Normalize line breaks and trim extra whitespace
         const normalizedCode = code.replace(/\n\s*\n/g, "\n").trim();
+        
+        // Escape HTML to prevent rendering
+        const escapedCode = normalizedCode
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
 
         // Map some common language aliases to their Prism equivalents
         const languageMap = {
@@ -172,7 +180,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
               Copy
             </button>
-            <pre class="language-${language} text-wrap"><code class="language-${language} wrap">${normalizedCode}</code></pre>
+            <pre class="language-${language} text-wrap"><code class="language-${language} wrap">${escapedCode}</code></pre>
           </div>
         `;
       }
